@@ -5429,3 +5429,519 @@ Traceback (most recent call last):
     sock.connect(sa)
 TimeoutError: [Errno 60] Operation timed out
 Watching for file changes with StatReloader
+Forbidden (CSRF cookie not set.): /
+Method Not Allowed: /api/signup/
+Internal Server Error: /api/signup/
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/views.py", line 203, in post
+    self._send_signup_otp_email(user.first_name, user.email, otp_code)
+  File "/Users/mac/Vaultify-main/accounts/views.py", line 275, in _send_signup_otp_email
+    send_mail(
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+                       ^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 86, in open
+    self.connection = self.connection_class(
+                      ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/socket.py", line 865, in create_connection
+    raise exceptions[0]
+  File "/opt/anaconda3/lib/python3.12/socket.py", line 850, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 60] Operation timed out
+Internal Server Error: /api/signup/
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/views.py", line 203, in post
+    self._send_signup_otp_email(user.first_name, user.email, otp_code)
+  File "/Users/mac/Vaultify-main/accounts/views.py", line 275, in _send_signup_otp_email
+    send_mail(
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+                       ^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 86, in open
+    self.connection = self.connection_class(
+                      ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/socket.py", line 865, in create_connection
+    raise exceptions[0]
+  File "/opt/anaconda3/lib/python3.12/socket.py", line 850, in create_connection
+    sock.connect(sa)
+TimeoutError: [Errno 60] Operation timed out
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/vaultify/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/vaultify/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /api/signup/
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/views.py", line 203, in post
+    self._send_signup_otp_email(user.first_name, user.email, otp_code)
+  File "/Users/mac/Vaultify-main/accounts/views.py", line 275, in _send_signup_otp_email
+    send_mail(
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+                       ^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 95, in open
+    self.connection.login(self.username, self.password)
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 642, in auth
+    (code, resp) = self.docmd("AUTH", mechanism + " " + response)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 432, in docmd
+    return self.getreply()
+           ^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 405, in getreply
+    raise SMTPServerDisconnected("Connection unexpectedly closed")
+smtplib.SMTPServerDisconnected: Connection unexpectedly closed
+Watching for file changes with StatReloader
+Internal Server Error: /api/signup/
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/views.py", line 203, in post
+    self._send_signup_otp_email(user.first_name, user.email, otp_code)
+  File "/Users/mac/Vaultify-main/accounts/views.py", line 275, in _send_signup_otp_email
+    send_mail(
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 128, in send_messages
+    new_conn_created = self.open()
+                       ^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 95, in open
+    self.connection.login(self.username, self.password)
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 642, in auth
+    (code, resp) = self.docmd("AUTH", mechanism + " " + response)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 432, in docmd
+    return self.getreply()
+           ^^^^^^^^^^^^^^^
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 405, in getreply
+    raise SMTPServerDisconnected("Connection unexpectedly closed")
+smtplib.SMTPServerDisconnected: Connection unexpectedly closed
+Watching for file changes with StatReloader
+Internal Server Error: /api/signup/
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/views.py", line 203, in post
+    self._send_signup_otp_email(user.first_name, user.email, otp_code)
+  File "/Users/mac/Vaultify-main/accounts/views.py", line 275, in _send_signup_otp_email
+    send_mail(
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/__init__.py", line 92, in send_mail
+    return mail.send()
+           ^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/message.py", line 307, in send
+    return self.get_connection(fail_silently).send_messages([self])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 136, in send_messages
+    sent = self._send(message)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/mail/backends/smtp.py", line 155, in _send
+    self.connection.sendmail(
+  File "/opt/anaconda3/lib/python3.12/smtplib.py", line 897, in sendmail
+    raise SMTPDataError(code, resp)
+smtplib.SMTPDataError: (550, b'The from address does not match a verified Sender Identity. Mail cannot be sent until this error is resolved. Visit https://sendgrid.com/docs/for-developers/sending-email/sender-identity/ to see the Sender Identity requirements')
+/Users/mac/Vaultify-main/vaultify/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Bad Request: /api/verify-email/800481/
+Bad Request: /api/verify-email/800481/
+Not Found: /api/verify-otp
+Internal Server Error: /api/signup/verify-otp
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/deprecation.py", line 122, in __call__
+    response = self.process_response(request, response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/api/signup/verify-otp/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+Internal Server Error: /api/signup/verify-otp/
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/views.py", line 395, in post
+    otp = request.data.get('otp', '').strip()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'int' object has no attribute 'strip'
+Bad Request: /api/signup/verify-otp/
+Email verified for user mukyalbani1@gmail.com via OTP
+User mukyalbani1@gmail.com logged in successfully, Role: Residence
+Forbidden: /api/user/3/
+Forbidden: /api/user/3/
+Forbidden: /api/user/3/
+Forbidden: /api/user/3/
+Bad Request: /api/user/3/
+User updated with role: Residence, phone_number: 09011223344
+User mukyalbani1@gmail.com updated to mukarramalbany@gmail.com, Role: Residence, Profile Picture: 
+Verification OTP email sent to mukarramalbany@gmail.com after email change
+Login failed: Email not verified for mukyalbani1@gmail.com
+Forbidden: /api/login/
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+Forbidden: /api/login/3/
+Forbidden: /api/login/3/
+Forbidden: /api/login/3/
+Not Found: /api/user/7a6f84dbdf7c70d29e76aef89060fd767d6e1256/
+Bad Request: /api/verify-email/7a6f84dbdf7c70d29e76aef89060fd767d6e1256/
+Method Not Allowed: /api/signup/verify-otp/
+Internal Server Error: /api/signup/verify-otp
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/deprecation.py", line 122, in __call__
+    response = self.process_response(request, response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/signup/verify-otp/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+Bad Request: /api/signup/verify-otp/
+Signup OTP sent to mukarramalbany@gmail.com
+Method Not Allowed: /api/signup/verify-otp/
+Email verified for user mukarramalbany@gmail.com via OTP
+Login with ID successful for mukarramalbany@gmail.com, Role: Residence
+Internal Server Error: /api/login
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/deprecation.py", line 122, in __call__
+    response = self.process_response(request, response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/login/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+Login with ID successful for mukarramalbany@gmail.com, Role: Residence
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+Login with ID successful for mukarramalbany@gmail.com, Role: Residence
+Watching for file changes with StatReloader
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+Internal Server Error: /api/login/3
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/deprecation.py", line 122, in __call__
+    response = self.process_response(request, response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/login/3/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+Login with ID successful for mukarramalbany@gmail.com, Role: Residence
+Internal Server Error: /api/login
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/deprecation.py", line 122, in __call__
+    response = self.process_response(request, response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/login/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+User mukyalbani1@gmail.com logged in successfully, Role: Residence
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+User updated with role: Residence, phone_number: 09011223344
+User mukarramalbany@gmail.com updated to mukarramalbany@gmail.com, Role: Residence, Profile Picture: 
+Signup OTP sent to mukarramalbany@gmail.com
+Email verified for user mukarramalbany@gmail.com via OTP
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+User updated with role: Residence, phone_number: 09011223344
+User mukarramalbany@gmail.com updated to mukyalbani1@gmail.com, Role: Residence, Profile Picture: 
+Verification OTP email sent to mukyalbani1@gmail.com after email change
+Signup OTP sent to mukyalbani1@gmail.com
+Email verified for user mukyalbani1@gmail.com via OTP
+User mukyalbani1@gmail.com logged in successfully, Role: Residence
+User updated with role: Residence, phone_number: 09011223344
+User mukyalbani1@gmail.com updated to mukarramalbany@gmail.com, Role: Residence, Profile Picture: 
+Verification OTP email sent to mukarramalbany@gmail.com after email change
+Signup OTP sent to mukarramalbany@gmail.com
+Bad Request: /api/signup/verify-otp/
+Bad Request: /api/signup/verify-otp/
+Email verified for user mukarramalbany@gmail.com via OTP
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+Login failed: Invalid credentials for mukyalbani1@gmail.com
+Unauthorized: /api/login/
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+Login with ID successful for mukarramalbany@gmail.com, Role: Residence
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+Login failed: Invalid credentials for mukyalbani1@gmail.com
+Unauthorized: /api/login/
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+Login failed: Invalid credentials for mukyalbani1@gmail.com
+Unauthorized: /api/login/
+Login failed: Invalid credentials for mukarramalbany@gmail.com
+Unauthorized: /api/login/
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+User updated with role: Residence, phone_number: 09011223344
+User mukarramalbany@gmail.com updated to mukyalbani1@gmail.com, Role: Residence, Profile Picture: 
+Verification OTP email sent to mukyalbani1@gmail.com after email change
+Signup OTP sent to mukyalbani1@gmail.com
+Not Found: /api/signup/verify-otp/
+Email verified for user mukyalbani1@gmail.com via OTP
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+User mukyalbani1@gmail.com logged in successfully, Role: Residence
+User updated with role: Residence, phone_number: 09011223344
+User mukyalbani1@gmail.com updated to mukarramalbany@gmail.com, Role: Residence, Profile Picture: 
+Verification OTP email sent to mukarramalbany@gmail.com after email change
+Signup OTP sent to mukarramalbany@gmail.com
+Email verified for user mukarramalbany@gmail.com via OTP
+User mukarramalbany@gmail.com logged in successfully, Role: Residence

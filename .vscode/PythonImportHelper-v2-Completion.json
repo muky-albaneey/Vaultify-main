@@ -114,6 +114,14 @@
         "documentation": {}
     },
     {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
         "label": "migrations",
         "importPath": "django.db",
         "description": "django.db",
@@ -685,6 +693,15 @@
         "documentation": {}
     },
     {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
         "label": "APIView",
         "importPath": "rest_framework.views",
         "description": "rest_framework.views",
@@ -1135,15 +1152,6 @@
         "description": "django.core.files.base",
         "isExtraImport": true,
         "detail": "django.core.files.base",
-        "documentation": {}
-    },
-    {
-        "label": "os",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
         "documentation": {}
     },
     {
@@ -1708,7 +1716,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class LoginView(APIView):\n    def post(self, request):\n        email = request.data.get('email').lower()  # Normalize to lowercase\n        password = request.data.get('password')\n        user = authenticate(username=email, password=password)\n        if user:\n            if not user.profile.is_email_verified:\n                logger.warning(f\"Login failed: Email not verified for {email}\")\n                return Response({'error': 'Email not verified'}, status=status.HTTP_403_FORBIDDEN)\n            token, _ = AuthToken.objects.get_or_create(user=user)",
+        "peekOfCode": "class LoginView(APIView):\n    def post(self, request):\n        email = request.data.get('email').lower()  # Normalize to lowercase\n        password = request.data.get('password')\n        print(email)\n        user = authenticate(username=email, password=password)\n        print(user)\n        if user:\n            if not user.profile.is_email_verified:\n                logger.warning(f\"Login failed: Email not verified for {email}\")",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -2338,7 +2346,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\nEMAIL_HOST = 'smtp.sendgrid.net'\nEMAIL_PORT = 587\nEMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'apikey'\nEMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'vaultifyltd@gmail.com'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {",
+        "peekOfCode": "EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'\nEMAIL_HOST = 'smtp.sendgrid.net'\nEMAIL_PORT = 587\nEMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'apikey'\nEMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'support@vaultify.africa'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -2347,7 +2355,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "EMAIL_HOST = 'smtp.sendgrid.net'\nEMAIL_PORT = 587\nEMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'apikey'\nEMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'vaultifyltd@gmail.com'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',",
+        "peekOfCode": "EMAIL_HOST = 'smtp.sendgrid.net'\nEMAIL_PORT = 587\nEMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'apikey'\nEMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'support@vaultify.africa'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -2356,7 +2364,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "EMAIL_PORT = 587\nEMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'apikey'\nEMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'vaultifyltd@gmail.com'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [BASE_DIR / 'web'],",
+        "peekOfCode": "EMAIL_PORT = 587\nEMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'apikey'\nEMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'support@vaultify.africa'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [BASE_DIR / 'web'],",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -2365,7 +2373,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "EMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'apikey'\nEMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'vaultifyltd@gmail.com'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [BASE_DIR / 'web'],\n        'APP_DIRS': True,",
+        "peekOfCode": "EMAIL_USE_TLS = True\nEMAIL_HOST_USER = 'apikey'\nEMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'support@vaultify.africa'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [BASE_DIR / 'web'],\n        'APP_DIRS': True,",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -2374,7 +2382,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "EMAIL_HOST_USER = 'apikey'\nEMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'vaultifyltd@gmail.com'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [BASE_DIR / 'web'],\n        'APP_DIRS': True,\n        'OPTIONS': {",
+        "peekOfCode": "EMAIL_HOST_USER = 'apikey'\nEMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'support@vaultify.africa'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [BASE_DIR / 'web'],\n        'APP_DIRS': True,\n        'OPTIONS': {",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -2383,7 +2391,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'vaultifyltd@gmail.com'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [BASE_DIR / 'web'],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [",
+        "peekOfCode": "EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable\nDEFAULT_FROM_EMAIL = 'support@vaultify.africa'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [BASE_DIR / 'web'],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -2392,7 +2400,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "DEFAULT_FROM_EMAIL = 'vaultifyltd@gmail.com'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [BASE_DIR / 'web'],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',",
+        "peekOfCode": "DEFAULT_FROM_EMAIL = 'support@vaultify.africa'\nBASE_URL = 'https://vaultify-43wm.onrender.com'\nTEMPLATES = [\n    {\n        'BACKEND': 'django.template.backends.django.DjangoTemplates',\n        'DIRS': [BASE_DIR / 'web'],\n        'APP_DIRS': True,\n        'OPTIONS': {\n            'context_processors': [\n                'django.template.context_processors.debug',",
         "detail": "vaultify.settings",
         "documentation": {}
     },

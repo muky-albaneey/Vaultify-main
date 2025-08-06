@@ -1,6 +1,7 @@
 from django import views
 from django.urls import path
 from django.contrib.auth.views import PasswordResetConfirmView
+import os
 from .views import (
     AccessCodeUnapprovedCountByEstateView, AccessCodeVerifiedCountByEstateView, AlertCountByEstateView, AlertCountView, GeneralAlertListView, GeneralVisitorCheckinListView, LostFoundCountByEstateView, LostFoundCountView, PrivateMessageCreateView, PrivateMessageListView, ResidenceUsersCountByEstateView, SecurityPersonnelUsersCountByEstateView, SignupSendOTPView, SignupVerifyOTPView, SignupView, LoginView, LoginWithIdView, UploadProfileImageView, UserTransactionListView, UserUpdateView, VerifyEmailView,
     ResendVerificationEmailView, GoogleSignInView, PasswordResetRequestView,
@@ -19,7 +20,11 @@ from .views import (
     ChangePasswordView,
     SubscriptionUsersListView,
 )
+from django.conf import settings
 
+# print("SENDGRID_API_KEY:", repr(os.getenv('SENDGRID_API_KEY')))
+# print(settings.DEFAULT_FROM_EMAIL)
+# print("EMAIL_HOST_PASSWORD:", repr(os.getenv('EMAIL_HOST_PASSWORD')))
 
 urlpatterns = [
     # Authentication

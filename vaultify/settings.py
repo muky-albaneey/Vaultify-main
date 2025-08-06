@@ -72,7 +72,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable
-DEFAULT_FROM_EMAIL = 'vaultifyltd@gmail.com'
+DEFAULT_FROM_EMAIL = 'support@vaultify.africa'
 
 BASE_URL = 'https://vaultify-43wm.onrender.com'
 

@@ -433,7 +433,9 @@ class LoginView(APIView):
     def post(self, request):
         email = request.data.get('email').lower()  # Normalize to lowercase
         password = request.data.get('password')
+        print(email)
         user = authenticate(username=email, password=password)
+        print(user)
         if user:
             if not user.profile.is_email_verified:
                 logger.warning(f"Login failed: Email not verified for {email}")
@@ -463,21 +465,25 @@ class UserUpdateView(APIView):
             user = User.objects.get(pk=pk)
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
         old_email = user.email
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             new_email = serializer.instance.email
+
             logger.info(f"User {old_email} updated to {new_email}, Role: {user.profile.role}, Profile Picture: {user.profile.profile_picture}")
 
-            # If email changed, generate new OTP for email verification and send OTP email
             if old_email != new_email:
+                user.username = new_email
+                user.save(update_fields=['username'])  # ✅ Save the new username
+
                 otp_code = f"{random.randint(100000, 999999)}"
                 user.profile.signup_otp = otp_code
                 user.profile.signup_otp_expiry = now() + timedelta(minutes=10)
                 user.profile.is_email_verified = False
                 user.profile.save(update_fields=['signup_otp', 'signup_otp_expiry', 'is_email_verified'])
+
                 from django.core.mail import send_mail
                 from django.conf import settings
                 send_mail(
@@ -490,8 +496,46 @@ class UserUpdateView(APIView):
                 logger.info(f"Verification OTP email sent to {new_email} after email change")
 
             return Response(serializer.data, status=status.HTTP_200_OK)
+
         logger.error(f"User update errors: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # def put(self, request, pk):
+    #     try:
+    #         user = User.objects.get(pk=pk)
+    #     except User.DoesNotExist:
+    #         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+    #     old_email = user.email
+    #     serializer = UserSerializer(user, data=request.data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         new_email = serializer.instance.email
+    #         user.username = new_email
+    #         logger.info(f"User {old_email} updated to {new_email}, Role: {user.profile.role}, Profile Picture: {user.profile.profile_picture}")
+
+    #         # If email changed, generate new OTP for email verification and send OTP email
+    #         if old_email != new_email:
+                
+    #             otp_code = f"{random.randint(100000, 999999)}"
+    #             user.profile.signup_otp = otp_code
+    #             user.profile.signup_otp_expiry = now() + timedelta(minutes=10)
+    #             user.profile.is_email_verified = False
+    #             user.profile.save(update_fields=['signup_otp', 'signup_otp_expiry', 'is_email_verified'])
+    #             from django.core.mail import send_mail
+    #             from django.conf import settings
+    #             send_mail(
+    #                 'Verify Your New Email - OTP',
+    #                 f'Your OTP to verify your new email is: {otp_code}. It expires in 10 minutes.',
+    #                 settings.DEFAULT_FROM_EMAIL,
+    #                 [new_email],
+    #                 fail_silently=False,
+    #             )
+    #             logger.info(f"Verification OTP email sent to {new_email} after email change")
+
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     logger.error(f"User update errors: {serializer.errors}")
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AccessCodeCreateView(generics.CreateAPIView):
     serializer_class = AccessCodeSerializer
