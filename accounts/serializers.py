@@ -6,6 +6,40 @@ from django.contrib.auth.hashers import make_password
 import logging
 
 logger = logging.getLogger(__name__)
+from decimal import Decimal
+from .models import BankServiceCharge
+
+class BankServiceChargeSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
+
+    class Meta:
+        model = BankServiceCharge
+        fields = [
+            'id',
+            'user_id',
+            'service_charge',
+            'payment_frequency',
+            'bank_name',
+            'account_name',
+            'account_number',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'user_id', 'created_at', 'updated_at']
+
+    def validate_account_number(self, value):
+        if value in [None, '']:
+            return value
+        if not value.isdigit() or len(value) != 10:
+            raise serializers.ValidationError("Account number must be exactly 10 digits.")
+        return value
+
+    def validate_service_charge(self, value):
+        if value is None:
+            return value
+        if Decimal(value) < Decimal('0.00'):
+            raise serializers.ValidationError("Service charge must be >= 0.")
+        return value
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -54,7 +88,7 @@ class AccessCodeSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['phone_number', 'role', 'estate', 'estate_email', 'house_address', 'pin', 'plan', 'wallet_balance', 'profile_picture', 'subscription_start_date', 'subscription_expiry_date']
+        fields = ['phone_number', 'role', 'estate', 'estate_email', 'house_address', 'pin', 'plan', 'wallet_balance', 'profile_picture', 'subscription_start_date', 'subscription_expiry_date','user_status']
 
 
     def validate_role(self, value):
@@ -68,16 +102,35 @@ class UserProfileSerializer(serializers.ModelSerializer):
                 f"Role must be one of: {', '.join(valid_roles)}"
             )
         return value
-
 class UserSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer()
     password = serializers.CharField(write_only=True)
+    bank_service_charge = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'profile', 'password']
-        extra_kwargs = {
-            # Removed read_only for profile to allow nested updates
+        fields = ['id', 'email', 'first_name', 'last_name', 'profile', 'password', 'bank_service_charge']
+        extra_kwargs = {}
+
+    def get_bank_service_charge(self, obj):
+        # Always fetch related BankServiceCharge (blank or not)
+        try:
+            bank_service_charge = obj.bank_service_charge
+        except BankServiceCharge.DoesNotExist:
+            bank_service_charge = None
+
+        if bank_service_charge:
+            return BankServiceChargeSerializer(bank_service_charge).data
+        return {
+            "id": None,
+            "user_id": obj.id,
+            "service_charge": None,
+            "payment_frequency": None,
+            "bank_name": None,
+            "account_name": None,
+            "account_number": None,
+            "created_at": None,
+            "updated_at": None
         }
 
     def to_representation(self, instance):
@@ -86,7 +139,6 @@ class UserSerializer(serializers.ModelSerializer):
         profile_data = data.get('profile', {})
         wallet_balance = profile_data.get('wallet_balance')
         if wallet_balance is None or wallet_balance == '0.00':
-            # Fetch actual wallet_balance from instance.profile.wallet_balance if available
             try:
                 wallet_balance_value = instance.profile.wallet_balance
                 profile_data['wallet_balance'] = str(wallet_balance_value) if wallet_balance_value is not None else '0.00'
@@ -118,7 +170,6 @@ class UserSerializer(serializers.ModelSerializer):
                     'password': "This field is required."
                 })
         else:
-            # For updates, if profile is present, validate role if provided
             if 'role' in profile_data and profile_data['role'] not in ['Residence', 'Security Personnel']:
                 logger.error(f"Invalid role provided in update: {profile_data['role']}")
                 raise serializers.ValidationError({
@@ -128,7 +179,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         profile_data = validated_data.pop('profile', {})
-        password = validated_data.pop('password')  # This will now work as password is enforced
+        password = validated_data.pop('password')
         logger.info(f"Creating user with profile data: {profile_data}")
         user = User(
             username=validated_data['email'],
@@ -143,14 +194,7 @@ class UserSerializer(serializers.ModelSerializer):
             for attr, value in profile_data.items():
                 setattr(profile, attr, value)
             profile.save()
-            logger.info(f"Existing UserProfile updated with role: {profile_data.get('role')}")
-        else:
-            logger.info(f"UserProfile created with role: {profile_data.get('role')}")
-        # Debug log to confirm phone_number saved
-        logger.info(f"UserProfile phone_number after save: {profile.phone_number}")
-        # Explicitly refresh profile from DB to ensure latest data
         profile.refresh_from_db()
-        logger.info(f"UserProfile phone_number after refresh: {profile.phone_number}")
         return user
 
     def update(self, instance, validated_data):
@@ -167,8 +211,8 @@ class UserSerializer(serializers.ModelSerializer):
         for attr, value in profile_data.items():
             setattr(profile, attr, value)
         profile.save()
-        logger.info(f"User updated with role: {profile.role}, phone_number: {profile.phone_number}")
         return instance
+
 from rest_framework import serializers
 
 class AlertSerializer(serializers.ModelSerializer):
@@ -258,3 +302,14 @@ class PrivateMessageSerializer(serializers.ModelSerializer):
         model = PrivateMessage
         fields = ['id', 'sender', 'receiver', 'message', 'timestamp']
         read_only_fields = ['id', 'sender', 'timestamp']
+from rest_framework import serializers
+from .models import UserProfile
+
+from rest_framework import serializers
+from django.contrib.auth.models import User
+from .models import UserProfile
+
+class UserStatusUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['user_status']

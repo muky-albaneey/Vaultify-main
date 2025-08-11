@@ -50,11 +50,19 @@
         "documentation": {}
     },
     {
-        "label": "settings",
-        "importPath": "django.conf",
-        "description": "django.conf",
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
         "isExtraImport": true,
-        "detail": "django.conf",
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
         "documentation": {}
     },
     {
@@ -122,35 +130,27 @@
         "documentation": {}
     },
     {
-        "label": "migrations",
-        "importPath": "django.db",
-        "description": "django.db",
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
         "isExtraImport": true,
-        "detail": "django.db",
+        "detail": "django.conf",
         "documentation": {}
     },
     {
-        "label": "models",
-        "importPath": "django.db",
-        "description": "django.db",
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
         "isExtraImport": true,
-        "detail": "django.db",
+        "detail": "django.conf",
         "documentation": {}
     },
     {
-        "label": "migrations",
-        "importPath": "django.db",
-        "description": "django.db",
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
         "isExtraImport": true,
-        "detail": "django.db",
-        "documentation": {}
-    },
-    {
-        "label": "models",
-        "importPath": "django.db",
-        "description": "django.db",
-        "isExtraImport": true,
-        "detail": "django.db",
+        "detail": "django.conf",
         "documentation": {}
     },
     {
@@ -299,6 +299,94 @@
     },
     {
         "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
         "importPath": "django.db",
         "description": "django.db",
         "isExtraImport": true,
@@ -434,7 +522,55 @@
         "documentation": {}
     },
     {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
+        "documentation": {}
+    },
+    {
         "label": "status",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
+        "label": "serializers",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
+        "label": "serializers",
         "importPath": "rest_framework",
         "description": "rest_framework",
         "isExtraImport": true,
@@ -578,6 +714,14 @@
         "documentation": {}
     },
     {
+        "label": "status",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
         "label": "PrivateMessage",
         "importPath": "vaultify.accounts.models",
         "description": "vaultify.accounts.models",
@@ -702,11 +846,12 @@
         "documentation": {}
     },
     {
-        "label": "APIView",
-        "importPath": "rest_framework.views",
-        "description": "rest_framework.views",
+        "label": "requests",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "rest_framework.views",
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
         "documentation": {}
     },
     {
@@ -755,6 +900,38 @@
         "description": "rest_framework.views",
         "isExtraImport": true,
         "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "APIView",
+        "importPath": "rest_framework.views",
+        "description": "rest_framework.views",
+        "isExtraImport": true,
+        "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "APIView",
+        "importPath": "rest_framework.views",
+        "description": "rest_framework.views",
+        "isExtraImport": true,
+        "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "rest_framework.response",
+        "description": "rest_framework.response",
+        "isExtraImport": true,
+        "detail": "rest_framework.response",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "rest_framework.response",
+        "description": "rest_framework.response",
+        "isExtraImport": true,
+        "detail": "rest_framework.response",
         "documentation": {}
     },
     {
@@ -902,15 +1079,6 @@
         "documentation": {}
     },
     {
-        "label": "requests",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "requests",
-        "description": "requests",
-        "detail": "requests",
-        "documentation": {}
-    },
-    {
         "label": "send_mail",
         "importPath": "django.core.mail",
         "description": "django.core.mail",
@@ -988,6 +1156,22 @@
         "description": "django.utils.encoding",
         "isExtraImport": true,
         "detail": "django.utils.encoding",
+        "documentation": {}
+    },
+    {
+        "label": "IsAuthenticated",
+        "importPath": "rest_framework.permissions",
+        "description": "rest_framework.permissions",
+        "isExtraImport": true,
+        "detail": "rest_framework.permissions",
+        "documentation": {}
+    },
+    {
+        "label": "IsAuthenticated",
+        "importPath": "rest_framework.permissions",
+        "description": "rest_framework.permissions",
+        "isExtraImport": true,
+        "detail": "rest_framework.permissions",
         "documentation": {}
     },
     {
@@ -1139,6 +1323,22 @@
         "documentation": {}
     },
     {
+        "label": "api_view",
+        "importPath": "rest_framework.decorators",
+        "description": "rest_framework.decorators",
+        "isExtraImport": true,
+        "detail": "rest_framework.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "permission_classes",
+        "importPath": "rest_framework.decorators",
+        "description": "rest_framework.decorators",
+        "isExtraImport": true,
+        "detail": "rest_framework.decorators",
+        "documentation": {}
+    },
+    {
         "label": "default_storage",
         "importPath": "django.core.files.storage",
         "description": "django.core.files.storage",
@@ -1221,6 +1421,14 @@
     },
     {
         "label": "redirect",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "get_object_or_404",
         "importPath": "django.shortcuts",
         "description": "django.shortcuts",
         "isExtraImport": true,
@@ -1442,6 +1650,33 @@
         "documentation": {}
     },
     {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "accounts.migrations.0013_devicetoken",
+        "description": "accounts.migrations.0013_devicetoken",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('accounts', '0012_transaction'),\n        migrations.swappable_dependency(settings.AUTH_USER_MODEL),\n    ]\n    operations = [\n        migrations.CreateModel(\n            name='DeviceToken',\n            fields=[\n                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),",
+        "detail": "accounts.migrations.0013_devicetoken",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "accounts.migrations.0014_userprofile_user_status",
+        "description": "accounts.migrations.0014_userprofile_user_status",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        ('accounts', '0013_devicetoken'),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name='userprofile',\n            name='user_status',\n            field=models.CharField(choices=[('pending', 'Pending'), ('active', 'Active'), ('suspended', 'Suspended')], default='pending', max_length=20),\n        ),",
+        "detail": "accounts.migrations.0014_userprofile_user_status",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "accounts.migrations.0015_bankservicecharge",
+        "description": "accounts.migrations.0015_bankservicecharge",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        (\"accounts\", \"0014_userprofile_user_status\"),\n        migrations.swappable_dependency(settings.AUTH_USER_MODEL),\n    ]\n    operations = [\n        migrations.CreateModel(\n            name=\"BankServiceCharge\",\n            fields=[\n                (",
+        "detail": "accounts.migrations.0015_bankservicecharge",
+        "documentation": {}
+    },
+    {
         "label": "PrivateMessageCreateTests",
         "kind": 6,
         "importPath": "accounts.tests.test_private_message_create",
@@ -1464,7 +1699,16 @@
         "kind": 6,
         "importPath": "accounts.models",
         "description": "accounts.models",
-        "peekOfCode": "class UserProfile(models.Model):\n    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='profile')\n    phone_number = models.CharField(max_length=15, blank=True, null=True)\n    role = models.CharField(max_length=100, blank=True, null=True)\n    estate = models.CharField(max_length=100, blank=True, null=True)\n    estate_email = models.EmailField(blank=True, null=True)\n    house_address = models.CharField(max_length=255, blank=True, null=True)\n    pin = models.CharField(max_length=128, blank=True, null=True)  # Hashed PIN\n    plan = models.CharField(max_length=50, blank=True, null=True)\n    subscription_start_date = models.DateTimeField(blank=True, null=True)",
+        "peekOfCode": "class UserProfile(models.Model):\n    USER_STATUS_CHOICES = [\n        ('pending', 'Pending'),\n        ('active', 'Active'),\n        ('suspended', 'Suspended'),  # optional, for future expansion\n    ]\n    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='profile')\n    phone_number = models.CharField(max_length=15, blank=True, null=True)\n    role = models.CharField(max_length=100, blank=True, null=True)\n    estate = models.CharField(max_length=100, blank=True, null=True)",
+        "detail": "accounts.models",
+        "documentation": {}
+    },
+    {
+        "label": "BankServiceCharge",
+        "kind": 6,
+        "importPath": "accounts.models",
+        "description": "accounts.models",
+        "peekOfCode": "class BankServiceCharge(models.Model):\n    PAYMENT_FREQUENCY_CHOICES = [\n        ('Daily', 'Daily'),\n        ('Weekly', 'Weekly'),\n        ('Monthly', 'Monthly'),\n        ('Quarterly', 'Quarterly'),\n        ('Yearly', 'Yearly'),\n    ]\n    # Attach to user; nullable so a user may have no service charge set\n    user = models.OneToOneField(",
         "detail": "accounts.models",
         "documentation": {}
     },
@@ -1518,7 +1762,25 @@
         "kind": 6,
         "importPath": "accounts.models",
         "description": "accounts.models",
-        "peekOfCode": "class Transaction(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')\n    date = models.DateTimeField(auto_now_add=True)\n    reference = models.CharField(max_length=255)\n    status = models.CharField(max_length=50)\n    amount = models.DecimalField(max_digits=12, decimal_places=2)\n    def __str__(self):\n        return f\"Transaction {self.reference} for {self.user.username} - {self.status} - {self.amount}\"",
+        "peekOfCode": "class Transaction(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')\n    date = models.DateTimeField(auto_now_add=True)\n    reference = models.CharField(max_length=255)\n    status = models.CharField(max_length=50)\n    amount = models.DecimalField(max_digits=12, decimal_places=2)\n    def __str__(self):\n        return f\"Transaction {self.reference} for {self.user.username} - {self.status} - {self.amount}\"\nfrom django.db import models\nfrom django.contrib.auth.models import User",
+        "detail": "accounts.models",
+        "documentation": {}
+    },
+    {
+        "label": "DeviceToken",
+        "kind": 6,
+        "importPath": "accounts.models",
+        "description": "accounts.models",
+        "peekOfCode": "class DeviceToken(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='device_tokens')\n    token = models.CharField(max_length=255, unique=True)\n    created_at = models.DateTimeField(auto_now_add=True)\n    def __str__(self):\n        return f\"{self.user.username} - {self.token}\"",
+        "detail": "accounts.models",
+        "documentation": {}
+    },
+    {
+        "label": "create_user_related_objects",
+        "kind": 2,
+        "importPath": "accounts.models",
+        "description": "accounts.models",
+        "peekOfCode": "def create_user_related_objects(sender, instance, created, **kwargs):\n    \"\"\"\n    When a new User is created, create a blank UserProfile and a blank BankServiceCharge\n    so both objects always exist and can be updated later.\n    \"\"\"\n    if created:\n        # create profile if it doesn't exist\n        # UserProfile.objects.create(user=instance)\n        # create an empty bank service charge record attached to the user\n        BankServiceCharge.objects.create(user=instance)",
         "detail": "accounts.models",
         "documentation": {}
     },
@@ -1529,6 +1791,15 @@
         "description": "accounts.models",
         "peekOfCode": "def save_user_profile(sender, instance, created, **kwargs):\n    if created:\n        UserProfile.objects.create(user=instance)\n    # No need to call save() unless there are updates to the profile\nclass Alert(models.Model):\n    ALERT_TYPES = [\n        ('Visitor Arrival', 'Visitor Arrival'),\n        ('Fire Alarm', 'Fire Alarm'),\n        ('Security Breach', 'Security Breach'),\n        ('others', 'others'),",
         "detail": "accounts.models",
+        "documentation": {}
+    },
+    {
+        "label": "BankServiceChargeSerializer",
+        "kind": 6,
+        "importPath": "accounts.serializers",
+        "description": "accounts.serializers",
+        "peekOfCode": "class BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    class Meta:\n        model = BankServiceCharge\n        fields = [\n            'id',\n            'user_id',\n            'service_charge',\n            'payment_frequency',\n            'bank_name',",
+        "detail": "accounts.serializers",
         "documentation": {}
     },
     {
@@ -1563,7 +1834,7 @@
         "kind": 6,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "class UserProfileSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = UserProfile\n        fields = ['phone_number', 'role', 'estate', 'estate_email', 'house_address', 'pin', 'plan', 'wallet_balance', 'profile_picture', 'subscription_start_date', 'subscription_expiry_date']\n    def validate_role(self, value):\n        \"\"\"\n        Validate that the role is either 'Residence' or 'Security Personnel'.\n        \"\"\"\n        valid_roles = ['Residence', 'Security Personnel']\n        if value not in valid_roles:",
+        "peekOfCode": "class UserProfileSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = UserProfile\n        fields = ['phone_number', 'role', 'estate', 'estate_email', 'house_address', 'pin', 'plan', 'wallet_balance', 'profile_picture', 'subscription_start_date', 'subscription_expiry_date','user_status']\n    def validate_role(self, value):\n        \"\"\"\n        Validate that the role is either 'Residence' or 'Security Personnel'.\n        \"\"\"\n        valid_roles = ['Residence', 'Security Personnel']\n        if value not in valid_roles:",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -1572,7 +1843,7 @@
         "kind": 6,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "class UserSerializer(serializers.ModelSerializer):\n    profile = UserProfileSerializer()\n    password = serializers.CharField(write_only=True)\n    class Meta:\n        model = User\n        fields = ['id', 'email', 'first_name', 'last_name', 'profile', 'password']\n        extra_kwargs = {\n            # Removed read_only for profile to allow nested updates\n        }\n    def to_representation(self, instance):",
+        "peekOfCode": "class UserSerializer(serializers.ModelSerializer):\n    profile = UserProfileSerializer()\n    password = serializers.CharField(write_only=True)\n    bank_service_charge = serializers.SerializerMethodField()\n    class Meta:\n        model = User\n        fields = ['id', 'email', 'first_name', 'last_name', 'profile', 'password', 'bank_service_charge']\n        extra_kwargs = {}\n    def get_bank_service_charge(self, obj):\n        # Always fetch related BankServiceCharge (blank or not)",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -1599,7 +1870,16 @@
         "kind": 6,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "class PrivateMessageSerializer(serializers.ModelSerializer):\n    sender = serializers.StringRelatedField(read_only=True)\n    receiver = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())\n    class Meta:\n        model = PrivateMessage\n        fields = ['id', 'sender', 'receiver', 'message', 'timestamp']\n        read_only_fields = ['id', 'sender', 'timestamp']",
+        "peekOfCode": "class PrivateMessageSerializer(serializers.ModelSerializer):\n    sender = serializers.StringRelatedField(read_only=True)\n    receiver = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())\n    class Meta:\n        model = PrivateMessage\n        fields = ['id', 'sender', 'receiver', 'message', 'timestamp']\n        read_only_fields = ['id', 'sender', 'timestamp']\nfrom rest_framework import serializers\nfrom .models import UserProfile\nfrom rest_framework import serializers",
+        "detail": "accounts.serializers",
+        "documentation": {}
+    },
+    {
+        "label": "UserStatusUpdateSerializer",
+        "kind": 6,
+        "importPath": "accounts.serializers",
+        "description": "accounts.serializers",
+        "peekOfCode": "class UserStatusUpdateSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = UserProfile\n        fields = ['user_status']",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -1608,7 +1888,7 @@
         "kind": 5,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nclass TransactionSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Transaction\n        fields = ['id', 'user', 'date', 'reference', 'status', 'amount']\n        read_only_fields = ['id', 'user', 'date']\nclass SubscriptionUserSerializer(serializers.Serializer):\n    user_id = serializers.IntegerField()\n    email = serializers.EmailField()\n    first_name = serializers.CharField()",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nfrom decimal import Decimal\nfrom .models import BankServiceCharge\nclass BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    class Meta:\n        model = BankServiceCharge\n        fields = [\n            'id',\n            'user_id',",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -1628,6 +1908,24 @@
         "description": "accounts.urls",
         "peekOfCode": "urlpatterns = [\n    # Authentication\n    path('signup/send-otp/', SignupSendOTPView.as_view(), name='signup-send-otp'),\n    path('signup/verify-otp/', SignupVerifyOTPView.as_view(), name='signup-verify-otp'),\n    path('signup/', SignupView.as_view(), name='signup'),\n    path('login/', LoginView.as_view(), name='login'),\n    path('login/<int:pk>/', LoginWithIdView.as_view(), name='login-with-id'),\n    path('user/<int:pk>/', UserUpdateView.as_view(), name='user-update'),\n    path('verify-email/<str:token>/', VerifyEmailView.as_view(), name='verify-email'),\n    path('resend-verification/', ResendVerificationEmailView.as_view(), name='resend-verification'),",
         "detail": "accounts.urls",
+        "documentation": {}
+    },
+    {
+        "label": "send_fcm_notification",
+        "kind": 2,
+        "importPath": "accounts.utils",
+        "description": "accounts.utils",
+        "peekOfCode": "def send_fcm_notification(token, title, body):\n    url = 'https://fcm.googleapis.com/fcm/send'\n    headers = {\n        'Authorization': f'key={FCM_API_KEY}',\n        'Content-Type': 'application/json',\n    }\n    payload = {\n        'to': token,\n        'notification': {\n            'title': title,",
+        "detail": "accounts.utils",
+        "documentation": {}
+    },
+    {
+        "label": "FCM_API_KEY",
+        "kind": 5,
+        "importPath": "accounts.utils",
+        "description": "accounts.utils",
+        "peekOfCode": "FCM_API_KEY = os.getenv(\"FCM_API_KEY\")\n# FCM_API_KEY = 'YOUR_FIREBASE_SERVER_KEY'\ndef send_fcm_notification(token, title, body):\n    url = 'https://fcm.googleapis.com/fcm/send'\n    headers = {\n        'Authorization': f'key={FCM_API_KEY}',\n        'Content-Type': 'application/json',\n    }\n    payload = {\n        'to': token,",
+        "detail": "accounts.utils",
         "documentation": {}
     },
     {
@@ -2180,11 +2478,65 @@
         "documentation": {}
     },
     {
+        "label": "BankServiceChargeUpdateView",
+        "kind": 6,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "class BankServiceChargeUpdateView(APIView):\n    permission_classes = [IsAuthenticated]\n    def get(self, request, user_id):\n        \"\"\"Return the service charge object for a user (if exists).\"\"\"\n        try:\n            user = User.objects.get(pk=user_id)\n        except User.DoesNotExist:\n            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)\n        bc = getattr(user, 'bank_service_charge', None)\n        if not bc:",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
+        "label": "UpdateUserStatusView",
+        "kind": 6,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "class UpdateUserStatusView(APIView):\n    def patch(self, request, pk):\n        \"\"\"\n        Update the user's status in a single endpoint.\n        Example body: { \"status\": \"active\" }\n        \"\"\"\n        allowed_statuses = [\"pending\", \"active\", \"suspended\"]  # validation\n        user_profile = get_object_or_404(UserProfile, user__pk=pk)\n        new_status = request.data.get(\"user_status\")\n        if not new_status:",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
         "label": "get_base_url",
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
         "peekOfCode": "def get_base_url():\n    return getattr(settings, 'BASE_URL', 'https://vaultify-43wm.onrender.com')\nlogger = logging.getLogger(__name__)\nfrom rest_framework.views import APIView\nfrom rest_framework.response import Response\nfrom rest_framework import status\nimport random\nfrom datetime import timedelta\nfrom django.utils.timezone import now\nfrom django.core.mail import send_mail",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
+        "label": "save_device_token",
+        "kind": 2,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "def save_device_token(request):\n    token = request.data.get('token')\n    if not token:\n        return Response({'error': 'Token is required'}, status=400)\n    DeviceToken.objects.update_or_create(user=request.user, defaults={'token': token})\n    return Response({'message': 'Token saved successfully'})\n@api_view(['GET'])\n@permission_classes([IsAuthenticated])\ndef get_device_tokens(request):\n    tokens = DeviceToken.objects.filter(user=request.user).values('token', 'created_at')",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
+        "label": "get_device_tokens",
+        "kind": 2,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "def get_device_tokens(request):\n    tokens = DeviceToken.objects.filter(user=request.user).values('token', 'created_at')\n    return Response({'tokens': list(tokens)})\nfrom .models import DeviceToken\nfrom .utils import send_fcm_notification\ndef notify_user(user, title, message):\n    try:\n        token = DeviceToken.objects.get(user=user).token\n        send_fcm_notification(token, title, message)\n    except DeviceToken.DoesNotExist:",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
+        "label": "notify_user",
+        "kind": 2,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "def notify_user(user, title, message):\n    try:\n        token = DeviceToken.objects.get(user=user).token\n        send_fcm_notification(token, title, message)\n    except DeviceToken.DoesNotExist:\n        pass\ndef notify_users(users, title, message):\n    tokens = DeviceToken.objects.filter(user__in=users).values_list('token', flat=True)\n    for token in tokens:\n        send_fcm_notification(token, title, message)",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
+        "label": "notify_users",
+        "kind": 2,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "def notify_users(users, title, message):\n    tokens = DeviceToken.objects.filter(user__in=users).values_list('token', flat=True)\n    for token in tokens:\n        send_fcm_notification(token, title, message)\n# views.py (append near other APIView classes)\nfrom rest_framework.permissions import IsAuthenticated\nfrom .serializers import BankServiceChargeSerializer\nfrom .models import BankServiceCharge\nfrom django.contrib.auth.models import User\nclass BankServiceChargeUpdateView(APIView):",
         "detail": "accounts.views",
         "documentation": {}
     },

@@ -163,7 +163,9 @@ class SignupView(APIView):
             # Already verified?  Bail out early.
             if profile.is_email_verified:
                 return Response(
-                    {'message': 'Email already verified. Please sign in.'},
+                    # {'message': 'Email already exist. Please sign in.'},
+                    { "message": "Email already registered. Use a different Email address to sign up." },
+
                     status=status.HTTP_200_OK
                 )
 
@@ -281,14 +283,7 @@ please verify your email address. Here’s why it’s important:
 	•	Account Protection: Verifying your email helps secure your profile and prevent unauthorized access.
 	•	Stay Informed: Get important announcements, updates, and alerts from your estate without missing a thing.
 
-Input the otp below to confirm your email and get the full Vaultify experience:
-
-                   Confirm Email
-
-Warm regards,
-The Vaultify Team.
-To complete your sign‑in, please verify your email address using the OTP below.
-
+To complete your sign‑in, please verify your email address using the OTP below:
 Your OTP is: {otp_code}
 
 This OTP expires in {OTP_LIFETIME_MINUTES} minutes.
@@ -500,42 +495,6 @@ class UserUpdateView(APIView):
         logger.error(f"User update errors: {serializer.errors}")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # def put(self, request, pk):
-    #     try:
-    #         user = User.objects.get(pk=pk)
-    #     except User.DoesNotExist:
-    #         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        
-    #     old_email = user.email
-    #     serializer = UserSerializer(user, data=request.data, partial=True)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         new_email = serializer.instance.email
-    #         user.username = new_email
-    #         logger.info(f"User {old_email} updated to {new_email}, Role: {user.profile.role}, Profile Picture: {user.profile.profile_picture}")
-
-    #         # If email changed, generate new OTP for email verification and send OTP email
-    #         if old_email != new_email:
-                
-    #             otp_code = f"{random.randint(100000, 999999)}"
-    #             user.profile.signup_otp = otp_code
-    #             user.profile.signup_otp_expiry = now() + timedelta(minutes=10)
-    #             user.profile.is_email_verified = False
-    #             user.profile.save(update_fields=['signup_otp', 'signup_otp_expiry', 'is_email_verified'])
-    #             from django.core.mail import send_mail
-    #             from django.conf import settings
-    #             send_mail(
-    #                 'Verify Your New Email - OTP',
-    #                 f'Your OTP to verify your new email is: {otp_code}. It expires in 10 minutes.',
-    #                 settings.DEFAULT_FROM_EMAIL,
-    #                 [new_email],
-    #                 fail_silently=False,
-    #             )
-    #             logger.info(f"Verification OTP email sent to {new_email} after email change")
-
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #     logger.error(f"User update errors: {serializer.errors}")
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AccessCodeCreateView(generics.CreateAPIView):
     serializer_class = AccessCodeSerializer
@@ -1619,3 +1578,129 @@ class ChangePasswordView(APIView):
         return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
         # Return JSON response explicitly
         return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
+    
+# views.py
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def save_device_token(request):
+    token = request.data.get('token')
+    if not token:
+        return Response({'error': 'Token is required'}, status=400)
+    
+    DeviceToken.objects.update_or_create(user=request.user, defaults={'token': token})
+
+
+    return Response({'message': 'Token saved successfully'})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_device_tokens(request):
+    tokens = DeviceToken.objects.filter(user=request.user).values('token', 'created_at')
+    return Response({'tokens': list(tokens)})
+
+
+from .models import DeviceToken
+from .utils import send_fcm_notification
+
+def notify_user(user, title, message):
+    try:
+        token = DeviceToken.objects.get(user=user).token
+        send_fcm_notification(token, title, message)
+    except DeviceToken.DoesNotExist:
+        pass
+
+def notify_users(users, title, message):
+    tokens = DeviceToken.objects.filter(user__in=users).values_list('token', flat=True)
+    for token in tokens:
+        send_fcm_notification(token, title, message)
+        
+        
+# views.py (append near other APIView classes)
+from rest_framework.permissions import IsAuthenticated
+from .serializers import BankServiceChargeSerializer
+from .models import BankServiceCharge
+from django.contrib.auth.models import User
+
+
+class BankServiceChargeUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id):
+        """Return the service charge object for a user (if exists)."""
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        bc = getattr(user, 'bank_service_charge', None)
+        if not bc:
+            return Response({'service_charge': None}, status=status.HTTP_200_OK)
+
+        serializer = BankServiceChargeSerializer(bc)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, user_id):
+        """
+        Create or update the BankServiceCharge for the given user_id.
+        Permission: user can update their own service charge, staff can update any user's.
+        """
+        # permission guard — allow owner or staff
+        if request.user.id != user_id and not request.user.is_staff:
+            return Response({'error': 'Not authorized to update this user\'s service charge'}, status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        bc = getattr(user, 'bank_service_charge', None)
+        if bc:
+            serializer = BankServiceChargeSerializer(bc, data=request.data, partial=True)
+        else:
+            serializer = BankServiceChargeSerializer(data=request.data)
+
+        if serializer.is_valid():
+            # if creating, pass user in save so the foreign key is set
+            instance = serializer.save(user=user) if not bc else serializer.save()
+            return Response(BankServiceChargeSerializer(instance).data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+from .models import UserProfile  # or your model
+from django.contrib.auth.models import User
+
+class UpdateUserStatusView(APIView):
+    def patch(self, request, pk):
+        """
+        Update the user's status in a single endpoint.
+        Example body: { "status": "active" }
+        """
+        allowed_statuses = ["pending", "active", "suspended"]  # validation
+
+        user_profile = get_object_or_404(UserProfile, user__pk=pk)
+        new_status = request.data.get("user_status")
+
+        if not new_status:
+            return Response({"error": "Status is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if new_status not in allowed_statuses:
+            return Response({"error": f"Invalid status. Allowed: {allowed_statuses}"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        user_profile.user_status = new_status
+        user_profile.save()
+
+        return Response({
+            "message": f"User status updated to '{new_status}'",
+            "user_id": pk,
+            "new_status": new_status
+        }, status=status.HTTP_200_OK)
+

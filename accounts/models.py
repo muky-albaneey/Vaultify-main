@@ -7,6 +7,12 @@ from decimal import Decimal
 
 
 class UserProfile(models.Model):
+    USER_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('active', 'Active'),
+        ('suspended', 'Suspended'),  # optional, for future expansion
+    ]
+       
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='profile')
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     role = models.CharField(max_length=100, blank=True, null=True)
@@ -31,10 +37,76 @@ class UserProfile(models.Model):
     password_reset_otp_expiry = models.DateTimeField(blank=True, null=True)
     signup_otp = models.CharField(max_length=6, blank=True, null=True)
     signup_otp_expiry = models.DateTimeField(blank=True, null=True)
+    # 🔽 NEW FIELD HERE
+    user_status = models.CharField(
+        max_length=20,
+        choices=USER_STATUS_CHOICES,
+        default='pending'
+    )
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
+# --------------------------
+# BankServiceCharge model (new)
+# --------------------------
+class BankServiceCharge(models.Model):
+    PAYMENT_FREQUENCY_CHOICES = [
+        ('Daily', 'Daily'),
+        ('Weekly', 'Weekly'),
+        ('Monthly', 'Monthly'),
+        ('Quarterly', 'Quarterly'),
+        ('Yearly', 'Yearly'),
+    ]
 
+    # Attach to user; nullable so a user may have no service charge set
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='bank_service_charge',
+        null=True,
+        blank=True
+    )
+
+    service_charge = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.00'))],
+        null=True,
+        blank=True,
+        help_text="Service Charge in Naira (#)"
+    )
+    payment_frequency = models.CharField(
+        max_length=20,
+        choices=PAYMENT_FREQUENCY_CHOICES,
+        null=True,
+        blank=True
+    )
+    bank_name = models.CharField(max_length=150, null=True, blank=True)
+    account_name = models.CharField(max_length=255, null=True, blank=True)
+    account_number = models.CharField(max_length=20, null=True, blank=True)  # validate in serializer
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        if self.user:
+            return f"ServiceCharge for {self.user.username}"
+        return "ServiceCharge (unattached)"
+# --------------------------
+# Ensure profile + service charge are created when a User is created
+# Put this receiver AFTER the model classes above
+# --------------------------
+@receiver(post_save, sender=User)
+def create_user_related_objects(sender, instance, created, **kwargs):
+    """
+    When a new User is created, create a blank UserProfile and a blank BankServiceCharge
+    so both objects always exist and can be updated later.
+    """
+    if created:
+        # create profile if it doesn't exist
+        # UserProfile.objects.create(user=instance)
+        # create an empty bank service charge record attached to the user
+        BankServiceCharge.objects.create(user=instance)
+        
 class AccessCode(models.Model):
     code = models.CharField(max_length=10, unique=True)
     visitor_name = models.CharField(max_length=255)
@@ -133,3 +205,16 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"Transaction {self.reference} for {self.user.username} - {self.status} - {self.amount}"
+
+
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class DeviceToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='device_tokens')
+    token = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.token}"
