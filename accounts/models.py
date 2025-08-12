@@ -101,6 +101,15 @@ class BankServiceCharge(models.Model):
     bank_name = models.CharField(max_length=150, null=True, blank=True)
     account_name = models.CharField(max_length=255, null=True, blank=True)
     account_number = models.CharField(max_length=20, null=True, blank=True)  # validate in serializer
+    
+       # 📌 New field for uploaded receipt
+    receipt_image = models.ImageField(
+        upload_to='service_charge_receipts/',
+        null=True,
+        blank=True,
+        help_text="Upload a receipt image for the payment"
+    )
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

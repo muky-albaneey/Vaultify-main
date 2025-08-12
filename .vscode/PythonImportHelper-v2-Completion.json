@@ -418,6 +418,22 @@
         "documentation": {}
     },
     {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
         "label": "models",
         "importPath": "django.db",
         "description": "django.db",
@@ -1095,6 +1111,22 @@
         "documentation": {}
     },
     {
+        "label": "MultiPartParser",
+        "importPath": "rest_framework.parsers",
+        "description": "rest_framework.parsers",
+        "isExtraImport": true,
+        "detail": "rest_framework.parsers",
+        "documentation": {}
+    },
+    {
+        "label": "FormParser",
+        "importPath": "rest_framework.parsers",
+        "description": "rest_framework.parsers",
+        "isExtraImport": true,
+        "detail": "rest_framework.parsers",
+        "documentation": {}
+    },
+    {
         "label": "JSONRenderer",
         "importPath": "rest_framework.renderers",
         "description": "rest_framework.renderers",
@@ -1718,6 +1750,15 @@
         "documentation": {}
     },
     {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "accounts.migrations.0017_bankservicecharge_receipt_image",
+        "description": "accounts.migrations.0017_bankservicecharge_receipt_image",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        (\"accounts\", \"0016_bankservicecharge_outstanding_charge_and_more\"),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name=\"bankservicecharge\",\n            name=\"receipt_image\",\n            field=models.ImageField(\n                blank=True,",
+        "detail": "accounts.migrations.0017_bankservicecharge_receipt_image",
+        "documentation": {}
+    },
+    {
         "label": "PrivateMessageCreateTests",
         "kind": 6,
         "importPath": "accounts.tests.test_private_message_create",
@@ -1929,7 +1970,7 @@
         "kind": 5,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nfrom decimal import Decimal\nfrom .models import BankServiceCharge\n# class BankServiceChargeSerializer(serializers.ModelSerializer):\n#     user_id = serializers.IntegerField(source='user.id', read_only=True)\n#     class Meta:\n#         model = BankServiceCharge\n#         fields = [\n#             'id',\n#             'user_id',",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nfrom decimal import Decimal\nfrom .models import BankServiceCharge\nclass BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    class Meta:\n        model = BankServiceCharge\n        fields = [\n            'id',\n            'user_id',",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -2523,7 +2564,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class BankServiceChargeUpdateView(APIView):\n    permission_classes = [IsAuthenticated]\n    def get(self, request, user_id):\n        \"\"\"Return the service charge object for a user (if exists).\"\"\"\n        try:\n            user = User.objects.get(pk=user_id)\n        except User.DoesNotExist:\n            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)\n        bc = getattr(user, 'bank_service_charge', None)\n        if not bc:",
+        "peekOfCode": "class BankServiceChargeUpdateView(APIView):\n    permission_classes = [IsAuthenticated]\n    parser_classes = [MultiPartParser, FormParser]  # 👈 allows image uploads\n    def get(self, request, user_id):\n        \"\"\"Return the service charge object for a user (if exists).\"\"\"\n        try:\n            user = User.objects.get(pk=user_id)\n        except User.DoesNotExist:\n            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)\n        bc = getattr(user, 'bank_service_charge', None)",
         "detail": "accounts.views",
         "documentation": {}
     },

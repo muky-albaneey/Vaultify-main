@@ -1644,8 +1644,11 @@ from .models import BankServiceCharge
 from django.contrib.auth.models import User
 
 
+from rest_framework.parsers import MultiPartParser, FormParser
+
 class BankServiceChargeUpdateView(APIView):
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]  # 👈 allows image uploads
 
     def get(self, request, user_id):
         """Return the service charge object for a user (if exists)."""
@@ -1658,35 +1661,49 @@ class BankServiceChargeUpdateView(APIView):
         if not bc:
             return Response({'service_charge': None}, status=status.HTTP_200_OK)
 
-        serializer = BankServiceChargeSerializer(bc)
+        serializer = BankServiceChargeSerializer(bc, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, user_id):
         """
         Create or update the BankServiceCharge for the given user_id.
         Permission: user can update their own service charge, staff can update any user's.
+        Supports image upload for receipt_image.
         """
-        # permission guard — allow owner or staff
+        # ✅ permission check — owner or staff only
         if request.user.id != user_id and not request.user.is_staff:
-            return Response({'error': 'Not authorized to update this user\'s service charge'}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {'error': 'Not authorized to update this user\'s service charge'},
+                status=status.HTTP_403_FORBIDDEN
+            )
 
+        # ✅ check if user exists
         try:
             user = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
+        # ✅ fetch or create serializer with request context
         bc = getattr(user, 'bank_service_charge', None)
         if bc:
-            serializer = BankServiceChargeSerializer(bc, data=request.data, partial=True)
+            serializer = BankServiceChargeSerializer(
+                bc, data=request.data, partial=True, context={'request': request}
+            )
         else:
-            serializer = BankServiceChargeSerializer(data=request.data)
+            serializer = BankServiceChargeSerializer(
+                data=request.data, context={'request': request}
+            )
 
+        # ✅ save if valid
         if serializer.is_valid():
-            # if creating, pass user in save so the foreign key is set
             instance = serializer.save(user=user) if not bc else serializer.save()
-            return Response(BankServiceChargeSerializer(instance).data, status=status.HTTP_200_OK)
+            return Response(
+                BankServiceChargeSerializer(instance, context={'request': request}).data,
+                status=status.HTTP_200_OK
+            )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 from rest_framework.views import APIView
 from rest_framework.response import Response

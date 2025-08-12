@@ -9,39 +9,6 @@ logger = logging.getLogger(__name__)
 from decimal import Decimal
 from .models import BankServiceCharge
 
-# class BankServiceChargeSerializer(serializers.ModelSerializer):
-#     user_id = serializers.IntegerField(source='user.id', read_only=True)
-
-#     class Meta:
-#         model = BankServiceCharge
-#         fields = [
-#             'id',
-#             'user_id',
-#             'service_charge',
-#             'paid_charge',
-#             'outstanding_charge',
-#             'payment_frequency',
-#             'bank_name',
-#             'account_name',
-#             'account_number',
-#             'created_at',
-#             'updated_at',
-#         ]
-#         read_only_fields = ['id', 'user_id', 'created_at', 'updated_at']
-
-#     def validate_account_number(self, value):
-#         if value in [None, '']:
-#             return value
-#         if not value.isdigit() or len(value) != 10:
-#             raise serializers.ValidationError("Account number must be exactly 10 digits.")
-#         return value
-
-#     def validate_service_charge(self, value):
-#         if value is None:
-#             return value
-#         if Decimal(value) < Decimal('0.00'):
-#             raise serializers.ValidationError("Service charge must be >= 0.")
-#         return value
 class BankServiceChargeSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(source='user.id', read_only=True)
 
@@ -57,11 +24,18 @@ class BankServiceChargeSerializer(serializers.ModelSerializer):
             'bank_name',
             'account_name',
             'account_number',
+            'receipt_image',
             'created_at',
             'updated_at',
         ]
         read_only_fields = ['id', 'user_id', 'created_at', 'updated_at']
-
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        request = self.context.get('request')
+        if instance.receipt_image and hasattr(instance.receipt_image, 'url'):
+            rep['receipt_image'] = request.build_absolute_uri(instance.receipt_image.url) if request else instance.receipt_image.url
+        return rep
+    
     def validate_account_number(self, value):
         if value in [None, '']:
             return value
