@@ -6884,3 +6884,27 @@ Watching for file changes with StatReloader
 Watching for file changes with StatReloader
 /Users/mac/Vaultify-main/accounts/views.py changed, reloading.
 Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/urls.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /api/notify-user
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/deprecation.py", line 122, in __call__
+    response = self.process_response(request, response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to 127.0.0.1:8000/api/notify-user/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+Bad Request: /api/notify-user/
+Not Found: /api/notify-user/
+Not Found: /api/notify-users/
+Bad Request: /api/notify-user/

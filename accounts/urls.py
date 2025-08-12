@@ -24,8 +24,7 @@ from .views import (
 )
 from django.conf import settings
 from .views import  save_device_token
-from .views import notify_user
-from .views import notify_users
+
 
 # print("SENDGRID_API_KEY:", repr(os.getenv('SENDGRID_API_KEY')))
 # print(settings.DEFAULT_FROM_EMAIL)
@@ -100,8 +99,6 @@ urlpatterns = [
     path('user/<int:user_id>/transactions/', UserTransactionListView.as_view(), name='user-transactions'),
     path('subscription-users/', SubscriptionUsersListView.as_view(), name='subscription-users-list'),
     path('save-token/', save_device_token),
-    -- path('notify-user/', notify_user),
-    -- path('notify-users/', notify_users),
     path('notify-user/', notify_user_view),
     path('notify-users/', notify_users_view),
     path('user/<int:user_id>/service-charge/', BankServiceChargeUpdateView.as_view(), name='user-service-charge'),
