@@ -1578,11 +1578,14 @@ class ChangePasswordView(APIView):
         return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
         # Return JSON response explicitly
         return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
-    
+
 # views.py
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.contrib.auth.models import User
+from .models import DeviceToken
+from .utils import send_fcm_notification
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -1592,34 +1595,49 @@ def save_device_token(request):
         return Response({'error': 'Token is required'}, status=400)
     
     DeviceToken.objects.update_or_create(user=request.user, defaults={'token': token})
-
-
     return Response({'message': 'Token saved successfully'})
 
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def get_device_tokens(request):
-    tokens = DeviceToken.objects.filter(user=request.user).values('token', 'created_at')
-    return Response({'tokens': list(tokens)})
+def notify_user_view(request):
+    user_id = request.data.get('user_id')
+    title = request.data.get('title')
+    message = request.data.get('message')
 
+    if not all([user_id, title, message]):
+        return Response({'error': 'user_id, title, and message are required'}, status=400)
 
-from .models import DeviceToken
-from .utils import send_fcm_notification
-
-def notify_user(user, title, message):
     try:
-        token = DeviceToken.objects.get(user=user).token
-        send_fcm_notification(token, title, message)
-    except DeviceToken.DoesNotExist:
-        pass
+        user = User.objects.get(id=user_id)
+        tokens = DeviceToken.objects.filter(user=user).values_list('token', flat=True)
 
-def notify_users(users, title, message):
-    tokens = DeviceToken.objects.filter(user__in=users).values_list('token', flat=True)
-    for token in tokens:
-        send_fcm_notification(token, title, message)
-        
-        
-# views.py (append near other APIView classes)
+        if not tokens:
+            return Response({'error': 'No device token for this user'}, status=404)
+
+        results = [send_fcm_notification(t, title, message) for t in tokens]
+        return Response({'message': 'Notification sent', 'results': results})
+
+    except User.DoesNotExist:
+        return Response({'error': 'User not found'}, status=404)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def notify_users_view(request):
+    user_ids = request.data.get('user_ids')
+    title = request.data.get('title')
+    message = request.data.get('message')
+
+    if not all([user_ids, title, message]):
+        return Response({'error': 'user_ids, title, and message are required'}, status=400)
+
+    tokens = DeviceToken.objects.filter(user_id__in=user_ids).values_list('token', flat=True)
+    if not tokens:
+        return Response({'error': 'No tokens found for these users'}, status=404)
+
+    results = [send_fcm_notification(t, title, message) for t in tokens]
+    return Response({'message': 'Notifications sent', 'results': results})
+
+
 from rest_framework.permissions import IsAuthenticated
 from .serializers import BankServiceChargeSerializer
 from .models import BankServiceCharge
@@ -1704,3 +1722,32 @@ class UpdateUserStatusView(APIView):
             "new_status": new_status
         }, status=status.HTTP_200_OK)
 
+class ResetPaidChargeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        # Allow only owner or staff to reset
+        if request.user.id != user_id and not request.user.is_staff:
+            return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
+
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        bc = getattr(user, 'bank_service_charge', None)
+        if not bc:
+            return Response({'error': 'No bank service charge record'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Reset paid_charge and recalculate outstanding
+        bc.paid_charge = Decimal('0.00')
+        if bc.service_charge is not None:
+            bc.outstanding_charge = bc.service_charge
+        else:
+            bc.outstanding_charge = Decimal('0.00')
+        bc.save()
+
+        return Response(
+            BankServiceChargeSerializer(bc).data,
+            status=status.HTTP_200_OK
+        )

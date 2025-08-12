@@ -66,11 +66,11 @@
         "documentation": {}
     },
     {
-        "label": "settings",
-        "importPath": "django.conf",
-        "description": "django.conf",
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
         "isExtraImport": true,
-        "detail": "django.conf",
+        "detail": "decimal",
         "documentation": {}
     },
     {
@@ -151,6 +151,30 @@
         "description": "django.conf",
         "isExtraImport": true,
         "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
         "documentation": {}
     },
     {
@@ -463,6 +487,14 @@
         "description": "django.urls",
         "isExtraImport": true,
         "detail": "django.urls",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
         "documentation": {}
     },
     {
@@ -1677,6 +1709,15 @@
         "documentation": {}
     },
     {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "accounts.migrations.0016_bankservicecharge_outstanding_charge_and_more",
+        "description": "accounts.migrations.0016_bankservicecharge_outstanding_charge_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        (\"accounts\", \"0015_bankservicecharge\"),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name=\"bankservicecharge\",\n            name=\"outstanding_charge\",\n            field=models.DecimalField(\n                blank=True,",
+        "detail": "accounts.migrations.0016_bankservicecharge_outstanding_charge_and_more",
+        "documentation": {}
+    },
+    {
         "label": "PrivateMessageCreateTests",
         "kind": 6,
         "importPath": "accounts.tests.test_private_message_create",
@@ -1798,7 +1839,7 @@
         "kind": 6,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "class BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    class Meta:\n        model = BankServiceCharge\n        fields = [\n            'id',\n            'user_id',\n            'service_charge',\n            'payment_frequency',\n            'bank_name',",
+        "peekOfCode": "class BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    class Meta:\n        model = BankServiceCharge\n        fields = [\n            'id',\n            'user_id',\n            'service_charge',\n            'paid_charge',\n            'outstanding_charge',",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -1888,7 +1929,7 @@
         "kind": 5,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nfrom decimal import Decimal\nfrom .models import BankServiceCharge\nclass BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    class Meta:\n        model = BankServiceCharge\n        fields = [\n            'id',\n            'user_id',",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nfrom decimal import Decimal\nfrom .models import BankServiceCharge\n# class BankServiceChargeSerializer(serializers.ModelSerializer):\n#     user_id = serializers.IntegerField(source='user.id', read_only=True)\n#     class Meta:\n#         model = BankServiceCharge\n#         fields = [\n#             'id',\n#             'user_id',",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -2496,6 +2537,15 @@
         "documentation": {}
     },
     {
+        "label": "ResetPaidChargeView",
+        "kind": 6,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "class ResetPaidChargeView(APIView):\n    permission_classes = [IsAuthenticated]\n    def post(self, request, user_id):\n        # Allow only owner or staff to reset\n        if request.user.id != user_id and not request.user.is_staff:\n            return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)\n        try:\n            user = User.objects.get(pk=user_id)\n        except User.DoesNotExist:\n            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
         "label": "get_base_url",
         "kind": 2,
         "importPath": "accounts.views",
@@ -2509,34 +2559,25 @@
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def save_device_token(request):\n    token = request.data.get('token')\n    if not token:\n        return Response({'error': 'Token is required'}, status=400)\n    DeviceToken.objects.update_or_create(user=request.user, defaults={'token': token})\n    return Response({'message': 'Token saved successfully'})\n@api_view(['GET'])\n@permission_classes([IsAuthenticated])\ndef get_device_tokens(request):\n    tokens = DeviceToken.objects.filter(user=request.user).values('token', 'created_at')",
+        "peekOfCode": "def save_device_token(request):\n    token = request.data.get('token')\n    if not token:\n        return Response({'error': 'Token is required'}, status=400)\n    DeviceToken.objects.update_or_create(user=request.user, defaults={'token': token})\n    return Response({'message': 'Token saved successfully'})\n@api_view(['POST'])\n@permission_classes([IsAuthenticated])\ndef notify_user_view(request):\n    user_id = request.data.get('user_id')",
         "detail": "accounts.views",
         "documentation": {}
     },
     {
-        "label": "get_device_tokens",
+        "label": "notify_user_view",
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def get_device_tokens(request):\n    tokens = DeviceToken.objects.filter(user=request.user).values('token', 'created_at')\n    return Response({'tokens': list(tokens)})\nfrom .models import DeviceToken\nfrom .utils import send_fcm_notification\ndef notify_user(user, title, message):\n    try:\n        token = DeviceToken.objects.get(user=user).token\n        send_fcm_notification(token, title, message)\n    except DeviceToken.DoesNotExist:",
+        "peekOfCode": "def notify_user_view(request):\n    user_id = request.data.get('user_id')\n    title = request.data.get('title')\n    message = request.data.get('message')\n    if not all([user_id, title, message]):\n        return Response({'error': 'user_id, title, and message are required'}, status=400)\n    try:\n        user = User.objects.get(id=user_id)\n        tokens = DeviceToken.objects.filter(user=user).values_list('token', flat=True)\n        if not tokens:",
         "detail": "accounts.views",
         "documentation": {}
     },
     {
-        "label": "notify_user",
+        "label": "notify_users_view",
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def notify_user(user, title, message):\n    try:\n        token = DeviceToken.objects.get(user=user).token\n        send_fcm_notification(token, title, message)\n    except DeviceToken.DoesNotExist:\n        pass\ndef notify_users(users, title, message):\n    tokens = DeviceToken.objects.filter(user__in=users).values_list('token', flat=True)\n    for token in tokens:\n        send_fcm_notification(token, title, message)",
-        "detail": "accounts.views",
-        "documentation": {}
-    },
-    {
-        "label": "notify_users",
-        "kind": 2,
-        "importPath": "accounts.views",
-        "description": "accounts.views",
-        "peekOfCode": "def notify_users(users, title, message):\n    tokens = DeviceToken.objects.filter(user__in=users).values_list('token', flat=True)\n    for token in tokens:\n        send_fcm_notification(token, title, message)\n# views.py (append near other APIView classes)\nfrom rest_framework.permissions import IsAuthenticated\nfrom .serializers import BankServiceChargeSerializer\nfrom .models import BankServiceCharge\nfrom django.contrib.auth.models import User\nclass BankServiceChargeUpdateView(APIView):",
+        "peekOfCode": "def notify_users_view(request):\n    user_ids = request.data.get('user_ids')\n    title = request.data.get('title')\n    message = request.data.get('message')\n    if not all([user_ids, title, message]):\n        return Response({'error': 'user_ids, title, and message are required'}, status=400)\n    tokens = DeviceToken.objects.filter(user_id__in=user_ids).values_list('token', flat=True)\n    if not tokens:\n        return Response({'error': 'No tokens found for these users'}, status=404)\n    results = [send_fcm_notification(t, title, message) for t in tokens]",
         "detail": "accounts.views",
         "documentation": {}
     },

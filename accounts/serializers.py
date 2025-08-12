@@ -9,6 +9,39 @@ logger = logging.getLogger(__name__)
 from decimal import Decimal
 from .models import BankServiceCharge
 
+# class BankServiceChargeSerializer(serializers.ModelSerializer):
+#     user_id = serializers.IntegerField(source='user.id', read_only=True)
+
+#     class Meta:
+#         model = BankServiceCharge
+#         fields = [
+#             'id',
+#             'user_id',
+#             'service_charge',
+#             'paid_charge',
+#             'outstanding_charge',
+#             'payment_frequency',
+#             'bank_name',
+#             'account_name',
+#             'account_number',
+#             'created_at',
+#             'updated_at',
+#         ]
+#         read_only_fields = ['id', 'user_id', 'created_at', 'updated_at']
+
+#     def validate_account_number(self, value):
+#         if value in [None, '']:
+#             return value
+#         if not value.isdigit() or len(value) != 10:
+#             raise serializers.ValidationError("Account number must be exactly 10 digits.")
+#         return value
+
+#     def validate_service_charge(self, value):
+#         if value is None:
+#             return value
+#         if Decimal(value) < Decimal('0.00'):
+#             raise serializers.ValidationError("Service charge must be >= 0.")
+#         return value
 class BankServiceChargeSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(source='user.id', read_only=True)
 
@@ -18,6 +51,8 @@ class BankServiceChargeSerializer(serializers.ModelSerializer):
             'id',
             'user_id',
             'service_charge',
+            'paid_charge',
+            'outstanding_charge',
             'payment_frequency',
             'bank_name',
             'account_name',
@@ -40,6 +75,36 @@ class BankServiceChargeSerializer(serializers.ModelSerializer):
         if Decimal(value) < Decimal('0.00'):
             raise serializers.ValidationError("Service charge must be >= 0.")
         return value
+
+    def update(self, instance, validated_data):
+        paid_charge = validated_data.get('paid_charge', None)
+        service_charge = validated_data.get('service_charge', instance.service_charge)
+
+        if paid_charge is not None:
+            # Add to existing paid_charge instead of replacing
+            new_paid_charge = (instance.paid_charge or Decimal('0.00')) + Decimal(paid_charge)
+            validated_data['paid_charge'] = new_paid_charge
+
+            # Recalculate outstanding_charge
+            if service_charge is not None:
+                validated_data['outstanding_charge'] = max(
+                    Decimal(service_charge) - new_paid_charge,
+                    Decimal('0.00')
+                )
+
+        return super().update(instance, validated_data)
+
+    def create(self, validated_data):
+        paid_charge = validated_data.get('paid_charge', Decimal('0.00'))
+        service_charge = validated_data.get('service_charge', None)
+
+        if service_charge is not None:
+            validated_data['outstanding_charge'] = max(
+                Decimal(service_charge) - Decimal(paid_charge),
+                Decimal('0.00')
+            )
+
+        return super().create(validated_data)
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
