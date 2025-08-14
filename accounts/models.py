@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import MinValueValidator
 from decimal import Decimal
+from django.core.validators import FileExtensionValidator
 
 
 class UserProfile(models.Model):
@@ -103,11 +104,17 @@ class BankServiceCharge(models.Model):
     account_number = models.CharField(max_length=20, null=True, blank=True)  # validate in serializer
     
        # 📌 New field for uploaded receipt
-    receipt_image = models.ImageField(
+    # receipt_image = models.ImageField(
+    #     upload_to='service_charge_receipts/',
+    #     null=True,
+    #     blank=True,
+    #     help_text="Upload a receipt image for the payment"
+    # )
+    receipt_image = models.FileField(
         upload_to='service_charge_receipts/',
         null=True,
         blank=True,
-        help_text="Upload a receipt image for the payment"
+        help_text="Upload any file for the payment"
     )
     
     created_at = models.DateTimeField(auto_now_add=True)
@@ -132,7 +139,23 @@ def create_user_related_objects(sender, instance, created, **kwargs):
         # UserProfile.objects.create(user=instance)
         # create an empty bank service charge record attached to the user
         BankServiceCharge.objects.create(user=instance)
-        
+       
+       
+class BankServiceChargeFile(models.Model):
+    bank_service_charge = models.ForeignKey(
+        'BankServiceCharge',
+        on_delete=models.CASCADE,
+        related_name='receipt_files'
+    )
+    file = models.FileField(
+        upload_to='service_charge_receipts/',
+        help_text="Upload any file for the payment"
+    )
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"File for {self.bank_service_charge} - {self.file.name}"
+ 
 class AccessCode(models.Model):
     code = models.CharField(max_length=10, unique=True)
     visitor_name = models.CharField(max_length=255)
@@ -191,6 +214,9 @@ class UserDeletedAlert(models.Model):
     def __str__(self):
         return f"Deleted Alert {self.alert.id} by User {self.user.username}"
 
+
+from django.db import models
+from django.contrib.auth.models import User
 class LostFoundItem(models.Model):
     ITEM_TYPES = [
         ('Lost', 'Lost'),
@@ -203,10 +229,17 @@ class LostFoundItem(models.Model):
     date_reported = models.DateTimeField(auto_now_add=True)
     contact_info = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(upload_to='lostfound_images/', blank=True, null=True)
+    # Accept all files
+    # image = models.FileField(
+    #     upload_to='lostfound_files/',
+    #     blank=True,
+    #     null=True
+    # )
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.item_type} Item - {self.description[:50]}"
+
 
 class PrivateMessage(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')

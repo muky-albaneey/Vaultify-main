@@ -17,6 +17,14 @@
         "documentation": {}
     },
     {
+        "label": "FileExtensionValidator",
+        "importPath": "django.core.validators",
+        "description": "django.core.validators",
+        "isExtraImport": true,
+        "detail": "django.core.validators",
+        "documentation": {}
+    },
+    {
         "label": "django.db.models.deletion",
         "kind": 6,
         "isExtraImport": true,
@@ -434,6 +442,46 @@
         "documentation": {}
     },
     {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
         "label": "models",
         "importPath": "django.db",
         "description": "django.db",
@@ -503,6 +551,14 @@
         "description": "django.urls",
         "isExtraImport": true,
         "detail": "django.urls",
+        "documentation": {}
+    },
+    {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
         "documentation": {}
     },
     {
@@ -826,37 +882,20 @@
         "documentation": {}
     },
     {
-        "label": "uuid",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "uuid",
-        "description": "uuid",
-        "detail": "uuid",
-        "documentation": {}
-    },
-    {
-        "label": "make_password",
-        "importPath": "django.contrib.auth.hashers",
-        "description": "django.contrib.auth.hashers",
-        "isExtraImport": true,
-        "detail": "django.contrib.auth.hashers",
-        "documentation": {}
-    },
-    {
-        "label": "make_password",
-        "importPath": "django.contrib.auth.hashers",
-        "description": "django.contrib.auth.hashers",
-        "isExtraImport": true,
-        "detail": "django.contrib.auth.hashers",
-        "documentation": {}
-    },
-    {
         "label": "logging",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "logging",
         "description": "logging",
         "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "make_password",
+        "importPath": "django.contrib.auth.hashers",
+        "description": "django.contrib.auth.hashers",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.hashers",
         "documentation": {}
     },
     {
@@ -1148,6 +1187,15 @@
         "description": "rest_framework.renderers",
         "isExtraImport": true,
         "detail": "rest_framework.renderers",
+        "documentation": {}
+    },
+    {
+        "label": "uuid",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uuid",
+        "description": "uuid",
+        "detail": "uuid",
         "documentation": {}
     },
     {
@@ -1767,6 +1815,24 @@
         "documentation": {}
     },
     {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "accounts.migrations.0018_remove_lostfounditem_image_and_more",
+        "description": "accounts.migrations.0018_remove_lostfounditem_image_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        (\"accounts\", \"0017_bankservicecharge_receipt_image\"),\n    ]\n    operations = [\n        migrations.RemoveField(\n            model_name=\"lostfounditem\",\n            name=\"image\",\n        ),\n        migrations.AlterField(",
+        "detail": "accounts.migrations.0018_remove_lostfounditem_image_and_more",
+        "documentation": {}
+    },
+    {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "accounts.migrations.0019_lostfounditem_image_delete_lostfoundfile",
+        "description": "accounts.migrations.0019_lostfounditem_image_delete_lostfoundfile",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        (\"accounts\", \"0018_remove_lostfounditem_image_and_more\"),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name=\"lostfounditem\",\n            name=\"image\",\n            field=models.ImageField(\n                blank=True, null=True, upload_to=\"lostfound_images/\"",
+        "detail": "accounts.migrations.0019_lostfounditem_image_delete_lostfoundfile",
+        "documentation": {}
+    },
+    {
         "label": "PrivateMessageCreateTests",
         "kind": 6,
         "importPath": "accounts.tests.test_private_message_create",
@@ -1803,6 +1869,15 @@
         "documentation": {}
     },
     {
+        "label": "BankServiceChargeFile",
+        "kind": 6,
+        "importPath": "accounts.models",
+        "description": "accounts.models",
+        "peekOfCode": "class BankServiceChargeFile(models.Model):\n    bank_service_charge = models.ForeignKey(\n        'BankServiceCharge',\n        on_delete=models.CASCADE,\n        related_name='receipt_files'\n    )\n    file = models.FileField(\n        upload_to='service_charge_receipts/',\n        help_text=\"Upload any file for the payment\"\n    )",
+        "detail": "accounts.models",
+        "documentation": {}
+    },
+    {
         "label": "AccessCode",
         "kind": 6,
         "importPath": "accounts.models",
@@ -1825,7 +1900,7 @@
         "kind": 6,
         "importPath": "accounts.models",
         "description": "accounts.models",
-        "peekOfCode": "class UserDeletedAlert(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deleted_alerts')\n    alert = models.ForeignKey(Alert, on_delete=models.CASCADE, related_name='deleted_by_users')\n    deleted_at = models.DateTimeField(auto_now_add=True)\n    class Meta:\n        unique_together = ('user', 'alert')\n    def __str__(self):\n        return f\"Deleted Alert {self.alert.id} by User {self.user.username}\"\nclass LostFoundItem(models.Model):\n    ITEM_TYPES = [",
+        "peekOfCode": "class UserDeletedAlert(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deleted_alerts')\n    alert = models.ForeignKey(Alert, on_delete=models.CASCADE, related_name='deleted_by_users')\n    deleted_at = models.DateTimeField(auto_now_add=True)\n    class Meta:\n        unique_together = ('user', 'alert')\n    def __str__(self):\n        return f\"Deleted Alert {self.alert.id} by User {self.user.username}\"\nfrom django.db import models\nfrom django.contrib.auth.models import User",
         "detail": "accounts.models",
         "documentation": {}
     },
@@ -1884,11 +1959,20 @@
         "documentation": {}
     },
     {
+        "label": "BankServiceChargeFileSerializer",
+        "kind": 6,
+        "importPath": "accounts.serializers",
+        "description": "accounts.serializers",
+        "peekOfCode": "class BankServiceChargeFileSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = BankServiceChargeFile\n        fields = ['id', 'file', 'uploaded_at']\n# ---------------- BankServiceCharge Serializer ----------------\nclass BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    receipt_files = BankServiceChargeFileSerializer(many=True, read_only=True)\n    class Meta:\n        model = BankServiceCharge",
+        "detail": "accounts.serializers",
+        "documentation": {}
+    },
+    {
         "label": "BankServiceChargeSerializer",
         "kind": 6,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "class BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    class Meta:\n        model = BankServiceCharge\n        fields = [\n            'id',\n            'user_id',\n            'service_charge',\n            'paid_charge',\n            'outstanding_charge',",
+        "peekOfCode": "class BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    receipt_files = BankServiceChargeFileSerializer(many=True, read_only=True)\n    class Meta:\n        model = BankServiceCharge\n        fields = [\n            'id', 'user_id', 'service_charge', 'paid_charge', 'outstanding_charge',\n            'payment_frequency', 'bank_name', 'account_name', 'account_number',\n            'receipt_files', 'created_at', 'updated_at'\n        ]",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -1978,7 +2062,7 @@
         "kind": 5,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nfrom decimal import Decimal\nfrom .models import BankServiceCharge\nclass BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    class Meta:\n        model = BankServiceCharge\n        fields = [\n            'id',\n            'user_id',",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n# ---------------- BankServiceChargeFile Serializer ----------------\nclass BankServiceChargeFileSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = BankServiceChargeFile\n        fields = ['id', 'file', 'uploaded_at']\n# ---------------- BankServiceCharge Serializer ----------------\nclass BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    receipt_files = BankServiceChargeFileSerializer(many=True, read_only=True)",
         "detail": "accounts.serializers",
         "documentation": {}
     },

@@ -1,84 +1,64 @@
-import uuid
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Alert, PrivateMessage, UserProfile, AccessCode, LostFoundItem, Transaction
-from django.contrib.auth.hashers import make_password
+from .models import BankServiceCharge, BankServiceChargeFile, Transaction, UserProfile, Alert, AccessCode, LostFoundItem, PrivateMessage
+from decimal import Decimal
 import logging
 
 logger = logging.getLogger(__name__)
-from decimal import Decimal
-from .models import BankServiceCharge
 
+
+# ---------------- BankServiceChargeFile Serializer ----------------
+class BankServiceChargeFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BankServiceChargeFile
+        fields = ['id', 'file', 'uploaded_at']
+
+# ---------------- BankServiceCharge Serializer ----------------
 class BankServiceChargeSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(source='user.id', read_only=True)
+    receipt_files = BankServiceChargeFileSerializer(many=True, read_only=True)
 
     class Meta:
         model = BankServiceCharge
         fields = [
-            'id',
-            'user_id',
-            'service_charge',
-            'paid_charge',
-            'outstanding_charge',
-            'payment_frequency',
-            'bank_name',
-            'account_name',
-            'account_number',
-            'receipt_image',
-            'created_at',
-            'updated_at',
+            'id', 'user_id', 'service_charge', 'paid_charge', 'outstanding_charge',
+            'payment_frequency', 'bank_name', 'account_name', 'account_number',
+            'receipt_files', 'created_at', 'updated_at'
         ]
         read_only_fields = ['id', 'user_id', 'created_at', 'updated_at']
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        request = self.context.get('request')
-        if instance.receipt_image and hasattr(instance.receipt_image, 'url'):
-            rep['receipt_image'] = request.build_absolute_uri(instance.receipt_image.url) if request else instance.receipt_image.url
-        return rep
-    
-    def validate_account_number(self, value):
-        if value in [None, '']:
-            return value
-        if not value.isdigit() or len(value) != 10:
-            raise serializers.ValidationError("Account number must be exactly 10 digits.")
-        return value
-
-    def validate_service_charge(self, value):
-        if value is None:
-            return value
-        if Decimal(value) < Decimal('0.00'):
-            raise serializers.ValidationError("Service charge must be >= 0.")
-        return value
-
-    def update(self, instance, validated_data):
-        paid_charge = validated_data.get('paid_charge', None)
-        service_charge = validated_data.get('service_charge', instance.service_charge)
-
-        if paid_charge is not None:
-            # Add to existing paid_charge instead of replacing
-            new_paid_charge = (instance.paid_charge or Decimal('0.00')) + Decimal(paid_charge)
-            validated_data['paid_charge'] = new_paid_charge
-
-            # Recalculate outstanding_charge
-            if service_charge is not None:
-                validated_data['outstanding_charge'] = max(
-                    Decimal(service_charge) - new_paid_charge,
-                    Decimal('0.00')
-                )
-
-        return super().update(instance, validated_data)
 
     def create(self, validated_data):
-        paid_charge = validated_data.get('paid_charge', Decimal('0.00'))
-        service_charge = validated_data.get('service_charge', None)
+        request = self.context.get('request')
+        files = request.FILES.getlist('receipt_files') if request else []
+        instance = super().create(validated_data)
 
-        if service_charge is not None:
-            validated_data['outstanding_charge'] = max(
-                Decimal(service_charge) - Decimal(paid_charge),
-                Decimal('0.00')
-            )
+        # Create BankServiceChargeFile objects
+        for f in files:
+            BankServiceChargeFile.objects.create(bank_service_charge=instance, file=f)
 
-        return super().create(validated_data)
+        return instance
+
+    def update(self, instance, validated_data):
+        request = self.context.get('request')
+        files = request.FILES.getlist('receipt_files') if request else []
+
+        instance = super().update(instance, validated_data)
+
+        # Add new files
+        for f in files:
+            BankServiceChargeFile.objects.create(bank_service_charge=instance, file=f)
+
+        return instance
+
+    def to_representation(self, instance):
+        """Return full URLs for receipt_files"""
+        rep = super().to_representation(instance)
+        request = self.context.get('request')
+        rep['receipt_files'] = [
+            request.build_absolute_uri(f.file.url) if request else f.file.url
+            for f in instance.receipt_files.all()
+        ]
+        return rep
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
