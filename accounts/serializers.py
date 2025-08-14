@@ -281,7 +281,44 @@ logger = logging.getLogger(__name__)
 from rest_framework import serializers
 from .models import LostFoundItem
 
+# class LostFoundItemSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = LostFoundItem
+#         fields = ['id', 'description', 'item_type', 'location', 'date_reported', 'contact_info', 'sender', 'image']
+#         read_only_fields = ['date_reported', 'sender']
+#         extra_kwargs = {
+#             'image': {'required': False}  # Optional field
+#         }
+
+#     def validate_item_type(self, value):
+#         valid_types = [choice[0] for choice in LostFoundItem.ITEM_TYPES]
+#         if value not in valid_types:
+#             raise serializers.ValidationError("Invalid item type")
+#         return value
+
+#     def create(self, validated_data):
+#         request = self.context.get('request')
+#         image = request.FILES.get('image') if request and request.FILES else None
+#         # Remove 'estate' if present to avoid passing it to model create
+#         validated_data.pop('estate', None)
+#         instance = LostFoundItem.objects.create(**validated_data)
+#         if image:
+#             instance.image = image
+#             instance.save()
+#         return instance
+
+#     def to_representation(self, instance):
+#         representation = super().to_representation(instance)
+#         request = self.context.get('request')
+#         if instance.image and hasattr(instance.image, 'url'):
+#             representation['image'] = request.build_absolute_uri(instance.image.url) if request else instance.image.url
+#         return representation
+from .models import LostFoundItem
+from .serializers import UserSerializer
+
 class LostFoundItemSerializer(serializers.ModelSerializer):
+    sender = UserSerializer(read_only=True)  # <-- Nested serializer
+
     class Meta:
         model = LostFoundItem
         fields = ['id', 'description', 'item_type', 'location', 'date_reported', 'contact_info', 'sender', 'image']
@@ -299,8 +336,7 @@ class LostFoundItemSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         image = request.FILES.get('image') if request and request.FILES else None
-        # Remove 'estate' if present to avoid passing it to model create
-        validated_data.pop('estate', None)
+        validated_data.pop('estate', None)  # avoid passing 'estate' to model
         instance = LostFoundItem.objects.create(**validated_data)
         if image:
             instance.image = image
@@ -313,6 +349,7 @@ class LostFoundItemSerializer(serializers.ModelSerializer):
         if instance.image and hasattr(instance.image, 'url'):
             representation['image'] = request.build_absolute_uri(instance.image.url) if request else instance.image.url
         return representation
+
 class PrivateMessageSerializer(serializers.ModelSerializer):
     sender = serializers.StringRelatedField(read_only=True)
     receiver = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())

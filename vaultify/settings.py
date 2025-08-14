@@ -53,7 +53,7 @@ MIDDLEWARE = [
 # or specify your IP
 ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = ["*"]
+# CORS_ALLOWED_ORIGINS = ["*"]
 # CORS_ALLOWED_ORIGINS = ["https://vaultifyadmin.onrender.com"]
 CORS_ALLOW_CREDENTIALS = True
 REST_FRAMEWORK = {

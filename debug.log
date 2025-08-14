@@ -7134,3 +7134,15 @@ Watching for file changes with StatReloader
 Watching for file changes with StatReloader
 /Users/mac/Vaultify-main/vaultify/settings.py changed, reloading.
 Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/vaultify/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /api/visitors/all
+Not Found: /api/visitor/all
+Bad Request: /api/visitor/checkin/
+Bad Request: /api/visitor/checkin/
