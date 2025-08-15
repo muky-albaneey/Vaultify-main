@@ -2917,7 +2917,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "ALLOWED_HOSTS = ['*']\nCORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],",
+        "peekOfCode": "ALLOWED_HOSTS = ['*']\nCORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\nCSRF_TRUSTED_ORIGINS = ['*']\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -2926,7 +2926,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "CORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
+        "peekOfCode": "CORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\nCSRF_TRUSTED_ORIGINS = ['*']\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -2935,7 +2935,16 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}\nload_dotenv()  # Load environment variables from .env file",
+        "peekOfCode": "CORS_ALLOWED_ORIGINS = [\"*\"]\nCSRF_TRUSTED_ORIGINS = ['*']\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
+        "detail": "vaultify.settings",
+        "documentation": {}
+    },
+    {
+        "label": "CSRF_TRUSTED_ORIGINS",
+        "kind": 5,
+        "importPath": "vaultify.settings",
+        "description": "vaultify.settings",
+        "peekOfCode": "CSRF_TRUSTED_ORIGINS = ['*']\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}\nload_dotenv()  # Load environment variables from .env file",
         "detail": "vaultify.settings",
         "documentation": {}
     },
