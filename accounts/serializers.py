@@ -121,18 +121,23 @@ class UserProfileSerializer(serializers.ModelSerializer):
                 f"Role must be one of: {', '.join(valid_roles)}"
             )
         return value
+
 class UserSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer()
     password = serializers.CharField(write_only=True)
     bank_service_charge = serializers.SerializerMethodField()
+    transactions = serializers.SerializerMethodField()
+    subscription = serializers.SerializerMethodField()  # <-- Add this
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'profile', 'password', 'bank_service_charge']
-        extra_kwargs = {}
+        fields = [
+            'id', 'email', 'first_name', 'last_name',
+            'profile', 'password', 'bank_service_charge',
+            'transactions', 'subscription'
+        ]
 
     def get_bank_service_charge(self, obj):
-        # Always fetch related BankServiceCharge (blank or not)
         try:
             bank_service_charge = obj.bank_service_charge
         except BankServiceCharge.DoesNotExist:
@@ -151,6 +156,41 @@ class UserSerializer(serializers.ModelSerializer):
             "created_at": None,
             "updated_at": None
         }
+
+    def get_transactions(self, obj):
+        transactions = Transaction.objects.filter(user=obj).order_by('-date')
+        return TransactionSerializer(transactions, many=True).data
+
+    def get_subscription(self, obj):
+        """Attach subscription info if available"""
+        try:
+            subscription = obj.subscription  # uses related_name (make sure your Subscription model has related_name='subscription')
+        except Exception:
+            subscription = None
+
+        if subscription:
+            return {
+                "user_id": obj.id,
+                "email": obj.email,
+                "first_name": obj.first_name,
+                "last_name": obj.last_name,
+                "payment_amount": str(subscription.payment_amount),
+                "subscription_type": subscription.subscription_type,
+                "payment_date": subscription.payment_date
+            }
+
+        # ✅ If user has no subscription, still return the skeleton instead of `None`
+        return {
+            "user_id": obj.id,
+            "email": obj.email,
+            "first_name": obj.first_name,
+            "last_name": obj.last_name,
+            "payment_amount": "0.00",
+            "subscription_type": "free",   # default
+            "payment_date": None
+        }
+
+
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -281,38 +321,6 @@ logger = logging.getLogger(__name__)
 from rest_framework import serializers
 from .models import LostFoundItem
 
-# class LostFoundItemSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = LostFoundItem
-#         fields = ['id', 'description', 'item_type', 'location', 'date_reported', 'contact_info', 'sender', 'image']
-#         read_only_fields = ['date_reported', 'sender']
-#         extra_kwargs = {
-#             'image': {'required': False}  # Optional field
-#         }
-
-#     def validate_item_type(self, value):
-#         valid_types = [choice[0] for choice in LostFoundItem.ITEM_TYPES]
-#         if value not in valid_types:
-#             raise serializers.ValidationError("Invalid item type")
-#         return value
-
-#     def create(self, validated_data):
-#         request = self.context.get('request')
-#         image = request.FILES.get('image') if request and request.FILES else None
-#         # Remove 'estate' if present to avoid passing it to model create
-#         validated_data.pop('estate', None)
-#         instance = LostFoundItem.objects.create(**validated_data)
-#         if image:
-#             instance.image = image
-#             instance.save()
-#         return instance
-
-#     def to_representation(self, instance):
-#         representation = super().to_representation(instance)
-#         request = self.context.get('request')
-#         if instance.image and hasattr(instance.image, 'url'):
-#             representation['image'] = request.build_absolute_uri(instance.image.url) if request else instance.image.url
-#         return representation
 from .models import LostFoundItem
 from .serializers import UserSerializer
 
