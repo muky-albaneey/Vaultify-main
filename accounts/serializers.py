@@ -325,15 +325,23 @@ from .models import LostFoundItem
 from .serializers import UserSerializer
 
 class LostFoundItemSerializer(serializers.ModelSerializer):
-    sender = UserSerializer(read_only=True)  # <-- Nested serializer
+    # Use the UserSerializer already defined earlier in this file
+    sender = UserSerializer(read_only=True)
 
     class Meta:
         model = LostFoundItem
-        fields = ['id', 'description', 'item_type', 'location', 'date_reported', 'contact_info', 'sender', 'image']
+        fields = [
+            'id',
+            'description',
+            'item_type',
+            'location',
+            'date_reported',
+            'contact_info',
+            'sender',
+            'image',
+        ]
         read_only_fields = ['date_reported', 'sender']
-        extra_kwargs = {
-            'image': {'required': False}  # Optional field
-        }
+        extra_kwargs = {'image': {'required': False}}  # keep image optional
 
     def validate_item_type(self, value):
         valid_types = [choice[0] for choice in LostFoundItem.ITEM_TYPES]
@@ -342,21 +350,17 @@ class LostFoundItemSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        request = self.context.get('request')
-        image = request.FILES.get('image') if request and request.FILES else None
-        validated_data.pop('estate', None)  # avoid passing 'estate' to model
-        instance = LostFoundItem.objects.create(**validated_data)
-        if image:
-            instance.image = image
-            instance.save()
-        return instance
+        # DRF includes uploaded 'image' in validated_data when using MultiPartParser
+        # No need to read request.FILES manually, and no 'estate' field on model.
+        return LostFoundItem.objects.create(**validated_data)
 
     def to_representation(self, instance):
-        representation = super().to_representation(instance)
+        rep = super().to_representation(instance)
         request = self.context.get('request')
         if instance.image and hasattr(instance.image, 'url'):
-            representation['image'] = request.build_absolute_uri(instance.image.url) if request else instance.image.url
-        return representation
+            rep['image'] = request.build_absolute_uri(instance.image.url) if request else instance.image.url
+        return rep
+
 
 class PrivateMessageSerializer(serializers.ModelSerializer):
     sender = serializers.StringRelatedField(read_only=True)

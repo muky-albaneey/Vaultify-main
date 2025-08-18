@@ -802,6 +802,30 @@
         "documentation": {}
     },
     {
+        "label": "filters",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
+        "label": "status",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
+        "label": "generics",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
         "label": "generics",
         "importPath": "rest_framework",
         "description": "rest_framework",
@@ -819,6 +843,22 @@
     },
     {
         "label": "generics",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
+        "label": "status",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
+        "label": "status",
         "importPath": "rest_framework",
         "description": "rest_framework",
         "isExtraImport": true,
@@ -1062,6 +1102,46 @@
         "documentation": {}
     },
     {
+        "label": "APIView",
+        "importPath": "rest_framework.views",
+        "description": "rest_framework.views",
+        "isExtraImport": true,
+        "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "APIView",
+        "importPath": "rest_framework.views",
+        "description": "rest_framework.views",
+        "isExtraImport": true,
+        "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "rest_framework.response",
+        "description": "rest_framework.response",
+        "isExtraImport": true,
+        "detail": "rest_framework.response",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "rest_framework.response",
+        "description": "rest_framework.response",
+        "isExtraImport": true,
+        "detail": "rest_framework.response",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "rest_framework.response",
+        "description": "rest_framework.response",
+        "isExtraImport": true,
+        "detail": "rest_framework.response",
+        "documentation": {}
+    },
+    {
         "label": "Response",
         "importPath": "rest_framework.response",
         "description": "rest_framework.response",
@@ -1238,6 +1318,38 @@
         "documentation": {}
     },
     {
+        "label": "MultiPartParser",
+        "importPath": "rest_framework.parsers",
+        "description": "rest_framework.parsers",
+        "isExtraImport": true,
+        "detail": "rest_framework.parsers",
+        "documentation": {}
+    },
+    {
+        "label": "FormParser",
+        "importPath": "rest_framework.parsers",
+        "description": "rest_framework.parsers",
+        "isExtraImport": true,
+        "detail": "rest_framework.parsers",
+        "documentation": {}
+    },
+    {
+        "label": "MultiPartParser",
+        "importPath": "rest_framework.parsers",
+        "description": "rest_framework.parsers",
+        "isExtraImport": true,
+        "detail": "rest_framework.parsers",
+        "documentation": {}
+    },
+    {
+        "label": "FormParser",
+        "importPath": "rest_framework.parsers",
+        "description": "rest_framework.parsers",
+        "isExtraImport": true,
+        "detail": "rest_framework.parsers",
+        "documentation": {}
+    },
+    {
         "label": "JSONRenderer",
         "importPath": "rest_framework.renderers",
         "description": "rest_framework.renderers",
@@ -1351,7 +1463,7 @@
         "documentation": {}
     },
     {
-        "label": "IsAuthenticated",
+        "label": "AllowAny",
         "importPath": "rest_framework.permissions",
         "description": "rest_framework.permissions",
         "isExtraImport": true,
@@ -1400,6 +1512,46 @@
     },
     {
         "label": "IsAuthenticated",
+        "importPath": "rest_framework.permissions",
+        "description": "rest_framework.permissions",
+        "isExtraImport": true,
+        "detail": "rest_framework.permissions",
+        "documentation": {}
+    },
+    {
+        "label": "IsAuthenticated",
+        "importPath": "rest_framework.permissions",
+        "description": "rest_framework.permissions",
+        "isExtraImport": true,
+        "detail": "rest_framework.permissions",
+        "documentation": {}
+    },
+    {
+        "label": "AllowAny",
+        "importPath": "rest_framework.permissions",
+        "description": "rest_framework.permissions",
+        "isExtraImport": true,
+        "detail": "rest_framework.permissions",
+        "documentation": {}
+    },
+    {
+        "label": "AllowAny",
+        "importPath": "rest_framework.permissions",
+        "description": "rest_framework.permissions",
+        "isExtraImport": true,
+        "detail": "rest_framework.permissions",
+        "documentation": {}
+    },
+    {
+        "label": "IsAuthenticated",
+        "importPath": "rest_framework.permissions",
+        "description": "rest_framework.permissions",
+        "isExtraImport": true,
+        "detail": "rest_framework.permissions",
+        "documentation": {}
+    },
+    {
+        "label": "AllowAny",
         "importPath": "rest_framework.permissions",
         "description": "rest_framework.permissions",
         "isExtraImport": true,
@@ -1613,6 +1765,22 @@
     },
     {
         "label": "redirect",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "get_object_or_404",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "get_object_or_404",
         "importPath": "django.shortcuts",
         "description": "django.shortcuts",
         "isExtraImport": true,
@@ -2107,7 +2275,7 @@
         "kind": 6,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "class LostFoundItemSerializer(serializers.ModelSerializer):\n    sender = UserSerializer(read_only=True)  # <-- Nested serializer\n    class Meta:\n        model = LostFoundItem\n        fields = ['id', 'description', 'item_type', 'location', 'date_reported', 'contact_info', 'sender', 'image']\n        read_only_fields = ['date_reported', 'sender']\n        extra_kwargs = {\n            'image': {'required': False}  # Optional field\n        }\n    def validate_item_type(self, value):",
+        "peekOfCode": "class LostFoundItemSerializer(serializers.ModelSerializer):\n    # Use the UserSerializer already defined earlier in this file\n    sender = UserSerializer(read_only=True)\n    class Meta:\n        model = LostFoundItem\n        fields = [\n            'id',\n            'description',\n            'item_type',\n            'location',",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -2143,7 +2311,7 @@
         "kind": 5,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "logger = logging.getLogger(__name__)\nfrom rest_framework import serializers\nfrom .models import LostFoundItem\nfrom .models import LostFoundItem\nfrom .serializers import UserSerializer\nclass LostFoundItemSerializer(serializers.ModelSerializer):\n    sender = UserSerializer(read_only=True)  # <-- Nested serializer\n    class Meta:\n        model = LostFoundItem\n        fields = ['id', 'description', 'item_type', 'location', 'date_reported', 'contact_info', 'sender', 'image']",
+        "peekOfCode": "logger = logging.getLogger(__name__)\nfrom rest_framework import serializers\nfrom .models import LostFoundItem\nfrom .models import LostFoundItem\nfrom .serializers import UserSerializer\nclass LostFoundItemSerializer(serializers.ModelSerializer):\n    # Use the UserSerializer already defined earlier in this file\n    sender = UserSerializer(read_only=True)\n    class Meta:\n        model = LostFoundItem",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -2269,7 +2437,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class UserUpdateView(APIView):\n    permission_classes = [IsAuthenticated]\n    def get(self, request, pk):\n        try:\n            user = User.objects.get(pk=pk)\n        except User.DoesNotExist:\n            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)\n        serializer = UserSerializer(user)\n        return Response(serializer.data, status=status.HTTP_200_OK)\n    from datetime import timedelta",
+        "peekOfCode": "class UserUpdateView(APIView):\n    authentication_classes = []          # bypass any global authenticators (e.g. JWT/Session)\n    permission_classes = [AllowAny]      # anyone can call it\n    def get(self, request, pk):\n        try:\n            user = User.objects.get(pk=pk)\n        except User.DoesNotExist:\n            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)\n        serializer = UserSerializer(user)\n        return Response(serializer.data, status=status.HTTP_200_OK)",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -2530,7 +2698,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class LostFoundItemCreateView(generics.CreateAPIView):\n    queryset = LostFoundItem.objects.all()\n    serializer_class = LostFoundItemSerializer\n    permission_classes = [IsAuthenticated]\n    parser_classes = [MultiPartParser, FormParser]\n    def perform_create(self, serializer):\n        user_estate = getattr(self.request.user.profile, 'estate', None)\n        serializer.save(sender=self.request.user, estate=user_estate)\nclass LostFoundItemListView(generics.ListAPIView):\n    serializer_class = LostFoundItemSerializer",
+        "peekOfCode": "class LostFoundItemCreateView(generics.CreateAPIView):\n    queryset = LostFoundItem.objects.all()\n    serializer_class = LostFoundItemSerializer\n    permission_classes = [IsAuthenticated]\n    parser_classes = [MultiPartParser, FormParser]\n    def perform_create(self, serializer):\n        # Estate is derived at list-time from sender.profile; no need to store on model\n        serializer.save(sender=self.request.user)\nclass LostFoundItemListView(generics.ListAPIView):\n    serializer_class = LostFoundItemSerializer",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -2539,7 +2707,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class LostFoundItemListView(generics.ListAPIView):\n    serializer_class = LostFoundItemSerializer\n    permission_classes = [IsAuthenticated]\n    filter_backends = [filters.SearchFilter]\n    search_fields = ['item_type', 'description', 'location', 'contact_info']\n    def get_queryset(self):\n        estate = self.request.query_params.get('estate')\n        if not estate:\n            estate = getattr(self.request.user.profile, 'estate', None)\n        if not estate:",
+        "peekOfCode": "class LostFoundItemListView(generics.ListAPIView):\n    serializer_class = LostFoundItemSerializer\n    permission_classes = [IsAuthenticated]\n    filter_backends = [filters.SearchFilter, filters.OrderingFilter]\n    search_fields = ['description', 'location', 'contact_info']  # leave text to SearchFilter\n    ordering = ['-date_reported']\n    def get_queryset(self):\n        # Prefer explicit ?estate=..., else use the caller’s estate\n        estate = self.request.query_params.get('estate') or getattr(self.request.user.profile, 'estate', None)\n        if not estate:",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -2548,25 +2716,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class LostFoundItemListAllView(generics.ListAPIView):\n    serializer_class = LostFoundItemSerializer\n    permission_classes = [IsAuthenticated]\n    def get_queryset(self):\n        return LostFoundItem.objects.all().order_by('-date_reported')\nclass LostFoundItemListAllView(generics.ListAPIView):\n    serializer_class = LostFoundItemSerializer\n    permission_classes = [IsAuthenticated]\n    def get_queryset(self):\n        return LostFoundItem.objects.all().order_by('-date_reported')",
-        "detail": "accounts.views",
-        "documentation": {}
-    },
-    {
-        "label": "LostFoundItemListAllView",
-        "kind": 6,
-        "importPath": "accounts.views",
-        "description": "accounts.views",
-        "peekOfCode": "class LostFoundItemListAllView(generics.ListAPIView):\n    serializer_class = LostFoundItemSerializer\n    permission_classes = [IsAuthenticated]\n    def get_queryset(self):\n        return LostFoundItem.objects.all().order_by('-date_reported')\nclass LostFoundItemListAllView(generics.ListAPIView):\n    serializer_class = LostFoundItemSerializer\n    permission_classes = [IsAuthenticated]\n    def get_queryset(self):\n        return LostFoundItem.objects.all().order_by('-date_reported')",
-        "detail": "accounts.views",
-        "documentation": {}
-    },
-    {
-        "label": "LostFoundItemListAllView",
-        "kind": 6,
-        "importPath": "accounts.views",
-        "description": "accounts.views",
-        "peekOfCode": "class LostFoundItemListAllView(generics.ListAPIView):\n    serializer_class = LostFoundItemSerializer\n    permission_classes = [IsAuthenticated]\n    def get_queryset(self):\n        return LostFoundItem.objects.all().order_by('-date_reported')\nfrom rest_framework import generics\nfrom rest_framework.views import APIView\nfrom rest_framework.response import Response\nfrom rest_framework.permissions import IsAuthenticated\nfrom django.contrib.auth.models import User",
+        "peekOfCode": "class LostFoundItemListAllView(generics.ListAPIView):\n    queryset = LostFoundItem.objects.select_related('sender', 'sender__profile').order_by('-date_reported')\n    serializer_class = LostFoundItemSerializer\n    permission_classes = [IsAuthenticated]\nfrom rest_framework import generics\nfrom rest_framework.views import APIView\nfrom rest_framework.response import Response\nfrom rest_framework.permissions import IsAuthenticated\nfrom django.contrib.auth.models import User\nfrom .serializers import UserSerializer",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -2728,7 +2878,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class BankServiceChargeUpdateView(APIView):\n    permission_classes = [IsAuthenticated]\n    parser_classes = [MultiPartParser, FormParser]  # 👈 allows image uploads\n    def get(self, request, user_id):\n        \"\"\"Return the service charge object for a user (if exists).\"\"\"\n        try:\n            user = User.objects.get(pk=user_id)\n        except User.DoesNotExist:\n            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)\n        bc = getattr(user, 'bank_service_charge', None)",
+        "peekOfCode": "class BankServiceChargeUpdateView(APIView):\n    authentication_classes = []                 # no JWT/Session auth\n    permission_classes = [AllowAny]             # allow anonymous\n    parser_classes = [MultiPartParser, FormParser]  # handle file uploads\n    def get(self, request, user_id):\n        user = get_object_or_404(User, pk=user_id)\n        bc = getattr(user, 'bank_service_charge', None)\n        if not bc:\n            return Response({'service_charge': None}, status=status.HTTP_200_OK)\n        data = BankServiceChargeSerializer(bc, context={'request': request}).data",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -2746,7 +2896,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class FilterUsersView(APIView):\n    def get(self, request):\n        user_status = request.query_params.get('user_status')\n        estate = request.query_params.get('estate')\n        users = User.objects.all()\n        if user_status:\n            users = users.filter(profile__user_status=user_status)\n        if estate:\n            users = users.filter(profile__estate__iexact=estate)  # case-insensitive exact match\n        serializer = UserSerializer(users, many=True)",
+        "peekOfCode": "class FilterUsersView(APIView):\n    permission_classes = [AllowAny]   # keep/change as you prefer\n    def get(self, request):\n        user_status = request.query_params.get(\"user_status\")\n        estate = request.query_params.get(\"estate\")\n        # allow ?role=Residence&role=Security%20Personnel or default to both\n        role_params = request.query_params.getlist(\"role\")\n        group_by_role = request.query_params.get(\"group_by_role\") in (\"1\", \"true\", \"True\")\n        # base queryset\n        qs = UserProfile.objects.select_related(\"user\").all()",
         "detail": "accounts.views",
         "documentation": {}
     },
