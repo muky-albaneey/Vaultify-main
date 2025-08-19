@@ -19,16 +19,12 @@ from .views import (
     PrivateMessageDeleteView,
     ChangePasswordView,
     SubscriptionUsersListView,
-    BankServiceChargeUpdateView,OpenDeleteAccountView,
+    BankServiceChargeUpdateView,OpenDeleteAccountView,PublicUserDetailView,
     UpdateUserStatusView,ResetPaidChargeView,notify_users_view,notify_user_view,FilterUsersView
 )
 from django.conf import settings
 from .views import  save_device_token
 
-
-# print("SENDGRID_API_KEY:", repr(os.getenv('SENDGRID_API_KEY')))
-# print(settings.DEFAULT_FROM_EMAIL)
-# print("EMAIL_HOST_PASSWORD:", repr(os.getenv('EMAIL_HOST_PASSWORD')))
 
 urlpatterns = [
     # Authentication
@@ -48,6 +44,8 @@ urlpatterns = [
     path('open-delete-account/<int:pk>/', OpenDeleteAccountView.as_view(), name='open-delete-account'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('check-email-verification/', CheckEmailVerificationView.as_view(), name='check-email-verification'),
+    path('users/public/<int:pk>/', PublicUserDetailView.as_view(), name='public-user-detail'),
+
     # Deprecated combined counts endpoint
     path('counts/', LostFoundAndAlertCountView.as_view(), name='lostfound-alerts-count'),
     # New separate counts endpoints
