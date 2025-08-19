@@ -698,6 +698,14 @@
         "documentation": {}
     },
     {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
+        "documentation": {}
+    },
+    {
         "label": "status",
         "importPath": "rest_framework",
         "description": "rest_framework",
@@ -795,6 +803,14 @@
     },
     {
         "label": "generics",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
+        "label": "status",
         "importPath": "rest_framework",
         "description": "rest_framework",
         "isExtraImport": true,
@@ -1158,6 +1174,22 @@
         "documentation": {}
     },
     {
+        "label": "APIView",
+        "importPath": "rest_framework.views",
+        "description": "rest_framework.views",
+        "isExtraImport": true,
+        "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "rest_framework.response",
+        "description": "rest_framework.response",
+        "isExtraImport": true,
+        "detail": "rest_framework.response",
+        "documentation": {}
+    },
+    {
         "label": "Response",
         "importPath": "rest_framework.response",
         "description": "rest_framework.response",
@@ -1511,6 +1543,14 @@
         "documentation": {}
     },
     {
+        "label": "AllowAny",
+        "importPath": "rest_framework.permissions",
+        "description": "rest_framework.permissions",
+        "isExtraImport": true,
+        "detail": "rest_framework.permissions",
+        "documentation": {}
+    },
+    {
         "label": "IsAuthenticated",
         "importPath": "rest_framework.permissions",
         "description": "rest_framework.permissions",
@@ -1645,6 +1685,22 @@
         "description": "django.views.decorators.csrf",
         "isExtraImport": true,
         "detail": "django.views.decorators.csrf",
+        "documentation": {}
+    },
+    {
+        "label": "csrf_exempt",
+        "importPath": "django.views.decorators.csrf",
+        "description": "django.views.decorators.csrf",
+        "isExtraImport": true,
+        "detail": "django.views.decorators.csrf",
+        "documentation": {}
+    },
+    {
+        "label": "method_decorator",
+        "importPath": "django.utils.decorators",
+        "description": "django.utils.decorators",
+        "isExtraImport": true,
+        "detail": "django.utils.decorators",
         "documentation": {}
     },
     {
@@ -1805,6 +1861,14 @@
     },
     {
         "label": "redirect",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "get_object_or_404",
         "importPath": "django.shortcuts",
         "description": "django.shortcuts",
         "isExtraImport": true,
@@ -2550,7 +2614,16 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class DeleteAccountView(APIView):\n    permission_classes = [IsAuthenticated]\n    def delete(self, request, pk):\n        if request.user.pk != pk:\n            return Response({'error': 'You can only delete your own account'}, status=status.HTTP_403_FORBIDDEN)\n        try:\n            user = User.objects.get(pk=pk)\n            user.delete()\n            logger.info(f\"Account deleted for {user.email}\")\n            return Response({'message': 'Account deleted successfully'}, status=status.HTTP_200_OK)",
+        "peekOfCode": "class DeleteAccountView(APIView):\n    authentication_classes = []                 # no JWT/Session auth\n    permission_classes = [AllowAny]             # allow anonymous\n    parser_classes = [MultiPartParser, FormParser]  # handle file uploads\n    def delete(self, request, pk):\n        # if request.user.pk != pk:\n        #     return Response({'error': 'You can only delete your own account'}, status=status.HTTP_403_FORBIDDEN)\n        try:\n            user = User.objects.get(pk=pk)\n            user.delete()",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
+        "label": "OpenDeleteAccountView",
+        "kind": 6,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "class OpenDeleteAccountView(APIView):\n    authentication_classes = []     # ignore global authenticators\n    permission_classes = [AllowAny] # allow anonymous\n    # extra hard override in case a project-level mixin tries to inject perms\n    def get_authenticators(self):    # return none → no auth attempted\n        return []\n    def get_permissions(self):       # force AllowAny at runtime\n        return [AllowAny()]\n    def delete(self, request, pk):\n        user = get_object_or_404(User, pk=pk)",
         "detail": "accounts.views",
         "documentation": {}
     },

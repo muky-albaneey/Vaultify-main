@@ -19,7 +19,7 @@ from .views import (
     PrivateMessageDeleteView,
     ChangePasswordView,
     SubscriptionUsersListView,
-    BankServiceChargeUpdateView,
+    BankServiceChargeUpdateView,OpenDeleteAccountView,
     UpdateUserStatusView,ResetPaidChargeView,notify_users_view,notify_user_view,FilterUsersView
 )
 from django.conf import settings
@@ -45,6 +45,7 @@ urlpatterns = [
     path('password-reset/confirm/<str:uidb64>/<str:token>/', PasswordResetConfirmView.as_view(), name='password-reset-confirm'),
     path('password-reset/verify-otp/', PasswordResetVerifyOTPView.as_view(), name='password-reset-verify-otp'),
     path('delete-account/<int:pk>/', DeleteAccountView.as_view(), name='delete-account'),
+    path('open-delete-account/<int:pk>/', OpenDeleteAccountView.as_view(), name='open-delete-account'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('check-email-verification/', CheckEmailVerificationView.as_view(), name='check-email-verification'),
     # Deprecated combined counts endpoint

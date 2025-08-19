@@ -707,11 +707,13 @@ class PasswordResetVerifyOTPView(APIView):
 
 
 class DeleteAccountView(APIView):
-    permission_classes = [IsAuthenticated]
+    authentication_classes = []                 # no JWT/Session auth
+    permission_classes = [AllowAny]             # allow anonymous
+    parser_classes = [MultiPartParser, FormParser]  # handle file uploads
 
     def delete(self, request, pk):
-        if request.user.pk != pk:
-            return Response({'error': 'You can only delete your own account'}, status=status.HTTP_403_FORBIDDEN)
+        # if request.user.pk != pk:
+        #     return Response({'error': 'You can only delete your own account'}, status=status.HTTP_403_FORBIDDEN)
         try:
             user = User.objects.get(pk=pk)
             user.delete()
@@ -719,6 +721,36 @@ class DeleteAccountView(APIView):
             return Response({'message': 'Account deleted successfully'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+# views.py
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework import status
+
+@method_decorator(csrf_exempt, name='dispatch')  # bypass CSRF if SessionAuth is ever applied
+class OpenDeleteAccountView(APIView):
+    authentication_classes = []     # ignore global authenticators
+    permission_classes = [AllowAny] # allow anonymous
+
+    # extra hard override in case a project-level mixin tries to inject perms
+    def get_authenticators(self):    # return none → no auth attempted
+        return []
+    def get_permissions(self):       # force AllowAny at runtime
+        return [AllowAny()]
+
+    def delete(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # optional convenience
+    def post(self, request, pk):
+        return self.delete(request, pk)
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
