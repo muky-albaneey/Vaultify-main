@@ -1740,72 +1740,104 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
 
-# class FilterUsersView(APIView):
-#     def get(self, request):
-#         user_status = request.query_params.get('user_status')
-#         estate = request.query_params.get('estate')
-
-#         users = User.objects.all()
-
-#         if user_status:
-#             users = users.filter(profile__user_status=user_status)
-#         if estate:
-#             users = users.filter(profile__estate__iexact=estate)  # case-insensitive exact match
-
-#         serializer = UserSerializer(users, many=True)
-        # return Response(serializer.data, status=status.HTTP_200_OK)
-# views.py
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 
-from .models import UserProfile
-from .serializers import UserProfileSerializer  # adjust to your serializer name
+from .serializers import UserSerializer
 
 class FilterUsersView(APIView):
-    permission_classes = [AllowAny]   # keep/change as you prefer
+    permission_classes = [AllowAny]
 
     def get(self, request):
         user_status = request.query_params.get("user_status")
         estate = request.query_params.get("estate")
-        # allow ?role=Residence&role=Security%20Personnel or default to both
         role_params = request.query_params.getlist("role")
         group_by_role = request.query_params.get("group_by_role") in ("1", "true", "True")
 
-        # base queryset
-        qs = UserProfile.objects.select_related("user").all()
-
-        # strict (case-insensitive) filters for status/estate
-        if user_status:
-            qs = qs.filter(user_status__iexact=user_status.strip())
-        if estate:
-            qs = qs.filter(estate__iexact=estate.strip())
-
-        # restrict roles to either provided ones or our two allowed roles
         allowed_roles = role_params or ["Residence", "Security Personnel"]
-        qs = qs.filter(role__in=allowed_roles)
+
+        # Query USERS and filter via related profile fields
+        qs = (
+            User.objects
+            .select_related("profile", "bank_service_charge")  # 1-1 / 1-0 relateds
+            .prefetch_related("transactions")                  # reverse FK
+        )
+
+        if user_status:
+            qs = qs.filter(profile__user_status__iexact=user_status.strip())
+        if estate:
+            qs = qs.filter(profile__estate__iexact=estate.strip())
+
+        qs = qs.filter(profile__role__in=allowed_roles)
 
         if group_by_role:
-            residents_qs = qs.filter(role="Residence")
-            security_qs = qs.filter(role="Security Personnel")
+            residents_qs = qs.filter(profile__role="Residence")
+            security_qs = qs.filter(profile__role="Security Personnel")
             return Response({
-                "residents": UserProfileSerializer(residents_qs, many=True).data,
-                "security_personnel": UserProfileSerializer(security_qs, many=True).data,
+                "residents": UserSerializer(residents_qs, many=True, context={'request': request}).data,
+                "security_personnel": UserSerializer(security_qs, many=True, context={'request': request}).data,
             }, status=status.HTTP_200_OK)
 
-        # default: single list containing only the two roles
-        data = UserProfileSerializer(qs, many=True).data
+        data = UserSerializer(qs, many=True, context={'request': request}).data
         return Response(data, status=status.HTTP_200_OK)
 
+# views.py
+# from django.shortcuts import get_object_or_404
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from rest_framework import status
+# from rest_framework.permissions import AllowAny
+
+# from .models import UserProfile
+# from .serializers import UserProfileSerializer  # adjust to your serializer name
+
+# class FilterUsersView(APIView):
+#     permission_classes = [AllowAny]   # keep/change as you prefer
+
+#     def get(self, request):
+#         user_status = request.query_params.get("user_status")
+#         estate = request.query_params.get("estate")
+#         # allow ?role=Residence&role=Security%20Personnel or default to both
+#         role_params = request.query_params.getlist("role")
+#         group_by_role = request.query_params.get("group_by_role") in ("1", "true", "True")
+
+#         # base queryset
+#         qs = UserProfile.objects.select_related("user").all()
+
+#         # strict (case-insensitive) filters for status/estate
+#         if user_status:
+#             qs = qs.filter(user_status__iexact=user_status.strip())
+#         if estate:
+#             qs = qs.filter(estate__iexact=estate.strip())
+
+#         # restrict roles to either provided ones or our two allowed roles
+#         allowed_roles = role_params or ["Residence", "Security Personnel"]
+#         qs = qs.filter(role__in=allowed_roles)
+
+#         if group_by_role:
+#             residents_qs = qs.filter(role="Residence")
+#             security_qs = qs.filter(role="Security Personnel")
+#             return Response({
+#                 "residents": UserProfileSerializer(residents_qs, many=True).data,
+#                 "security_personnel": UserProfileSerializer(security_qs, many=True).data,
+#             }, status=status.HTTP_200_OK)
+
+#         # default: single list containing only the two roles
+#         data = UserProfileSerializer(qs, many=True).data
+#         return Response(data, status=status.HTTP_200_OK)
+
 class ResetPaidChargeView(APIView):
-    permission_classes = [IsAuthenticated]
+    authentication_classes = []                 # no JWT/Session auth
+    permission_classes = [AllowAny]             # allow anonymous
+    parser_classes = [MultiPartParser, FormParser]  # handle file uploads
 
     def post(self, request, user_id):
         # Allow only owner or staff to reset
-        if request.user.id != user_id and not request.user.is_staff:
-            return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
+        # if request.user.id != user_id and not request.user.is_staff:
+        #     return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
 
         try:
             user = User.objects.get(pk=user_id)

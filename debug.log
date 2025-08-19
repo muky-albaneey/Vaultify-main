@@ -7587,3 +7587,39 @@ Bad Request: /api/lostfound/create/
 Bad Request: /api/lostfound/create/
 /Users/mac/Vaultify-main/vaultify/settings.py changed, reloading.
 Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Bad Request: /api/user/52/service-charge/
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden: /api/bank-service-charge/52/reset-paid/
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden: /api/bank-service-charge/52/reset-paid/
+Forbidden: /api/bank-service-charge/52/reset-paid/
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/vaultify/settings.py changed, reloading.
+Watching for file changes with StatReloader

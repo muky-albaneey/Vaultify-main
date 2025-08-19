@@ -82,6 +82,22 @@
         "documentation": {}
     },
     {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
         "label": "settings",
         "importPath": "django.conf",
         "description": "django.conf",
@@ -674,7 +690,31 @@
         "documentation": {}
     },
     {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
+        "documentation": {}
+    },
+    {
         "label": "status",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
+        "label": "serializers",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
+        "label": "serializers",
         "importPath": "rest_framework",
         "description": "rest_framework",
         "isExtraImport": true,
@@ -1788,14 +1828,6 @@
         "documentation": {}
     },
     {
-        "label": "get_object_or_404",
-        "importPath": "django.shortcuts",
-        "description": "django.shortcuts",
-        "isExtraImport": true,
-        "detail": "django.shortcuts",
-        "documentation": {}
-    },
-    {
         "label": "urlencode",
         "importPath": "urllib.parse",
         "description": "urllib.parse",
@@ -2203,7 +2235,16 @@
         "kind": 6,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "class BankServiceChargeFileSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = BankServiceChargeFile\n        fields = ['id', 'file', 'uploaded_at']\n# ---------------- BankServiceCharge Serializer ----------------\nclass BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    receipt_files = BankServiceChargeFileSerializer(many=True, read_only=True)\n    class Meta:\n        model = BankServiceCharge",
+        "peekOfCode": "class BankServiceChargeFileSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = BankServiceChargeFile\n        fields = ['id', 'file', 'uploaded_at']\n# ---------------- BankServiceCharge Serializer ----------------\nfrom decimal import Decimal\nfrom rest_framework import serializers\nclass BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    receipt_files = BankServiceChargeFileSerializer(many=True, read_only=True)",
+        "detail": "accounts.serializers",
+        "documentation": {}
+    },
+    {
+        "label": "BankServiceChargeSerializer",
+        "kind": 6,
+        "importPath": "accounts.serializers",
+        "description": "accounts.serializers",
+        "peekOfCode": "class BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    receipt_files = BankServiceChargeFileSerializer(many=True, read_only=True)\n    class Meta:\n        model = BankServiceCharge\n        fields = [\n            'id', 'user_id', 'service_charge', 'paid_charge', 'outstanding_charge',\n            'payment_frequency', 'bank_name', 'account_name', 'account_number',\n            'receipt_files', 'created_at', 'updated_at'\n        ]",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -2302,7 +2343,7 @@
         "kind": 5,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "logger = logging.getLogger(__name__)\n# ---------------- BankServiceChargeFile Serializer ----------------\nclass BankServiceChargeFileSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = BankServiceChargeFile\n        fields = ['id', 'file', 'uploaded_at']\n# ---------------- BankServiceCharge Serializer ----------------\nclass BankServiceChargeSerializer(serializers.ModelSerializer):\n    user_id = serializers.IntegerField(source='user.id', read_only=True)\n    receipt_files = BankServiceChargeFileSerializer(many=True, read_only=True)",
+        "peekOfCode": "logger = logging.getLogger(__name__)\n# ---------------- BankServiceChargeFile Serializer ----------------\nclass BankServiceChargeFileSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = BankServiceChargeFile\n        fields = ['id', 'file', 'uploaded_at']\n# ---------------- BankServiceCharge Serializer ----------------\nfrom decimal import Decimal\nfrom rest_framework import serializers\nclass BankServiceChargeSerializer(serializers.ModelSerializer):",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -2896,7 +2937,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class FilterUsersView(APIView):\n    permission_classes = [AllowAny]   # keep/change as you prefer\n    def get(self, request):\n        user_status = request.query_params.get(\"user_status\")\n        estate = request.query_params.get(\"estate\")\n        # allow ?role=Residence&role=Security%20Personnel or default to both\n        role_params = request.query_params.getlist(\"role\")\n        group_by_role = request.query_params.get(\"group_by_role\") in (\"1\", \"true\", \"True\")\n        # base queryset\n        qs = UserProfile.objects.select_related(\"user\").all()",
+        "peekOfCode": "class FilterUsersView(APIView):\n    permission_classes = [AllowAny]\n    def get(self, request):\n        user_status = request.query_params.get(\"user_status\")\n        estate = request.query_params.get(\"estate\")\n        role_params = request.query_params.getlist(\"role\")\n        group_by_role = request.query_params.get(\"group_by_role\") in (\"1\", \"true\", \"True\")\n        allowed_roles = role_params or [\"Residence\", \"Security Personnel\"]\n        # Query USERS and filter via related profile fields\n        qs = (",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -2905,7 +2946,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class ResetPaidChargeView(APIView):\n    permission_classes = [IsAuthenticated]\n    def post(self, request, user_id):\n        # Allow only owner or staff to reset\n        if request.user.id != user_id and not request.user.is_staff:\n            return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)\n        try:\n            user = User.objects.get(pk=user_id)\n        except User.DoesNotExist:\n            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)",
+        "peekOfCode": "class ResetPaidChargeView(APIView):\n    authentication_classes = []                 # no JWT/Session auth\n    permission_classes = [AllowAny]             # allow anonymous\n    parser_classes = [MultiPartParser, FormParser]  # handle file uploads\n    def post(self, request, user_id):\n        # Allow only owner or staff to reset\n        # if request.user.id != user_id and not request.user.is_staff:\n        #     return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)\n        try:\n            user = User.objects.get(pk=user_id)",
         "detail": "accounts.views",
         "documentation": {}
     },

@@ -14,6 +14,9 @@ class BankServiceChargeFileSerializer(serializers.ModelSerializer):
         fields = ['id', 'file', 'uploaded_at']
 
 # ---------------- BankServiceCharge Serializer ----------------
+from decimal import Decimal
+from rest_framework import serializers
+
 class BankServiceChargeSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(source='user.id', read_only=True)
     receipt_files = BankServiceChargeFileSerializer(many=True, read_only=True)
@@ -32,26 +35,81 @@ class BankServiceChargeSerializer(serializers.ModelSerializer):
         files = request.FILES.getlist('receipt_files') if request else []
         instance = super().create(validated_data)
 
-        # Create BankServiceChargeFile objects
+        # compute outstanding on create
+        svc = instance.service_charge or Decimal('0.00')
+        paid = instance.paid_charge or Decimal('0.00')
+        instance.outstanding_charge = max(Decimal('0.00'), svc - paid)
+        instance.save(update_fields=['outstanding_charge'])
+
         for f in files:
             BankServiceChargeFile.objects.create(bank_service_charge=instance, file=f)
+        return instance
 
+from decimal import Decimal
+from rest_framework import serializers
+
+class BankServiceChargeSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
+    receipt_files = BankServiceChargeFileSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = BankServiceCharge
+        fields = [
+            'id', 'user_id', 'service_charge', 'paid_charge', 'outstanding_charge',
+            'payment_frequency', 'bank_name', 'account_name', 'account_number',
+            'receipt_files', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'user_id', 'created_at', 'updated_at']
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        files = request.FILES.getlist('receipt_files') if request else []
+        instance = super().create(validated_data)
+
+        # compute outstanding on create
+        svc = instance.service_charge or Decimal('0.00')
+        paid = instance.paid_charge or Decimal('0.00')
+        instance.outstanding_charge = max(Decimal('0.00'), svc - paid)
+        instance.save(update_fields=['outstanding_charge'])
+
+        for f in files:
+            BankServiceChargeFile.objects.create(bank_service_charge=instance, file=f)
         return instance
 
     def update(self, instance, validated_data):
         request = self.context.get('request')
         files = request.FILES.getlist('receipt_files') if request else []
 
-        instance = super().update(instance, validated_data)
+        # --- INCREMENT paid_charge if provided ---
+        increment = validated_data.pop('paid_charge', None)
+        if increment not in (None, ''):
+            try:
+                inc = Decimal(str(increment))
+            except Exception:
+                raise serializers.ValidationError({'paid_charge': 'Invalid decimal.'})
+            if inc < 0:
+                raise serializers.ValidationError({'paid_charge': 'Must be >= 0.'})
+            current_paid = instance.paid_charge or Decimal('0.00')
+            instance.paid_charge = current_paid + inc
 
-        # Add new files
+        # update the rest of fields normally
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        # recompute outstanding = max(0, service_charge - paid_charge)
+        svc = instance.service_charge or Decimal('0.00')
+        paid = instance.paid_charge or Decimal('0.00')
+        instance.outstanding_charge = max(Decimal('0.00'), svc - paid)
+
+        instance.save()
+
+        # attach any new files
         for f in files:
             BankServiceChargeFile.objects.create(bank_service_charge=instance, file=f)
 
         return instance
 
     def to_representation(self, instance):
-        """Return full URLs for receipt_files"""
         rep = super().to_representation(instance)
         request = self.context.get('request')
         rep['receipt_files'] = [
@@ -59,6 +117,17 @@ class BankServiceChargeSerializer(serializers.ModelSerializer):
             for f in instance.receipt_files.all()
         ]
         return rep
+
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        request = self.context.get('request')
+        rep['receipt_files'] = [
+            request.build_absolute_uri(f.file.url) if request else f.file.url
+            for f in instance.receipt_files.all()
+        ]
+        return rep
+
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -137,6 +206,25 @@ class UserSerializer(serializers.ModelSerializer):
             'transactions', 'subscription'
         ]
 
+    # def get_bank_service_charge(self, obj):
+    #     try:
+    #         bank_service_charge = obj.bank_service_charge
+    #     except BankServiceCharge.DoesNotExist:
+    #         bank_service_charge = None
+
+    #     if bank_service_charge:
+    #         return BankServiceChargeSerializer(bank_service_charge).data
+    #     return {
+    #         "id": None,
+    #         "user_id": obj.id,
+    #         "service_charge": None,
+    #         "payment_frequency": None,
+    #         "bank_name": None,
+    #         "account_name": None,
+    #         "account_number": None,
+    #         "created_at": None,
+    #         "updated_at": None
+    #     }
     def get_bank_service_charge(self, obj):
         try:
             bank_service_charge = obj.bank_service_charge
@@ -144,7 +232,9 @@ class UserSerializer(serializers.ModelSerializer):
             bank_service_charge = None
 
         if bank_service_charge:
-            return BankServiceChargeSerializer(bank_service_charge).data
+            # IMPORTANT: pass context through
+            return BankServiceChargeSerializer(bank_service_charge, context=self.context).data
+
         return {
             "id": None,
             "user_id": obj.id,
@@ -156,6 +246,7 @@ class UserSerializer(serializers.ModelSerializer):
             "created_at": None,
             "updated_at": None
         }
+
 
     def get_transactions(self, obj):
         transactions = Transaction.objects.filter(user=obj).order_by('-date')
