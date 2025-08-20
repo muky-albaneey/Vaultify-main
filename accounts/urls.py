@@ -17,7 +17,7 @@ from .views import (
     LostFoundAndAlertCountView,
     PrivateMessageMarkSeenView,
     PrivateMessageDeleteView,
-    ChangePasswordView,
+    ChangePasswordView,notify_topic_view,delete_device_token,
     SubscriptionUsersListView,
     BankServiceChargeUpdateView,OpenDeleteAccountView,PublicUserDetailView,
     UpdateUserStatusView,ResetPaidChargeView,notify_users_view,notify_user_view,FilterUsersView
@@ -100,6 +100,8 @@ urlpatterns = [
     path('save-token/', save_device_token),
     path('notify-user/', notify_user_view),
     path('notify-users/', notify_users_view),
+    path('notify-topic/', notify_topic_view),
+    path('delete-token/', delete_device_token),
     path('user/<int:user_id>/service-charge/', BankServiceChargeUpdateView.as_view(), name='user-service-charge'),
     path('user/<int:pk>/status/', UpdateUserStatusView.as_view(), name='update-user-status'),
     path('bank-service-charge/<int:user_id>/reset-paid/', ResetPaidChargeView.as_view(), name='reset-paid-charge'),

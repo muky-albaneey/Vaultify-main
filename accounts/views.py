@@ -1617,62 +1617,112 @@ class ChangePasswordView(APIView):
         return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
 
 # views.py
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.contrib.auth.models import User
+
 from .models import DeviceToken
-from .utils import send_fcm_notification
+from .utils import send_fcm_v1_to_token, send_fcm_v1_to_topic  # public helpers only
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def save_device_token(request):
-    token = request.data.get('token')
+    token     = request.data.get('token')
+    platform  = request.data.get('platform')    # optional
+    device_id = request.data.get('device_id')   # optional
     if not token:
         return Response({'error': 'Token is required'}, status=400)
-    
-    DeviceToken.objects.update_or_create(user=request.user, defaults={'token': token})
-    return Response({'message': 'Token saved successfully'})
+
+    obj, created = DeviceToken.objects.get_or_create(
+        user=request.user, token=token,
+        defaults={"platform": platform or "", "device_id": device_id or ""}
+    )
+    if not created:
+        changed = False
+        if platform and obj.platform != platform:
+            obj.platform = platform; changed = True
+        if device_id and obj.device_id != device_id:
+            obj.device_id = device_id; changed = True
+        if changed:
+            obj.save(update_fields=["platform", "device_id", "last_seen"])
+    return Response({'message': 'Token saved'}, status=200)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def notify_user_view(request):
     user_id = request.data.get('user_id')
-    title = request.data.get('title')
+    title   = request.data.get('title')
     message = request.data.get('message')
+    data    = request.data.get('data', {})  # optional
 
     if not all([user_id, title, message]):
         return Response({'error': 'user_id, title, and message are required'}, status=400)
 
-    try:
-        user = User.objects.get(id=user_id)
-        tokens = DeviceToken.objects.filter(user=user).values_list('token', flat=True)
+    user = get_object_or_404(User, id=user_id)
+    tokens = list(DeviceToken.objects.filter(user=user).values_list('token', flat=True))
+    if not tokens:
+        return Response({'error': 'No device token for this user'}, status=404)
 
-        if not tokens:
-            return Response({'error': 'No device token for this user'}, status=404)
+    results, dropped = [], 0
+    for t in tokens:
+        res = send_fcm_v1_to_token(t, title, message, data=data)
+        if not res["ok"] and res.get("drop_token"):
+            DeviceToken.objects.filter(token=t).delete()
+            dropped += 1
+        results.append(res["detail"])
 
-        results = [send_fcm_notification(t, title, message) for t in tokens]
-        return Response({'message': 'Notification sent', 'results': results})
-
-    except User.DoesNotExist:
-        return Response({'error': 'User not found'}, status=404)
+    return Response({'message': 'Notification attempted', 'results': results, 'dropped': dropped}, status=200)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def notify_users_view(request):
     user_ids = request.data.get('user_ids')
-    title = request.data.get('title')
-    message = request.data.get('message')
+    if not isinstance(user_ids, list) or not user_ids:
+        return Response({'error': 'user_ids must be a non-empty list'}, status=400)
+    title    = request.data.get('title')
+    message  = request.data.get('message')
+    data     = request.data.get('data', {})
 
     if not all([user_ids, title, message]):
         return Response({'error': 'user_ids, title, and message are required'}, status=400)
 
-    tokens = DeviceToken.objects.filter(user_id__in=user_ids).values_list('token', flat=True)
+    tokens = list(DeviceToken.objects.filter(user_id__in=user_ids).values_list('token', flat=True))
     if not tokens:
         return Response({'error': 'No tokens found for these users'}, status=404)
 
-    results = [send_fcm_notification(t, title, message) for t in tokens]
-    return Response({'message': 'Notifications sent', 'results': results})
+    results, dropped = [], 0
+    for t in tokens:
+        res = send_fcm_v1_to_token(t, title, message, data=data)
+        if not res["ok"] and res.get("drop_token"):
+            DeviceToken.objects.filter(token=t).delete()
+            dropped += 1
+        results.append(res["detail"])
+
+    return Response({'message': 'Notifications attempted', 'results': results, 'dropped': dropped}, status=200)
+
+# Optional: Topic-based
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def notify_topic_view(request):
+    topic   = request.data.get('topic')  # without '/topics/'
+    title   = request.data.get('title')
+    message = request.data.get('message')
+    data    = request.data.get('data', {})
+    if not all([topic, title, message]):
+        return Response({'error': 'topic, title, and message are required'}, status=400)
+    res = send_fcm_v1_to_topic(topic, title, message, data=data)
+    return Response(res, status=200 if res["ok"] else 400)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def delete_device_token(request):
+    token = request.data.get('token')
+    if not token:
+        return Response({'error': 'Token is required'}, status=400)
+    DeviceToken.objects.filter(user=request.user, token=token).delete()
+    return Response({'message': 'Token deleted'}, status=200)
 
 
 from rest_framework.permissions import IsAuthenticated

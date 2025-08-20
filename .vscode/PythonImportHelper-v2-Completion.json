@@ -186,6 +186,30 @@
         "documentation": {}
     },
     {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
         "label": "migrations",
         "importPath": "django.db",
         "description": "django.db",
@@ -706,6 +730,14 @@
         "documentation": {}
     },
     {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
+        "documentation": {}
+    },
+    {
         "label": "status",
         "importPath": "rest_framework",
         "description": "rest_framework",
@@ -899,6 +931,14 @@
     },
     {
         "label": "generics",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
+        "label": "status",
         "importPath": "rest_framework",
         "description": "rest_framework",
         "isExtraImport": true,
@@ -1002,14 +1042,6 @@
         "documentation": {}
     },
     {
-        "label": "BASE_DIR",
-        "importPath": "vaultify.settings",
-        "description": "vaultify.settings",
-        "isExtraImport": true,
-        "detail": "vaultify.settings",
-        "documentation": {}
-    },
-    {
         "label": "logging",
         "kind": 6,
         "isExtraImport": true,
@@ -1069,12 +1101,36 @@
         "documentation": {}
     },
     {
-        "label": "requests",
+        "label": "os,",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "requests",
-        "description": "requests",
-        "detail": "requests",
+        "importPath": "os.",
+        "description": "os.",
+        "detail": "os.",
+        "documentation": {}
+    },
+    {
+        "label": "service_account",
+        "importPath": "google.oauth2",
+        "description": "google.oauth2",
+        "isExtraImport": true,
+        "detail": "google.oauth2",
+        "documentation": {}
+    },
+    {
+        "label": "id_token",
+        "importPath": "google.oauth2",
+        "description": "google.oauth2",
+        "isExtraImport": true,
+        "detail": "google.oauth2",
+        "documentation": {}
+    },
+    {
+        "label": "Request",
+        "importPath": "google.auth.transport.requests",
+        "description": "google.auth.transport.requests",
+        "isExtraImport": true,
+        "detail": "google.auth.transport.requests",
         "documentation": {}
     },
     {
@@ -1179,6 +1235,22 @@
         "description": "rest_framework.views",
         "isExtraImport": true,
         "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "APIView",
+        "importPath": "rest_framework.views",
+        "description": "rest_framework.views",
+        "isExtraImport": true,
+        "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "rest_framework.response",
+        "description": "rest_framework.response",
+        "isExtraImport": true,
+        "detail": "rest_framework.response",
         "documentation": {}
     },
     {
@@ -1447,6 +1519,15 @@
         "documentation": {}
     },
     {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
         "label": "send_mail",
         "importPath": "django.core.mail",
         "description": "django.core.mail",
@@ -1476,14 +1557,6 @@
         "description": "django.contrib.auth",
         "isExtraImport": true,
         "detail": "django.contrib.auth",
-        "documentation": {}
-    },
-    {
-        "label": "id_token",
-        "importPath": "google.oauth2",
-        "description": "google.oauth2",
-        "isExtraImport": true,
-        "detail": "google.oauth2",
         "documentation": {}
     },
     {
@@ -1624,6 +1697,14 @@
     },
     {
         "label": "IsAuthenticated",
+        "importPath": "rest_framework.permissions",
+        "description": "rest_framework.permissions",
+        "isExtraImport": true,
+        "detail": "rest_framework.permissions",
+        "documentation": {}
+    },
+    {
+        "label": "AllowAny",
         "importPath": "rest_framework.permissions",
         "description": "rest_framework.permissions",
         "isExtraImport": true,
@@ -1861,6 +1942,22 @@
     },
     {
         "label": "redirect",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "get_object_or_404",
+        "importPath": "django.shortcuts",
+        "description": "django.shortcuts",
+        "isExtraImport": true,
+        "detail": "django.shortcuts",
+        "documentation": {}
+    },
+    {
+        "label": "get_object_or_404",
         "importPath": "django.shortcuts",
         "description": "django.shortcuts",
         "isExtraImport": true,
@@ -2169,6 +2266,15 @@
         "documentation": {}
     },
     {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "accounts.migrations.0020_alter_devicetoken_unique_together_and_more",
+        "description": "accounts.migrations.0020_alter_devicetoken_unique_together_and_more",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        (\"accounts\", \"0019_lostfounditem_image_delete_lostfoundfile\"),\n        migrations.swappable_dependency(settings.AUTH_USER_MODEL),\n    ]\n    operations = [\n        migrations.AlterUniqueTogether(\n            name=\"devicetoken\",\n            unique_together={(\"user\", \"token\")},\n        ),",
+        "detail": "accounts.migrations.0020_alter_devicetoken_unique_together_and_more",
+        "documentation": {}
+    },
+    {
         "label": "PrivateMessageCreateTests",
         "kind": 6,
         "importPath": "accounts.tests.test_private_message_create",
@@ -2263,7 +2369,7 @@
         "kind": 6,
         "importPath": "accounts.models",
         "description": "accounts.models",
-        "peekOfCode": "class Transaction(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')\n    date = models.DateTimeField(auto_now_add=True)\n    reference = models.CharField(max_length=255)\n    status = models.CharField(max_length=50)\n    amount = models.DecimalField(max_digits=12, decimal_places=2)\n    def __str__(self):\n        return f\"Transaction {self.reference} for {self.user.username} - {self.status} - {self.amount}\"\nfrom django.db import models\nfrom django.contrib.auth.models import User",
+        "peekOfCode": "class Transaction(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')\n    date = models.DateTimeField(auto_now_add=True)\n    reference = models.CharField(max_length=255)\n    status = models.CharField(max_length=50)\n    amount = models.DecimalField(max_digits=12, decimal_places=2)\n    def __str__(self):\n        return f\"Transaction {self.reference} for {self.user.username} - {self.status} - {self.amount}\"\n# from django.db import models\n# from django.contrib.auth.models import User",
         "detail": "accounts.models",
         "documentation": {}
     },
@@ -2272,7 +2378,7 @@
         "kind": 6,
         "importPath": "accounts.models",
         "description": "accounts.models",
-        "peekOfCode": "class DeviceToken(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='device_tokens')\n    token = models.CharField(max_length=255, unique=True)\n    created_at = models.DateTimeField(auto_now_add=True)\n    def __str__(self):\n        return f\"{self.user.username} - {self.token}\"",
+        "peekOfCode": "class DeviceToken(models.Model):\n    user      = models.ForeignKey(User, on_delete=models.CASCADE, related_name='device_tokens')\n    token     = models.CharField(max_length=255)                 # no unique=True\n    platform  = models.CharField(max_length=16, blank=True)      # \"android\" | \"ios\" | \"web\"\n    device_id = models.CharField(max_length=128, blank=True)\n    last_seen = models.DateTimeField(auto_now=True)\n    class Meta:\n        unique_together = (\"user\", \"token\")\n        indexes = [models.Index(fields=[\"token\"])]\n    def __str__(self):",
         "detail": "accounts.models",
         "documentation": {}
     },
@@ -2430,20 +2536,47 @@
         "documentation": {}
     },
     {
-        "label": "send_fcm_notification",
+        "label": "send_fcm_v1_to_token",
         "kind": 2,
         "importPath": "accounts.utils",
         "description": "accounts.utils",
-        "peekOfCode": "def send_fcm_notification(token, title, body):\n    url = 'https://fcm.googleapis.com/fcm/send'\n    headers = {\n        'Authorization': f'key={FCM_API_KEY}',\n        'Content-Type': 'application/json',\n    }\n    payload = {\n        'to': token,\n        'notification': {\n            'title': title,",
+        "peekOfCode": "def send_fcm_v1_to_token(token: str, title: str, body: str, data: dict | None = None):\n    payload = {\n        \"message\": {\n            \"token\": token,\n            \"notification\": {\"title\": title, \"body\": body},\n            \"data\": {k: str(v) for k, v in (data or {}).items()},\n            \"android\": {\"priority\": \"HIGH\"},\n            \"apns\": {\"headers\": {\"apns-priority\": \"10\"}},\n        }\n    }",
         "detail": "accounts.utils",
         "documentation": {}
     },
     {
-        "label": "FCM_API_KEY",
+        "label": "send_fcm_v1_to_topic",
+        "kind": 2,
+        "importPath": "accounts.utils",
+        "description": "accounts.utils",
+        "peekOfCode": "def send_fcm_v1_to_topic(topic: str, title: str, body: str, data: dict | None = None):\n    payload = {\n        \"message\": {\n            \"topic\": topic,\n            \"notification\": {\"title\": title, \"body\": body},\n            \"data\": {k: str(v) for k, v in (data or {}).items()},\n        }\n    }\n    ok, code, j = _post_fcm(payload)\n    return {\"ok\": ok, \"status\": code, \"detail\": j}",
+        "detail": "accounts.utils",
+        "documentation": {}
+    },
+    {
+        "label": "FIREBASE_PROJECT_ID",
         "kind": 5,
         "importPath": "accounts.utils",
         "description": "accounts.utils",
-        "peekOfCode": "FCM_API_KEY = os.getenv(\"FCM_API_KEY\")\n# FCM_API_KEY = 'YOUR_FIREBASE_SERVER_KEY'\ndef send_fcm_notification(token, title, body):\n    url = 'https://fcm.googleapis.com/fcm/send'\n    headers = {\n        'Authorization': f'key={FCM_API_KEY}',\n        'Content-Type': 'application/json',\n    }\n    payload = {\n        'to': token,",
+        "peekOfCode": "FIREBASE_PROJECT_ID = os.getenv(\"FIREBASE_PROJECT_ID\")  # e.g. \"my-firebase-project\"\nGOOGLE_APPLICATION_CREDENTIALS_JSON = os.getenv(\"GOOGLE_APPLICATION_CREDENTIALS_JSON\")\nSCOPES = [\"https://www.googleapis.com/auth/firebase.messaging\"]\ndef _require_env():\n    if not FIREBASE_PROJECT_ID:\n        raise RuntimeError(\"FIREBASE_PROJECT_ID env var is not set\")\n    if not (GOOGLE_APPLICATION_CREDENTIALS_JSON or os.getenv(\"GOOGLE_APPLICATION_CREDENTIALS\")):\n        raise RuntimeError(\"Set GOOGLE_APPLICATION_CREDENTIALS_JSON or GOOGLE_APPLICATION_CREDENTIALS\")\ndef _get_access_token():\n    _require_env()",
+        "detail": "accounts.utils",
+        "documentation": {}
+    },
+    {
+        "label": "GOOGLE_APPLICATION_CREDENTIALS_JSON",
+        "kind": 5,
+        "importPath": "accounts.utils",
+        "description": "accounts.utils",
+        "peekOfCode": "GOOGLE_APPLICATION_CREDENTIALS_JSON = os.getenv(\"GOOGLE_APPLICATION_CREDENTIALS_JSON\")\nSCOPES = [\"https://www.googleapis.com/auth/firebase.messaging\"]\ndef _require_env():\n    if not FIREBASE_PROJECT_ID:\n        raise RuntimeError(\"FIREBASE_PROJECT_ID env var is not set\")\n    if not (GOOGLE_APPLICATION_CREDENTIALS_JSON or os.getenv(\"GOOGLE_APPLICATION_CREDENTIALS\")):\n        raise RuntimeError(\"Set GOOGLE_APPLICATION_CREDENTIALS_JSON or GOOGLE_APPLICATION_CREDENTIALS\")\ndef _get_access_token():\n    _require_env()\n    if GOOGLE_APPLICATION_CREDENTIALS_JSON:",
+        "detail": "accounts.utils",
+        "documentation": {}
+    },
+    {
+        "label": "SCOPES",
+        "kind": 5,
+        "importPath": "accounts.utils",
+        "description": "accounts.utils",
+        "peekOfCode": "SCOPES = [\"https://www.googleapis.com/auth/firebase.messaging\"]\ndef _require_env():\n    if not FIREBASE_PROJECT_ID:\n        raise RuntimeError(\"FIREBASE_PROJECT_ID env var is not set\")\n    if not (GOOGLE_APPLICATION_CREDENTIALS_JSON or os.getenv(\"GOOGLE_APPLICATION_CREDENTIALS\")):\n        raise RuntimeError(\"Set GOOGLE_APPLICATION_CREDENTIALS_JSON or GOOGLE_APPLICATION_CREDENTIALS\")\ndef _get_access_token():\n    _require_env()\n    if GOOGLE_APPLICATION_CREDENTIALS_JSON:\n        info = json.loads(GOOGLE_APPLICATION_CREDENTIALS_JSON)",
         "detail": "accounts.utils",
         "documentation": {}
     },
@@ -3015,6 +3148,15 @@
         "documentation": {}
     },
     {
+        "label": "PublicUserDetailView",
+        "kind": 6,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "class PublicUserDetailView(APIView):\n    authentication_classes = []          # no authentication at all\n    permission_classes = [AllowAny]      # anyone can access\n    def get(self, request, pk):\n        user = get_object_or_404(User, pk=pk)\n        data = UserSerializer(user, context={'request': request}).data\n        return Response(data, status=status.HTTP_200_OK)\nclass ResetPaidChargeView(APIView):\n    authentication_classes = []                 # no JWT/Session auth\n    permission_classes = [AllowAny]             # allow anonymous",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
         "label": "ResetPaidChargeView",
         "kind": 6,
         "importPath": "accounts.views",
@@ -3037,7 +3179,7 @@
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def save_device_token(request):\n    token = request.data.get('token')\n    if not token:\n        return Response({'error': 'Token is required'}, status=400)\n    DeviceToken.objects.update_or_create(user=request.user, defaults={'token': token})\n    return Response({'message': 'Token saved successfully'})\n@api_view(['POST'])\n@permission_classes([IsAuthenticated])\ndef notify_user_view(request):\n    user_id = request.data.get('user_id')",
+        "peekOfCode": "def save_device_token(request):\n    token     = request.data.get('token')\n    platform  = request.data.get('platform')    # optional\n    device_id = request.data.get('device_id')   # optional\n    if not token:\n        return Response({'error': 'Token is required'}, status=400)\n    obj, created = DeviceToken.objects.get_or_create(\n        user=request.user, token=token,\n        defaults={\"platform\": platform or \"\", \"device_id\": device_id or \"\"}\n    )",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -3046,7 +3188,7 @@
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def notify_user_view(request):\n    user_id = request.data.get('user_id')\n    title = request.data.get('title')\n    message = request.data.get('message')\n    if not all([user_id, title, message]):\n        return Response({'error': 'user_id, title, and message are required'}, status=400)\n    try:\n        user = User.objects.get(id=user_id)\n        tokens = DeviceToken.objects.filter(user=user).values_list('token', flat=True)\n        if not tokens:",
+        "peekOfCode": "def notify_user_view(request):\n    user_id = request.data.get('user_id')\n    title   = request.data.get('title')\n    message = request.data.get('message')\n    data    = request.data.get('data', {})  # optional\n    if not all([user_id, title, message]):\n        return Response({'error': 'user_id, title, and message are required'}, status=400)\n    user = get_object_or_404(User, id=user_id)\n    tokens = list(DeviceToken.objects.filter(user=user).values_list('token', flat=True))\n    if not tokens:",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -3055,7 +3197,25 @@
         "kind": 2,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "def notify_users_view(request):\n    user_ids = request.data.get('user_ids')\n    title = request.data.get('title')\n    message = request.data.get('message')\n    if not all([user_ids, title, message]):\n        return Response({'error': 'user_ids, title, and message are required'}, status=400)\n    tokens = DeviceToken.objects.filter(user_id__in=user_ids).values_list('token', flat=True)\n    if not tokens:\n        return Response({'error': 'No tokens found for these users'}, status=404)\n    results = [send_fcm_notification(t, title, message) for t in tokens]",
+        "peekOfCode": "def notify_users_view(request):\n    user_ids = request.data.get('user_ids')\n    if not isinstance(user_ids, list) or not user_ids:\n        return Response({'error': 'user_ids must be a non-empty list'}, status=400)\n    title    = request.data.get('title')\n    message  = request.data.get('message')\n    data     = request.data.get('data', {})\n    if not all([user_ids, title, message]):\n        return Response({'error': 'user_ids, title, and message are required'}, status=400)\n    tokens = list(DeviceToken.objects.filter(user_id__in=user_ids).values_list('token', flat=True))",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
+        "label": "notify_topic_view",
+        "kind": 2,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "def notify_topic_view(request):\n    topic   = request.data.get('topic')  # without '/topics/'\n    title   = request.data.get('title')\n    message = request.data.get('message')\n    data    = request.data.get('data', {})\n    if not all([topic, title, message]):\n        return Response({'error': 'topic, title, and message are required'}, status=400)\n    res = send_fcm_v1_to_topic(topic, title, message, data=data)\n    return Response(res, status=200 if res[\"ok\"] else 400)\n@api_view(['POST'])",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
+        "label": "delete_device_token",
+        "kind": 2,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "def delete_device_token(request):\n    token = request.data.get('token')\n    if not token:\n        return Response({'error': 'Token is required'}, status=400)\n    DeviceToken.objects.filter(user=request.user, token=token).delete()\n    return Response({'message': 'Token deleted'}, status=200)\nfrom rest_framework.permissions import IsAuthenticated\nfrom .serializers import BankServiceChargeSerializer\nfrom .models import BankServiceCharge\nfrom django.contrib.auth.models import User",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -3181,7 +3341,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "ALLOWED_HOSTS = ['*']\nCORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],",
+        "peekOfCode": "ALLOWED_HOSTS = ['*']\nCORS_ALLOW_ALL_ORIGINS = True\n# CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3190,16 +3350,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "CORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
-        "detail": "vaultify.settings",
-        "documentation": {}
-    },
-    {
-        "label": "CORS_ALLOWED_ORIGINS",
-        "kind": 5,
-        "importPath": "vaultify.settings",
-        "description": "vaultify.settings",
-        "peekOfCode": "CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}\nload_dotenv()  # Load environment variables from .env file",
+        "peekOfCode": "CORS_ALLOW_ALL_ORIGINS = True\n# CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
         "detail": "vaultify.settings",
         "documentation": {}
     },

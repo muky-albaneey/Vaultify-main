@@ -267,14 +267,33 @@ class Transaction(models.Model):
 
 
 
+# from django.db import models
+# from django.contrib.auth.models import User
+# from vaultify.settings import BASE_DIR
+
+# class DeviceToken(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='device_tokens')
+#     token = models.CharField(max_length=255, unique=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"{self.user.username} - {self.token}"
+# models.py
+# models.py
 from django.db import models
 from django.contrib.auth.models import User
-from vaultify.settings import BASE_DIR
 
 class DeviceToken(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='device_tokens')
-    token = models.CharField(max_length=255, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    user      = models.ForeignKey(User, on_delete=models.CASCADE, related_name='device_tokens')
+    token     = models.CharField(max_length=255)                 # no unique=True
+    platform  = models.CharField(max_length=16, blank=True)      # "android" | "ios" | "web"
+    device_id = models.CharField(max_length=128, blank=True)
+    last_seen = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("user", "token")
+        indexes = [models.Index(fields=["token"])]
 
     def __str__(self):
-        return f"{self.user.username} - {self.token}"
+        return f"{self.user.username} - {self.token[:12]}..."
+
