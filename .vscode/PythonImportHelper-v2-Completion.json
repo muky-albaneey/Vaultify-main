@@ -98,6 +98,22 @@
         "documentation": {}
     },
     {
+        "label": "Decimal",
+        "importPath": "decimal",
+        "description": "decimal",
+        "isExtraImport": true,
+        "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
+        "documentation": {}
+    },
+    {
         "label": "settings",
         "importPath": "django.conf",
         "description": "django.conf",
@@ -994,6 +1010,14 @@
         "documentation": {}
     },
     {
+        "label": "status",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
         "label": "PrivateMessage",
         "importPath": "vaultify.accounts.models",
         "description": "vaultify.accounts.models",
@@ -1048,6 +1072,30 @@
         "importPath": "logging",
         "description": "logging",
         "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
+        "documentation": {}
+    },
+    {
+        "label": "timezone",
+        "importPath": "django.utils",
+        "description": "django.utils",
+        "isExtraImport": true,
+        "detail": "django.utils",
         "documentation": {}
     },
     {
@@ -1243,6 +1291,22 @@
         "description": "rest_framework.views",
         "isExtraImport": true,
         "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "APIView",
+        "importPath": "rest_framework.views",
+        "description": "rest_framework.views",
+        "isExtraImport": true,
+        "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "rest_framework.response",
+        "description": "rest_framework.response",
+        "isExtraImport": true,
+        "detail": "rest_framework.response",
         "documentation": {}
     },
     {
@@ -1997,14 +2061,6 @@
         "documentation": {}
     },
     {
-        "label": "timezone",
-        "importPath": "django.utils",
-        "description": "django.utils",
-        "isExtraImport": true,
-        "detail": "django.utils",
-        "documentation": {}
-    },
-    {
         "label": "Q",
         "importPath": "django.db.models",
         "description": "django.db.models",
@@ -2369,7 +2425,7 @@
         "kind": 6,
         "importPath": "accounts.models",
         "description": "accounts.models",
-        "peekOfCode": "class Transaction(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')\n    date = models.DateTimeField(auto_now_add=True)\n    reference = models.CharField(max_length=255)\n    status = models.CharField(max_length=50)\n    amount = models.DecimalField(max_digits=12, decimal_places=2)\n    def __str__(self):\n        return f\"Transaction {self.reference} for {self.user.username} - {self.status} - {self.amount}\"\n# from django.db import models\n# from django.contrib.auth.models import User",
+        "peekOfCode": "class Transaction(models.Model):\n    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')\n    date = models.DateTimeField(auto_now_add=True)\n    reference = models.CharField(max_length=255)\n    status = models.CharField(max_length=50)\n    amount = models.DecimalField(max_digits=12, decimal_places=2)\n    def __str__(self):\n        return f\"Transaction {self.reference} for {self.user.username} - {self.status} - {self.amount}\"\nfrom django.db import models\nfrom django.contrib.auth.models import User",
         "detail": "accounts.models",
         "documentation": {}
     },
@@ -3089,7 +3145,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class VerifyAndCreditView(APIView):\n    def post(self, request):\n        try:\n            reference = request.data.get('reference')\n            user_id = request.data.get('user_id')\n            plan = request.data.get('plan')  \n            if not reference:\n                return Response(\n                    {'error': 'Transaction reference is required'},\n                    status=status.HTTP_400_BAD_REQUEST",
+        "peekOfCode": "class VerifyAndCreditView(APIView):\n    def post(self, request):\n        try:\n            reference = request.data.get('reference')\n            user_id   = request.data.get('user_id')\n            plan      = (request.data.get('plan') or '').strip()\n            if not reference:\n                return Response({'error': 'Transaction reference is required'}, status=status.HTTP_400_BAD_REQUEST)\n            if not user_id:\n                return Response({'error': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -3283,6 +3339,15 @@
         "documentation": {}
     },
     {
+        "label": "logger",
+        "kind": 5,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "logger = logging.getLogger(__name__)\ndef _subscription_summary_and_autofix(profile):\n    \"\"\"\n    Compute start/expiry/is_active/days_remaining.\n    If expired and not already 'free', auto-downgrade plan to 'free'.\n    \"\"\"\n    now_ts = timezone.now()\n    start_dt = getattr(profile, 'subscription_start_date', None)\n    expiry_dt = getattr(profile, 'subscription_expiry_date', None)\n    is_active = bool(expiry_dt and expiry_dt >= now_ts)",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
         "label": "application",
         "kind": 5,
         "importPath": "vaultify.asgi",
@@ -3341,7 +3406,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "ALLOWED_HOSTS = ['*']\nCORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],",
+        "peekOfCode": "ALLOWED_HOSTS = ['*']\nCORS_ALLOW_ALL_ORIGINS = True\n# CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3350,16 +3415,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "CORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
-        "detail": "vaultify.settings",
-        "documentation": {}
-    },
-    {
-        "label": "CORS_ALLOWED_ORIGINS",
-        "kind": 5,
-        "importPath": "vaultify.settings",
-        "description": "vaultify.settings",
-        "peekOfCode": "CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}\nload_dotenv()  # Load environment variables from .env file",
+        "peekOfCode": "CORS_ALLOW_ALL_ORIGINS = True\n# CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
         "detail": "vaultify.settings",
         "documentation": {}
     },

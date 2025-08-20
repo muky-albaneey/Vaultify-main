@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import BankServiceCharge, BankServiceChargeFile, Transaction, UserProfile, Alert, AccessCode, LostFoundItem, PrivateMessage
 from decimal import Decimal
 import logging
-
+from django.utils import timezone
 logger = logging.getLogger(__name__)
 
 
@@ -206,25 +206,6 @@ class UserSerializer(serializers.ModelSerializer):
             'transactions', 'subscription'
         ]
 
-    # def get_bank_service_charge(self, obj):
-    #     try:
-    #         bank_service_charge = obj.bank_service_charge
-    #     except BankServiceCharge.DoesNotExist:
-    #         bank_service_charge = None
-
-    #     if bank_service_charge:
-    #         return BankServiceChargeSerializer(bank_service_charge).data
-    #     return {
-    #         "id": None,
-    #         "user_id": obj.id,
-    #         "service_charge": None,
-    #         "payment_frequency": None,
-    #         "bank_name": None,
-    #         "account_name": None,
-    #         "account_number": None,
-    #         "created_at": None,
-    #         "updated_at": None
-    #     }
     def get_bank_service_charge(self, obj):
         try:
             bank_service_charge = obj.bank_service_charge
@@ -247,40 +228,67 @@ class UserSerializer(serializers.ModelSerializer):
             "updated_at": None
         }
 
-
     def get_transactions(self, obj):
-        transactions = Transaction.objects.filter(user=obj).order_by('-date')
-        return TransactionSerializer(transactions, many=True).data
+        """
+        Use prefetch result if available (fast), else fall back to a capped query.
+        """
+        txs = getattr(obj, 'limited_transactions', None)
+        if txs is None:
+            txs = (Transaction.objects
+                   .filter(user=obj)
+                   .only('id', 'user_id', 'date', 'reference', 'status', 'amount')
+                   .order_by('-date')[:5])   # cap to last 5
+        return TransactionSerializer(txs, many=True).data
 
     def get_subscription(self, obj):
-        """Attach subscription info if available"""
-        try:
-            subscription = obj.subscription  # uses related_name (make sure your Subscription model has related_name='subscription')
-        except Exception:
-            subscription = None
-
-        if subscription:
+        """
+        Compose subscription info from the user's profile.
+        We read start/expiry from UserProfile, and (optionally) infer the last
+        successful payment date from Transaction.
+        """
+        profile = getattr(obj, 'profile', None)
+        if not profile:
             return {
                 "user_id": obj.id,
                 "email": obj.email,
                 "first_name": obj.first_name,
                 "last_name": obj.last_name,
-                "payment_amount": str(subscription.payment_amount),
-                "subscription_type": subscription.subscription_type,
-                "payment_date": subscription.payment_date
+                "payment_amount": "0.00",
+                "subscription_type": "free",
+                "payment_date": None,
+                "start_date": None,          # <-- added
+                "expiry_date": None,         # <-- added
+                "is_active": False,          # convenience flag
+                "days_remaining": None,      # convenience countdown
             }
 
-        # ✅ If user has no subscription, still return the skeleton instead of `None`
+        # Optional: infer last successful payment date
+        last_payment = (
+            obj.transactions.filter(status__iexact='success')
+            .order_by('-date')
+            .first()
+        )
+        payment_date = last_payment.date if last_payment else None
+
+        start = profile.subscription_start_date
+        expiry = profile.subscription_expiry_date
+        now = timezone.now()
+        is_active = bool(expiry and expiry >= now)
+        days_remaining = max(0, (expiry - now).days) if expiry else None
+
         return {
             "user_id": obj.id,
             "email": obj.email,
             "first_name": obj.first_name,
             "last_name": obj.last_name,
-            "payment_amount": "0.00",
-            "subscription_type": "free",   # default
-            "payment_date": None
+            "payment_amount": str(profile.wallet_balance or Decimal('0.00')),
+            "subscription_type": (profile.plan or "free").lower(),
+            "payment_date": payment_date,
+            "start_date": start,             # <-- added
+            "expiry_date": expiry,           # <-- added
+            "is_active": is_active,
+            "days_remaining": days_remaining,
         }
-
 
 
     def to_representation(self, instance):

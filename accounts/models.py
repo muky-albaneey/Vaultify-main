@@ -103,13 +103,6 @@ class BankServiceCharge(models.Model):
     account_name = models.CharField(max_length=255, null=True, blank=True)
     account_number = models.CharField(max_length=20, null=True, blank=True)  # validate in serializer
     
-       # 📌 New field for uploaded receipt
-    # receipt_image = models.ImageField(
-    #     upload_to='service_charge_receipts/',
-    #     null=True,
-    #     blank=True,
-    #     help_text="Upload a receipt image for the payment"
-    # )
     receipt_image = models.FileField(
         upload_to='service_charge_receipts/',
         null=True,
@@ -229,12 +222,7 @@ class LostFoundItem(models.Model):
     date_reported = models.DateTimeField(auto_now_add=True)
     contact_info = models.CharField(max_length=255, blank=True, null=True)
     image = models.ImageField(upload_to='lostfound_images/', blank=True, null=True)
-    # Accept all files
-    # image = models.FileField(
-    #     upload_to='lostfound_files/',
-    #     blank=True,
-    #     null=True
-    # )
+
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -267,19 +255,6 @@ class Transaction(models.Model):
 
 
 
-# from django.db import models
-# from django.contrib.auth.models import User
-# from vaultify.settings import BASE_DIR
-
-# class DeviceToken(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='device_tokens')
-#     token = models.CharField(max_length=255, unique=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return f"{self.user.username} - {self.token}"
-# models.py
-# models.py
 from django.db import models
 from django.contrib.auth.models import User
 

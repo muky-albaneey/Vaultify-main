@@ -7669,3 +7669,494 @@ Not Found: /media/service_charge_receipts/ppa_Letter.pdf
 Not Found: /api/providers/
 Not Found: /favicon.ico
 Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/vaultify/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /media/service_charge_receipts/manage_security.png
+Not Found: /media/service_charge_receipts/scaled_34.jpg
+Not Found: /media/service_charge_receipts/scaled_34.jpg
+Not Found: /media/service_charge_receipts/dashboad.png
+Not Found: /media/service_charge_receipts/ppa_Letter.pdf
+Not Found: /media/service_charge_receipts/
+Not Found: /media/service_charge_receipts/scaled_137-88930.webp
+Not Found: /media/service_charge_receipts/scaled_35.jpg
+/Users/mac/Vaultify-main/accounts/models.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/models.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/models.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/models.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /api/residence-users/all/
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/generics.py", line 203, in get
+    return self.list(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/mixins.py", line 46, in list
+    return Response(serializer.data)
+                    ^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 797, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 251, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 716, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/serializers.py", line 262, in to_representation
+    data = super().to_representation(instance)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 540, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/fields.py", line 1869, in to_representation
+    method = getattr(self.parent, self.method_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UserSerializer' object has no attribute 'get_bank_service_charge'
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /api/residence-users/all/
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/generics.py", line 203, in get
+    return self.list(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/mixins.py", line 46, in list
+    return Response(serializer.data)
+                    ^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 797, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 251, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 716, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/serializers.py", line 239, in to_representation
+    data = super().to_representation(instance)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 540, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/fields.py", line 1869, in to_representation
+    method = getattr(self.parent, self.method_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'UserSerializer' object has no attribute 'get_subscription'
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /api/residence-users/all/
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/generics.py", line 203, in get
+    return self.list(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/mixins.py", line 46, in list
+    return Response(serializer.data)
+                    ^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 797, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 251, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 716, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/serializers.py", line 292, in to_representation
+    data = super().to_representation(instance)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 540, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/fields.py", line 1870, in to_representation
+    return method(value)
+           ^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/serializers.py", line 268, in get_subscription
+    now = timezone.now()
+          ^^^^^^^^
+NameError: name 'timezone' is not defined. Did you mean: 'self.timezone'?
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /api/residence-users/all/
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: could not receive data from server: Operation timed out
+SSL SYSCALL error: Operation timed out
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 512, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/generics.py", line 203, in get
+    return self.list(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/mixins.py", line 46, in list
+    return Response(serializer.data)
+                    ^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 797, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 251, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 716, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/serializers.py", line 292, in to_representation
+    data = super().to_representation(instance)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 540, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/fields.py", line 1870, in to_representation
+    return method(value)
+           ^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/serializers.py", line 217, in get_bank_service_charge
+    return BankServiceChargeSerializer(bank_service_charge, context=self.context).data
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 573, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 251, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/accounts/serializers.py", line 123, in to_representation
+    rep = super().to_representation(instance)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 540, in to_representation
+    ret[field.field_name] = field.to_representation(attribute)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/serializers.py", line 716, in to_representation
+    self.child.to_representation(item) for item in iterable
+                                                   ^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: could not receive data from server: Operation timed out
+SSL SYSCALL error: Operation timed out
+
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Internal Server Error: /api/residence-users/all/
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: could not translate host name "dpg-d27fncuuk2gs73e4a7i0-a.oregon-postgres.render.com" to address: nodename nor servname provided, or not known
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 515, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 475, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 486, in raise_uncaught_exception
+    raise exc
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 503, in dispatch
+    self.initial(request, *args, **kwargs)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 420, in initial
+    self.perform_authentication(request)
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/views.py", line 330, in perform_authentication
+    request.user
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/request.py", line 232, in user
+    self._authenticate()
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/request.py", line 385, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/authentication.py", line 196, in authenticate
+    return self.authenticate_credentials(token)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/rest_framework/authentication.py", line 201, in authenticate_credentials
+    token = model.objects.select_related('user').get(key=key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/models/query.py", line 629, in get
+    num = len(clone)
+          ^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/models/query.py", line 366, in __len__
+    self._fetch_all()
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/models/query.py", line 1949, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1621, in execute_sql
+    cursor = self.connection.cursor()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 320, in cursor
+    return self._cursor()
+           ^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 296, in _cursor
+    self.ensure_connection()
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 278, in ensure_connection
+    with self.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 279, in ensure_connection
+    self.connect()
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/base/base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/django/db/backends/postgresql/base.py", line 332, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/mac/Vaultify-main/.venv/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: could not translate host name "dpg-d27fncuuk2gs73e4a7i0-a.oregon-postgres.render.com" to address: nodename nor servname provided, or not known
+
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/views.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+/Users/mac/Vaultify-main/accounts/serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader

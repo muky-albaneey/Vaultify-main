@@ -1473,98 +1473,243 @@ class AccessCodeDeactivateView(APIView):
         except Exception as e:
             logger.error(f"Error deactivating access code {code}: {str(e)}")
             return Response({"error": "Failed to deactivate access code"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-@method_decorator(csrf_exempt, name='dispatch')
+# @method_decorator(csrf_exempt, name='dispatch')
+
+
+# class VerifyAndCreditView(APIView):
+#     def post(self, request):
+#         try:
+#             reference = request.data.get('reference')
+#             user_id = request.data.get('user_id')
+#             plan = request.data.get('plan')  
+#             if not reference:
+#                 return Response(
+#                     {'error': 'Transaction reference is required'},
+#                     status=status.HTTP_400_BAD_REQUEST
+#                 )
+#             if not user_id:
+#                 return Response(
+#                     {'error': 'User ID is required'},
+#                     status=status.HTTP_400_BAD_REQUEST
+#                 )
+#             if not plan:
+#                 return Response(
+#                     {'error': 'Plan type is required'},
+#                     status=status.HTTP_400_BAD_REQUEST
+#                 )
+
+#             secret_key = 'sk_live_43fc893ff9d7a6dd07302e43aae78602c0dc62c8'
+#             headers = {'Authorization': f'Bearer {secret_key}'}
+#             paystack_url = f'https://api.paystack.co/transaction/verify/{reference}'
+#             response = requests.get(paystack_url, headers=headers)
+#             response_data = response.json()
+#             print(f'Paystack response: status={response.status_code}, body={response_data}')
+
+#             if response.status_code == 200 and response_data['status']:
+#                 transaction_status = response_data['data'].get('status')
+#                 if transaction_status == 'success':
+#                     amount = Decimal(response_data['data']['amount']) / Decimal('100')
+#                     from django.contrib.auth.models import User
+#                     from django.utils import timezone
+#                     try:
+#                         user = User.objects.get(id=user_id)
+#                     except User.DoesNotExist:
+#                         return Response(
+#                             {'error': f'User with id {user_id} not found'},
+#                             status=status.HTTP_400_BAD_REQUEST
+#                         )
+#                     # Idempotency check: prevent double crediting
+#                     if not hasattr(user.profile, 'last_transaction_reference') or user.profile.last_transaction_reference != reference:
+#                         user.profile.wallet_balance += amount
+#                         user.profile.last_transaction_reference = reference
+#                         # Set subscription start and expiry dates based on plan
+#                         now = timezone.now()
+#                         user.profile.plan = plan
+#                         user.profile.subscription_start_date = now
+#                         if plan.lower() == 'monthly':
+#                             user.profile.subscription_expiry_date = now + timezone.timedelta(days=30)
+#                         elif plan.lower() == 'annual':
+#                             user.profile.subscription_expiry_date = now + timezone.timedelta(days=365)
+#                         else:
+#                             # For free or unknown plans, set expiry 30 days from now
+#                             user.profile.subscription_expiry_date = now + timezone.timedelta(days=30)
+#                         user.profile.save(update_fields=['wallet_balance', 'last_transaction_reference', 'plan', 'subscription_start_date', 'subscription_expiry_date'])
+#                         print(f'Updated wallet balance and subscription for user {user_id}: {user.profile.wallet_balance}, plan: {plan}')
+#                     else:
+#                         print(f'Transaction {reference} already processed for user {user_id}')
+
+#                     return Response(
+#                         {'message': 'Wallet credited and subscription updated successfully', 'balance': float(user.profile.wallet_balance)},
+#                         status=status.HTTP_200_OK
+#                     )
+#                 elif transaction_status == 'abandoned':
+#                     # Log abandoned transaction for monitoring
+#                     logger.warning(f'Transaction abandoned: reference={reference}, user_id={user_id}')
+#                     return Response(
+#                         {'error': 'Transaction was abandoned and not completed. Please try again or contact support.'},
+#                         status=status.HTTP_400_BAD_REQUEST
+#                     )
+#                 else:
+#                     return Response(
+#                         {'error': f'Transaction status {transaction_status} not supported'},
+#                         status=status.HTTP_400_BAD_REQUEST
+#                     )
+#             else:
+#                 return Response(
+#                     {'error': 'Transaction verification failed. Please check your payment and try again.'},
+#                     status=status.HTTP_400_BAD_REQUEST
+#                 )
+#         except Exception as e:
+#             logger.error(f'Error in VerifyAndCreditView: {str(e)}')
+#             return Response(
+#                 {'error': f'Something went wrong. Please try again later.'},
+#                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+#             )
+from decimal import Decimal
+from django.conf import settings
+from django.utils import timezone
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+import requests
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def _subscription_summary_and_autofix(profile):
+    """
+    Compute start/expiry/is_active/days_remaining.
+    If expired and not already 'free', auto-downgrade plan to 'free'.
+    """
+    now_ts = timezone.now()
+    start_dt = getattr(profile, 'subscription_start_date', None)
+    expiry_dt = getattr(profile, 'subscription_expiry_date', None)
+
+    is_active = bool(expiry_dt and expiry_dt >= now_ts)
+    days_remaining = max(0, (expiry_dt - now_ts).days) if expiry_dt else None
+
+    # Auto-downgrade if expired
+    if not is_active:
+        plan = (getattr(profile, 'plan', '') or '').strip().lower()
+        if plan and plan != 'free':
+            profile.plan = 'free'
+            try:
+                profile.save(update_fields=['plan'])
+            except Exception as e:
+                logger.warning(f"Failed to auto-downgrade expired plan for user {profile.user_id}: {e}")
+
+    return {
+        'type': ((getattr(profile, 'plan', None) or 'free')).lower(),
+        'start_date': start_dt.isoformat() if start_dt else None,
+        'expiry_date': expiry_dt.isoformat() if expiry_dt else None,
+        'is_active': is_active,
+        'days_remaining': days_remaining,
+    }
 
 
 class VerifyAndCreditView(APIView):
     def post(self, request):
         try:
             reference = request.data.get('reference')
-            user_id = request.data.get('user_id')
-            plan = request.data.get('plan')  
-            if not reference:
-                return Response(
-                    {'error': 'Transaction reference is required'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            if not user_id:
-                return Response(
-                    {'error': 'User ID is required'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            if not plan:
-                return Response(
-                    {'error': 'Plan type is required'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+            user_id   = request.data.get('user_id')
+            plan      = (request.data.get('plan') or '').strip()
 
-            secret_key = 'sk_live_43fc893ff9d7a6dd07302e43aae78602c0dc62c8'
+            if not reference:
+                return Response({'error': 'Transaction reference is required'}, status=status.HTTP_400_BAD_REQUEST)
+            if not user_id:
+                return Response({'error': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+            if not plan:
+                return Response({'error': 'Plan type is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+            secret_key = getattr(settings, 'PAYSTACK_SECRET_KEY', None)
+            if not secret_key:
+                logger.error("PAYSTACK_SECRET_KEY is not configured")
+                return Response({'error': 'Payment configuration error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
             headers = {'Authorization': f'Bearer {secret_key}'}
             paystack_url = f'https://api.paystack.co/transaction/verify/{reference}'
             response = requests.get(paystack_url, headers=headers)
             response_data = response.json()
-            print(f'Paystack response: status={response.status_code}, body={response_data}')
+            logger.info(f'Paystack verification: status={response.status_code}, body={response_data}')
 
-            if response.status_code == 200 and response_data['status']:
-                transaction_status = response_data['data'].get('status')
+            if response.status_code == 200 and response_data.get('status'):
+                transaction_status = response_data.get('data', {}).get('status')
+
                 if transaction_status == 'success':
                     amount = Decimal(response_data['data']['amount']) / Decimal('100')
+
                     from django.contrib.auth.models import User
-                    from django.utils import timezone
                     try:
                         user = User.objects.get(id=user_id)
                     except User.DoesNotExist:
-                        return Response(
-                            {'error': f'User with id {user_id} not found'},
-                            status=status.HTTP_400_BAD_REQUEST
-                        )
-                    # Idempotency check: prevent double crediting
-                    if not hasattr(user.profile, 'last_transaction_reference') or user.profile.last_transaction_reference != reference:
+                        return Response({'error': f'User with id {user_id} not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+                    # Idempotency: prevent double-crediting
+                    already_processed = (user.profile.last_transaction_reference == reference)
+                    if not already_processed:
                         user.profile.wallet_balance += amount
                         user.profile.last_transaction_reference = reference
-                        # Set subscription start and expiry dates based on plan
-                        now = timezone.now()
+
+                        # Update subscription dates
+                        now_ts = timezone.now()
                         user.profile.plan = plan
-                        user.profile.subscription_start_date = now
+                        user.profile.subscription_start_date = now_ts
                         if plan.lower() == 'monthly':
-                            user.profile.subscription_expiry_date = now + timezone.timedelta(days=30)
-                        elif plan.lower() == 'annual':
-                            user.profile.subscription_expiry_date = now + timezone.timedelta(days=365)
+                            user.profile.subscription_expiry_date = now_ts + timezone.timedelta(days=30)
+                        elif plan.lower() in ('annual', 'yearly', 'year'):
+                            user.profile.subscription_expiry_date = now_ts + timezone.timedelta(days=365)
                         else:
-                            # For free or unknown plans, set expiry 30 days from now
-                            user.profile.subscription_expiry_date = now + timezone.timedelta(days=30)
-                        user.profile.save(update_fields=['wallet_balance', 'last_transaction_reference', 'plan', 'subscription_start_date', 'subscription_expiry_date'])
-                        print(f'Updated wallet balance and subscription for user {user_id}: {user.profile.wallet_balance}, plan: {plan}')
+                            user.profile.subscription_expiry_date = now_ts + timezone.timedelta(days=30)
+
+                        user.profile.save(update_fields=[
+                            'wallet_balance', 'last_transaction_reference',
+                            'plan', 'subscription_start_date', 'subscription_expiry_date'
+                        ])
+                        logger.info(f'Wallet/subscription updated for user {user_id}: +{amount} plan={plan}')
                     else:
-                        print(f'Transaction {reference} already processed for user {user_id}')
+                        logger.info(f'Transaction {reference} already processed for user {user_id}')
+
+                    # Build summary AND auto-expire if past due
+                    summary = _subscription_summary_and_autofix(user.profile)
 
                     return Response(
-                        {'message': 'Wallet credited and subscription updated successfully', 'balance': float(user.profile.wallet_balance)},
+                        {
+                            'message': 'Wallet credited and subscription updated successfully'
+                                       if not already_processed else
+                                       'Transaction already processed; returning current subscription status',
+                            'already_processed': already_processed,
+                            'balance': float(user.profile.wallet_balance),
+                            'subscription': summary,
+                        },
                         status=status.HTTP_200_OK
                     )
+
                 elif transaction_status == 'abandoned':
-                    # Log abandoned transaction for monitoring
                     logger.warning(f'Transaction abandoned: reference={reference}, user_id={user_id}')
                     return Response(
                         {'error': 'Transaction was abandoned and not completed. Please try again or contact support.'},
                         status=status.HTTP_400_BAD_REQUEST
                     )
-                else:
-                    return Response(
-                        {'error': f'Transaction status {transaction_status} not supported'},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
-            else:
+
                 return Response(
-                    {'error': 'Transaction verification failed. Please check your payment and try again.'},
+                    {'error': f'Transaction status {transaction_status} not supported'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-        except Exception as e:
-            logger.error(f'Error in VerifyAndCreditView: {str(e)}')
+
             return Response(
-                {'error': f'Something went wrong. Please try again later.'},
+                {'error': 'Transaction verification failed. Please check your payment and try again.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        except Exception as e:
+            logger.exception(f'Error in VerifyAndCreditView: {str(e)}')
+            return Response(
+                {'error': 'Something went wrong. Please try again later.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
 class PrivateMessageMarkSeenView(APIView):
     permission_classes = [IsAuthenticated]
 
