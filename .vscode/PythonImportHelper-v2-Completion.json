@@ -2169,14 +2169,6 @@
         "documentation": {}
     },
     {
-        "label": "load_dotenv",
-        "importPath": "dotenv",
-        "description": "dotenv",
-        "isExtraImport": true,
-        "detail": "dotenv",
-        "documentation": {}
-    },
-    {
         "label": "static",
         "importPath": "django.conf.urls.static",
         "description": "django.conf.urls.static",
@@ -3679,7 +3671,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "USE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.1/howto/static-files/\nSTATIC_URL = 'static/'\nSTATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nfrom dotenv import load_dotenv",
+        "peekOfCode": "USE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.1/howto/static-files/\nSTATIC_URL = 'static/'\nSTATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nimport os",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3688,7 +3680,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "STATIC_URL = 'static/'\nSTATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nfrom dotenv import load_dotenv\nload_dotenv()\nUSE_S3_MEDIA = os.getenv('USE_S3_MEDIA', '1') == '1'\nif USE_S3_MEDIA:",
+        "peekOfCode": "STATIC_URL = 'static/'\nSTATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nimport os\nUSE_S3 = os.getenv(\"USE_S3\", \"true\").lower() == \"true\"\nif USE_S3:\n    # Default/uploaded media -> S3-compatible storage",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3697,7 +3689,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nfrom dotenv import load_dotenv\nload_dotenv()\nUSE_S3_MEDIA = os.getenv('USE_S3_MEDIA', '1') == '1'\nif USE_S3_MEDIA:\n    STORAGES = {",
+        "peekOfCode": "STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nimport os\nUSE_S3 = os.getenv(\"USE_S3\", \"true\").lower() == \"true\"\nif USE_S3:\n    # Default/uploaded media -> S3-compatible storage\n    STORAGES = {",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3706,7 +3698,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "STATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nfrom dotenv import load_dotenv\nload_dotenv()\nUSE_S3_MEDIA = os.getenv('USE_S3_MEDIA', '1') == '1'\nif USE_S3_MEDIA:\n    STORAGES = {\n        \"default\": {\"BACKEND\": \"storages.backends.s3boto3.S3Boto3Storage\"},",
+        "peekOfCode": "STATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nimport os\nUSE_S3 = os.getenv(\"USE_S3\", \"true\").lower() == \"true\"\nif USE_S3:\n    # Default/uploaded media -> S3-compatible storage\n    STORAGES = {\n        \"default\": {",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3715,16 +3707,16 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nfrom dotenv import load_dotenv\nload_dotenv()\nUSE_S3_MEDIA = os.getenv('USE_S3_MEDIA', '1') == '1'\nif USE_S3_MEDIA:\n    STORAGES = {\n        \"default\": {\"BACKEND\": \"storages.backends.s3boto3.S3Boto3Storage\"},\n        \"staticfiles\": {\"BACKEND\": \"django.contrib.staticfiles.storage.StaticFilesStorage\"},\n    }\n    AWS_ACCESS_KEY_ID       = os.getenv('AWS_ACCESS_KEY_ID')",
+        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nimport os\nUSE_S3 = os.getenv(\"USE_S3\", \"true\").lower() == \"true\"\nif USE_S3:\n    # Default/uploaded media -> S3-compatible storage\n    STORAGES = {\n        \"default\": {\n            \"BACKEND\": \"storages.backends.s3boto3.S3Boto3Storage\",\n        },\n        # Keep static via WhiteNoise on Render (fast, simple)",
         "detail": "vaultify.settings",
         "documentation": {}
     },
     {
-        "label": "USE_S3_MEDIA",
+        "label": "USE_S3",
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "USE_S3_MEDIA = os.getenv('USE_S3_MEDIA', '1') == '1'\nif USE_S3_MEDIA:\n    STORAGES = {\n        \"default\": {\"BACKEND\": \"storages.backends.s3boto3.S3Boto3Storage\"},\n        \"staticfiles\": {\"BACKEND\": \"django.contrib.staticfiles.storage.StaticFilesStorage\"},\n    }\n    AWS_ACCESS_KEY_ID       = os.getenv('AWS_ACCESS_KEY_ID')\n    AWS_SECRET_ACCESS_KEY   = os.getenv('AWS_SECRET_ACCESS_KEY')\n    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')  # vaultify\n    AWS_S3_REGION_NAME      = os.getenv('AWS_S3_REGION_NAME', 'us-southeast-1')",
+        "peekOfCode": "USE_S3 = os.getenv(\"USE_S3\", \"true\").lower() == \"true\"\nif USE_S3:\n    # Default/uploaded media -> S3-compatible storage\n    STORAGES = {\n        \"default\": {\n            \"BACKEND\": \"storages.backends.s3boto3.S3Boto3Storage\",\n        },\n        # Keep static via WhiteNoise on Render (fast, simple)\n        \"staticfiles\": {\n            \"BACKEND\": \"whitenoise.storage.CompressedManifestStaticFilesStorage\",",
         "detail": "vaultify.settings",
         "documentation": {}
     },
