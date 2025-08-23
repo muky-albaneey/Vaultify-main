@@ -3689,7 +3689,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# ---------------------------\n# S3 / Linode Object Storage\n# ---------------------------\n# Implemented exactly as requested:\nif os.getenv(\"USE_S3_MEDIA\") == \"1\":",
+        "peekOfCode": "STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# ---------------------------\n# S3 / Linode Object Storage\n# ---------------------------\n# Implemented exactly as requested:\n# --- S3 / Linode Object Storage ---",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3698,7 +3698,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "STATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# ---------------------------\n# S3 / Linode Object Storage\n# ---------------------------\n# Implemented exactly as requested:\nif os.getenv(\"USE_S3_MEDIA\") == \"1\":\n    DEFAULT_FILE_STORAGE = \"storages.backends.s3boto3.S3Boto3Storage\"",
+        "peekOfCode": "STATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# ---------------------------\n# S3 / Linode Object Storage\n# ---------------------------\n# Implemented exactly as requested:\n# --- S3 / Linode Object Storage ---\nif os.getenv(\"USE_S3_MEDIA\") == \"1\":",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3707,7 +3707,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# ---------------------------\n# S3 / Linode Object Storage\n# ---------------------------\n# Implemented exactly as requested:\nif os.getenv(\"USE_S3_MEDIA\") == \"1\":\n    DEFAULT_FILE_STORAGE = \"storages.backends.s3boto3.S3Boto3Storage\"\n    AWS_ACCESS_KEY_ID = os.getenv(\"AWS_ACCESS_KEY_ID\")\n    AWS_SECRET_ACCESS_KEY = os.getenv(\"AWS_SECRET_ACCESS_KEY\")\n    AWS_STORAGE_BUCKET_NAME = os.getenv(\"AWS_STORAGE_BUCKET_NAME\", \"vaultify\")",
+        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\n# ---------------------------\n# S3 / Linode Object Storage\n# ---------------------------\n# Implemented exactly as requested:\n# --- S3 / Linode Object Storage ---\nif os.getenv(\"USE_S3_MEDIA\") == \"1\":\n    # Default file storage: S3\n    DEFAULT_FILE_STORAGE = \"storages.backends.s3boto3.S3Boto3Storage\"\n    AWS_ACCESS_KEY_ID = os.getenv(\"AWS_ACCESS_KEY_ID\")",
         "detail": "vaultify.settings",
         "documentation": {}
     },

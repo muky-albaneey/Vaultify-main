@@ -176,7 +176,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # S3 / Linode Object Storage
 # ---------------------------
 # Implemented exactly as requested:
+# --- S3 / Linode Object Storage ---
 if os.getenv("USE_S3_MEDIA") == "1":
+    # Default file storage: S3
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -186,14 +188,31 @@ if os.getenv("USE_S3_MEDIA") == "1":
     AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-southeast-1")
     AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL", "https://us-southeast-1.linodeobjects.com")
 
-    # IMPORTANT: force vhost-style and use the bucket FQDN
-    AWS_S3_ADDRESSING_STYLE = "virtual"
-    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.us-southeast-1.linodeobjects.com"
-
+    # IMPORTANT: vhost-style addressing using the bucket FQDN
+    # AWS_S3_ADDRESSING_STYLE = "virtual"
+    # AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.us-southeast-1.linodeobjects.com"
+    AWS_S3_ADDRESSING_STYLE
     AWS_S3_SIGNATURE_VERSION = "s3v4"
     AWS_DEFAULT_ACL = None
     AWS_QUERYSTRING_AUTH = False
     AWS_S3_FILE_OVERWRITE = False
+
+    # Django 5 requires STORAGES to include "default" if STORAGES is set at all
+    STORAGES = {
+        "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
+        "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+    }
+
+    # Nice clean media URLs
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+else:
+    # Local dev/media fallback
+    STORAGES = {
+        "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+    }
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
+
     
 # from dotenv import load_dotenv
 # load_dotenv()
