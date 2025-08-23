@@ -22,7 +22,8 @@ requests==2.32.4
 requests-oauthlib==2.0.0
 rsa==4.9.1
 sqlparse==0.5.3
-urllib3==2.5.0
 whitenoise>=6
-django-storages[boto3]>=1.14
-boto3>=1.28
+# django-storages[boto3]>=1.14
+# boto3>=1.28
+django-storages[boto3]==1.14.3
+boto3==1.34.162
