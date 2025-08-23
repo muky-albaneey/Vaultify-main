@@ -189,9 +189,8 @@ if os.getenv("USE_S3_MEDIA") == "1":
     AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL", "https://us-southeast-1.linodeobjects.com")
 
     # IMPORTANT: vhost-style addressing using the bucket FQDN
-    # AWS_S3_ADDRESSING_STYLE = "virtual"
-    # AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.us-southeast-1.linodeobjects.com"
-    AWS_S3_ADDRESSING_STYLE
+    AWS_S3_ADDRESSING_STYLE = "path"
+    AWS_S3_CUSTOM_DOMAIN = None  # and drop MEDIA_URL override or use cluster URL + /bucket/
     AWS_S3_SIGNATURE_VERSION = "s3v4"
     AWS_DEFAULT_ACL = None
     AWS_QUERYSTRING_AUTH = False
