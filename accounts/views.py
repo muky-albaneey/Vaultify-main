@@ -80,12 +80,48 @@ class SubscriptionUsersListView(APIView):
         serializer = SubscriptionUserSerializer(subscription_users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+# class UploadProfileImageView(APIView):
+#     permission_classes = [IsAuthenticated]
+#     parser_classes = [MultiPartParser, FormParser]
+
+#     def post(self, request, format=None):
+#         import logging
+#         logger = logging.getLogger(__name__)
+#         logger.info("UploadProfileImageView POST called")
+#         logger.info(f"Request user: {request.user}")
+#         logger.info(f"Request files: {request.FILES}")
+
+#         file_obj = request.FILES.get('image')
+#         if not file_obj:
+#             logger.warning("No image file provided in request")
+#             return Response({'error': 'No image file provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         # Generate a unique filename with the original extension
+#         ext = os.path.splitext(file_obj.name)[1]  # e.g. '.jpg'
+#         unique_filename = f"{uuid.uuid4().hex}{ext}"
+
+#         # Save the file to default storage (e.g., media folder) with unique name
+#         file_path = default_storage.save(f'profile_images/{unique_filename}', ContentFile(file_obj.read()))
+#         image_url = default_storage.url(file_path)
+
+#         # Prepend base URL to image_url if not absolute
+#         base_url = get_base_url()
+#         if not image_url.startswith('http'):
+#             if image_url.startswith('/'):
+#                 image_url = base_url + image_url
+#             else:
+#                 image_url = base_url + '/' + image_url
+
+#         logger.info(f"Image saved at: {file_path}, URL: {image_url}")
+
+#         return Response({'image_url': image_url}, status=status.HTTP_200_OK)
+# accounts/views.py
+
 class UploadProfileImageView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request, format=None):
-        import logging
         logger = logging.getLogger(__name__)
         logger.info("UploadProfileImageView POST called")
         logger.info(f"Request user: {request.user}")
@@ -93,27 +129,21 @@ class UploadProfileImageView(APIView):
 
         file_obj = request.FILES.get('image')
         if not file_obj:
-            logger.warning("No image file provided in request")
             return Response({'error': 'No image file provided'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Generate a unique filename with the original extension
-        ext = os.path.splitext(file_obj.name)[1]  # e.g. '.jpg'
+        # keep original extension
+        ext = os.path.splitext(file_obj.name)[1]
         unique_filename = f"{uuid.uuid4().hex}{ext}"
 
-        # Save the file to default storage (e.g., media folder) with unique name
-        file_path = default_storage.save(f'profile_images/{unique_filename}', ContentFile(file_obj.read()))
-        image_url = default_storage.url(file_path)
+        # IMPORTANT: stream directly; do NOT read() into ContentFile
+        # S3 path under your bucket
+        object_key = f'profile_images/{unique_filename}'
+        saved_path = default_storage.save(object_key, file_obj)
 
-        # Prepend base URL to image_url if not absolute
-        base_url = get_base_url()
-        if not image_url.startswith('http'):
-            if image_url.startswith('/'):
-                image_url = base_url + image_url
-            else:
-                image_url = base_url + '/' + image_url
+        # django-storages returns a fully-qualified URL when using S3
+        image_url = default_storage.url(saved_path)
 
-        logger.info(f"Image saved at: {file_path}, URL: {image_url}")
-
+        logger.info(f"Image saved at key: {saved_path}, URL: {image_url}")
         return Response({'image_url': image_url}, status=status.HTTP_200_OK)
 
 class UserTransactionListView(APIView):

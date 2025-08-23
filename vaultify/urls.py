@@ -28,5 +28,12 @@ urlpatterns = [
     path('api/', include('accounts.urls')),
 ]
 
-if settings.DEBUG:
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urls.py
+from django.conf import settings
+from django.conf.urls.static import static
+
+...
+if settings.DEBUG and not getattr(settings, "USE_S3_MEDIA", False):
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,5 +1,57 @@
 [
     {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "argparse",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "argparse",
+        "description": "argparse",
+        "detail": "argparse",
+        "documentation": {}
+    },
+    {
+        "label": "pformat",
+        "importPath": "pprint",
+        "description": "pprint",
+        "isExtraImport": true,
+        "detail": "pprint",
+        "documentation": {}
+    },
+    {
+        "label": "jmespath",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "jmespath",
+        "description": "jmespath",
+        "detail": "jmespath",
+        "documentation": {}
+    },
+    {
+        "label": "exceptions",
+        "importPath": "jmespath",
+        "description": "jmespath",
+        "isExtraImport": true,
+        "detail": "jmespath",
+        "documentation": {}
+    },
+    {
         "label": "django.core.validators",
         "kind": 6,
         "isExtraImport": true,
@@ -103,6 +155,14 @@
         "description": "decimal",
         "isExtraImport": true,
         "detail": "decimal",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "django.conf",
+        "description": "django.conf",
+        "isExtraImport": true,
+        "detail": "django.conf",
         "documentation": {}
     },
     {
@@ -1107,6 +1167,14 @@
         "documentation": {}
     },
     {
+        "label": "S3Boto3Storage",
+        "importPath": "storages.backends.s3boto3",
+        "description": "storages.backends.s3boto3",
+        "isExtraImport": true,
+        "detail": "storages.backends.s3boto3",
+        "documentation": {}
+    },
+    {
         "label": "TestCase",
         "importPath": "django.test",
         "description": "django.test",
@@ -1873,15 +1941,6 @@
         "documentation": {}
     },
     {
-        "label": "json",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "json",
-        "description": "json",
-        "detail": "json",
-        "documentation": {}
-    },
-    {
         "label": "hashlib",
         "kind": 6,
         "isExtraImport": true,
@@ -2110,6 +2169,22 @@
         "documentation": {}
     },
     {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "static",
+        "importPath": "django.conf.urls.static",
+        "description": "django.conf.urls.static",
+        "isExtraImport": true,
+        "detail": "django.conf.urls.static",
+        "documentation": {}
+    },
+    {
         "label": "static",
         "importPath": "django.conf.urls.static",
         "description": "django.conf.urls.static",
@@ -2142,12 +2217,12 @@
         "documentation": {}
     },
     {
-        "label": "sys",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "sys",
-        "description": "sys",
-        "detail": "sys",
+        "label": "main",
+        "kind": 2,
+        "importPath": ".venv.bin.jp",
+        "description": ".venv.bin.jp",
+        "peekOfCode": "def main():\n    parser = argparse.ArgumentParser()\n    parser.add_argument('expression')\n    parser.add_argument('-f', '--filename',\n                        help=('The filename containing the input data.  '\n                              'If a filename is not given then data is '\n                              'read from stdin.'))\n    parser.add_argument('--ast', action='store_true',\n                        help=('Pretty print the AST, do not search the data.'))\n    args = parser.parse_args()",
+        "detail": ".venv.bin.jp",
         "documentation": {}
     },
     {
@@ -2583,6 +2658,15 @@
         "documentation": {}
     },
     {
+        "label": "MediaRootS3Boto3Storage",
+        "kind": 6,
+        "importPath": "accounts.storages",
+        "description": "accounts.storages",
+        "peekOfCode": "class MediaRootS3Boto3Storage(S3Boto3Storage):\n    location = \"media\"            # prefix inside the bucket\n    default_acl = None            # use bucket policy",
+        "detail": "accounts.storages",
+        "documentation": {}
+    },
+    {
         "label": "urlpatterns",
         "kind": 5,
         "importPath": "accounts.urls",
@@ -2650,7 +2734,7 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class UploadProfileImageView(APIView):\n    permission_classes = [IsAuthenticated]\n    parser_classes = [MultiPartParser, FormParser]\n    def post(self, request, format=None):\n        import logging\n        logger = logging.getLogger(__name__)\n        logger.info(\"UploadProfileImageView POST called\")\n        logger.info(f\"Request user: {request.user}\")\n        logger.info(f\"Request files: {request.FILES}\")\n        file_obj = request.FILES.get('image')",
+        "peekOfCode": "class UploadProfileImageView(APIView):\n    permission_classes = [IsAuthenticated]\n    parser_classes = [MultiPartParser, FormParser]\n    def post(self, request, format=None):\n        logger = logging.getLogger(__name__)\n        logger.info(\"UploadProfileImageView POST called\")\n        logger.info(f\"Request user: {request.user}\")\n        logger.info(f\"Request files: {request.FILES}\")\n        file_obj = request.FILES.get('image')\n        if not file_obj:",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -3406,7 +3490,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "ALLOWED_HOSTS = ['*']\nCORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],",
+        "peekOfCode": "ALLOWED_HOSTS = ['*']\nCORS_ALLOW_ALL_ORIGINS = True\n# CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3415,16 +3499,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "CORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
-        "detail": "vaultify.settings",
-        "documentation": {}
-    },
-    {
-        "label": "CORS_ALLOWED_ORIGINS",
-        "kind": 5,
-        "importPath": "vaultify.settings",
-        "description": "vaultify.settings",
-        "peekOfCode": "CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}\nload_dotenv()  # Load environment variables from .env file",
+        "peekOfCode": "CORS_ALLOW_ALL_ORIGINS = True\n# CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3604,7 +3679,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "USE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.1/howto/static-files/\nSTATIC_URL = 'static/'\nSTATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nMEDIA_URL = '/media/'",
+        "peekOfCode": "USE_TZ = True\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.1/howto/static-files/\nSTATIC_URL = 'static/'\nSTATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nfrom dotenv import load_dotenv",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3613,7 +3688,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "STATIC_URL = 'static/'\nSTATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nMEDIA_URL = '/media/'\nMEDIA_ROOT = BASE_DIR / 'media'",
+        "peekOfCode": "STATIC_URL = 'static/'\nSTATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nfrom dotenv import load_dotenv\nload_dotenv()\nUSE_S3_MEDIA = os.getenv('USE_S3_MEDIA', '1') == '1'\nif USE_S3_MEDIA:",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3622,7 +3697,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nMEDIA_URL = '/media/'\nMEDIA_ROOT = BASE_DIR / 'media'",
+        "peekOfCode": "STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')\nSTATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nfrom dotenv import load_dotenv\nload_dotenv()\nUSE_S3_MEDIA = os.getenv('USE_S3_MEDIA', '1') == '1'\nif USE_S3_MEDIA:\n    STORAGES = {",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3631,7 +3706,7 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "STATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nMEDIA_URL = '/media/'\nMEDIA_ROOT = BASE_DIR / 'media'",
+        "peekOfCode": "STATICFILES_DIRS = [BASE_DIR / \"static\"]\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field\nDEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nfrom dotenv import load_dotenv\nload_dotenv()\nUSE_S3_MEDIA = os.getenv('USE_S3_MEDIA', '1') == '1'\nif USE_S3_MEDIA:\n    STORAGES = {\n        \"default\": {\"BACKEND\": \"storages.backends.s3boto3.S3Boto3Storage\"},",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3640,25 +3715,16 @@
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nMEDIA_URL = '/media/'\nMEDIA_ROOT = BASE_DIR / 'media'",
+        "peekOfCode": "DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'\nfrom dotenv import load_dotenv\nload_dotenv()\nUSE_S3_MEDIA = os.getenv('USE_S3_MEDIA', '1') == '1'\nif USE_S3_MEDIA:\n    STORAGES = {\n        \"default\": {\"BACKEND\": \"storages.backends.s3boto3.S3Boto3Storage\"},\n        \"staticfiles\": {\"BACKEND\": \"django.contrib.staticfiles.storage.StaticFilesStorage\"},\n    }\n    AWS_ACCESS_KEY_ID       = os.getenv('AWS_ACCESS_KEY_ID')",
         "detail": "vaultify.settings",
         "documentation": {}
     },
     {
-        "label": "MEDIA_URL",
+        "label": "USE_S3_MEDIA",
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "MEDIA_URL = '/media/'\nMEDIA_ROOT = BASE_DIR / 'media'",
-        "detail": "vaultify.settings",
-        "documentation": {}
-    },
-    {
-        "label": "MEDIA_ROOT",
-        "kind": 5,
-        "importPath": "vaultify.settings",
-        "description": "vaultify.settings",
-        "peekOfCode": "MEDIA_ROOT = BASE_DIR / 'media'",
+        "peekOfCode": "USE_S3_MEDIA = os.getenv('USE_S3_MEDIA', '1') == '1'\nif USE_S3_MEDIA:\n    STORAGES = {\n        \"default\": {\"BACKEND\": \"storages.backends.s3boto3.S3Boto3Storage\"},\n        \"staticfiles\": {\"BACKEND\": \"django.contrib.staticfiles.storage.StaticFilesStorage\"},\n    }\n    AWS_ACCESS_KEY_ID       = os.getenv('AWS_ACCESS_KEY_ID')\n    AWS_SECRET_ACCESS_KEY   = os.getenv('AWS_SECRET_ACCESS_KEY')\n    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')  # vaultify\n    AWS_S3_REGION_NAME      = os.getenv('AWS_S3_REGION_NAME', 'us-southeast-1')",
         "detail": "vaultify.settings",
         "documentation": {}
     },
@@ -3667,7 +3733,7 @@
         "kind": 5,
         "importPath": "vaultify.urls",
         "description": "vaultify.urls",
-        "peekOfCode": "urlpatterns = [\n    path('', lambda request: HttpResponse(\"Vaultify is alive!\")),\n    path('admin/', admin.site.urls),\n    path('api/', include('accounts.urls')),\n]\nif settings.DEBUG:\n    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)",
+        "peekOfCode": "urlpatterns = [\n    path('', lambda request: HttpResponse(\"Vaultify is alive!\")),\n    path('admin/', admin.site.urls),\n    path('api/', include('accounts.urls')),\n]\n# if settings.DEBUG:\n#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n# urls.py\nfrom django.conf import settings\nfrom django.conf.urls.static import static",
         "detail": "vaultify.urls",
         "documentation": {}
     },
