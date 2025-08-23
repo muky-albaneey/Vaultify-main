@@ -54,7 +54,7 @@ MIDDLEWARE = [
 # or specify your IP
 ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
-# CORS_ALLOWED_ORIGINS = ["*"]
+CORS_ALLOWED_ORIGINS = ["*"]
 # CORS_ALLOWED_ORIGINS = ["https://vaultifyadmin.onrender.com"]
 CORS_ALLOW_CREDENTIALS = True
 REST_FRAMEWORK = {
@@ -206,37 +206,3 @@ else:
     }
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
-
-# if os.getenv("USE_S3_MEDIA") == "1":
-#     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
-#     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-#     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-
-#     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "vaultify")
-#     AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-southeast-1")
-#     AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL", "https://us-southeast-1.linodeobjects.com")
-
-#     # Legacy (E0) → use path-style
-#     AWS_S3_ADDRESSING_STYLE = "path"
-#     AWS_S3_SIGNATURE_VERSION = "s3v4"
-#     AWS_DEFAULT_ACL = None
-#     AWS_S3_FILE_OVERWRITE = False
-
-#     # Choose ONE of these:
-#     AWS_QUERYSTRING_AUTH = False   # if using public bucket policy (Option A)
-#     # AWS_QUERYSTRING_AUTH = True  # if keeping bucket private (Option B)
-
-#     STORAGES = {
-#         "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
-#         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
-#     }
-
-#     # For path-style, MEDIA_URL must be cluster endpoint + bucket
-#     MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/"
-# else:
-#     STORAGES = {
-#         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
-#     }
-#     MEDIA_URL = "/media/"
-#     MEDIA_ROOT = BASE_DIR / "media"
