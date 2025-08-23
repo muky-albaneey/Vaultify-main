@@ -173,12 +173,9 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ---------------------------
-# S3 / Linode Object Storage
+# S3 / Linode Object Storage (Legacy E0)
 # ---------------------------
-# Implemented exactly as requested:
-# --- S3 / Linode Object Storage ---
 if os.getenv("USE_S3_MEDIA") == "1":
-    # Default file storage: S3
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -188,68 +185,68 @@ if os.getenv("USE_S3_MEDIA") == "1":
     AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-southeast-1")
     AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL", "https://us-southeast-1.linodeobjects.com")
 
-    # IMPORTANT: vhost-style addressing using the bucket FQDN
+    # Legacy (E0) → use path-style
     AWS_S3_ADDRESSING_STYLE = "path"
-    AWS_S3_CUSTOM_DOMAIN = None  # and drop MEDIA_URL override or use cluster URL + /bucket/
     AWS_S3_SIGNATURE_VERSION = "s3v4"
     AWS_DEFAULT_ACL = None
-    AWS_QUERYSTRING_AUTH = False
     AWS_S3_FILE_OVERWRITE = False
 
-    # Django 5 requires STORAGES to include "default" if STORAGES is set at all
+    # Choose ONE of these:
+    AWS_QUERYSTRING_AUTH = False   # if using public bucket policy (Option A)
+    # AWS_QUERYSTRING_AUTH = True  # if keeping bucket private (Option B)
+
     STORAGES = {
         "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
     }
 
-    # Nice clean media URLs
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+    # For path-style, MEDIA_URL must be cluster endpoint + bucket
+    MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/"
 else:
-    # Local dev/media fallback
     STORAGES = {
         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
     }
     MEDIA_URL = "/media/"
     MEDIA_ROOT = BASE_DIR / "media"
 
-    
-# from dotenv import load_dotenv
-# load_dotenv()
+# ---------------------------
+# S3 / Linode Object Storage
+# ---------------------------
+# Implemented exactly as requested:
+# --- S3 / Linode Object Storage ---
+# if os.getenv("USE_S3_MEDIA") == "1":
+#     # Default file storage: S3
+#     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
-# USE_S3_MEDIA = os.getenv('USE_S3_MEDIA', '1') == '1'
+#     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+#     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 
-# if USE_S3_MEDIA:
+#     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "vaultify")
+#     AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-southeast-1")
+#     AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL", "https://us-southeast-1.linodeobjects.com")
+
+#     # IMPORTANT: vhost-style addressing using the bucket FQDN
+#     AWS_S3_ADDRESSING_STYLE = "path"
+#     AWS_S3_CUSTOM_DOMAIN = None  # and drop MEDIA_URL override or use cluster URL + /bucket/
+#     AWS_S3_SIGNATURE_VERSION = "s3v4"
+#     AWS_DEFAULT_ACL = None
+#     AWS_QUERYSTRING_AUTH = False
+#     AWS_S3_FILE_OVERWRITE = False
+
+#     # Django 5 requires STORAGES to include "default" if STORAGES is set at all
 #     STORAGES = {
 #         "default": {"BACKEND": "storages.backends.s3boto3.S3Boto3Storage"},
-#         "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+#         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
 #     }
 
-#     AWS_ACCESS_KEY_ID       = os.getenv('AWS_ACCESS_KEY_ID')
-#     AWS_SECRET_ACCESS_KEY   = os.getenv('AWS_SECRET_ACCESS_KEY')
-#     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')  # vaultify
-#     AWS_S3_REGION_NAME      = os.getenv('AWS_S3_REGION_NAME', 'us-southeast-1')
-#     AWS_S3_ENDPOINT_URL     = os.getenv('AWS_S3_ENDPOINT_URL', f'https://{AWS_S3_REGION_NAME}.linodeobjects.com')
-#     AWS_S3_SIGNATURE_VERSION = "s3v4"
-
-#     # 👇 Required for Linode Legacy (E0)
-#     AWS_S3_ADDRESSING_STYLE = "path"
-
-#     AWS_S3_FILE_OVERWRITE   = False
-#     AWS_DEFAULT_ACL         = None
-
-#     # Signed URLs off if bucket is public
-#     AWS_QUERYSTRING_AUTH    = os.getenv('AWS_QUERYSTRING_AUTH', 'False') == 'True'
-
-#     # 👇 DO NOT use a custom domain on E0
-#     # AWS_S3_CUSTOM_DOMAIN = ...
-
-#     # Public URL base (path-style)
-#     MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/"
+#     # Nice clean media URLs
+#     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 # else:
-#     MEDIA_URL  = '/media/'
-#     MEDIA_ROOT = BASE_DIR / 'media'
+#     # Local dev/media fallback
+#     STORAGES = {
+#         "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+#     }
+#     MEDIA_URL = "/media/"
+#     MEDIA_ROOT = BASE_DIR / "media"
 
-# MEDIA_URL = '/media/'
 
-# MEDIA_ROOT = BASE_DIR / 'media'
-# --- S3 / Linode Object Storage (works reliably) ---
