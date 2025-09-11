@@ -52,7 +52,8 @@ MIDDLEWARE = [
 ]
 # ALLOWED_HOSTS = ['vaultify.lexisdevelopmentltd.com', 'vaultify.lexisfinance.com', 'vaultify-43wm.onrender.com', 'vaultifyadmin.onrender.com', 'yourdomain.com', '127.0.0.1', ] 
 # or specify your IP
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = True
 CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = ["*"]
 CORS_ALLOWED_ORIGINS = True
