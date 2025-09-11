@@ -1,0 +1,80 @@
+name: Deploy Vaultify
+
+on:
+  push:
+    branches:
+      - main
+      - VPS
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Pull latest changes on VPS
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /home/Vaultify-main
+            echo "Fetching branch: ${GITHUB_REF_NAME}"
+            git fetch --all
+            git reset --hard origin/${GITHUB_REF_NAME}
+            git clean -fd
+
+      - name: Install dependencies
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /home/Vaultify-main
+            source venv/bin/activate
+            pip install --upgrade pip
+            pip install -r requirements.txt
+
+      - name: Run migrations
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /home/Vaultify-main
+            source venv/bin/activate
+            python manage.py migrate --noinput
+
+      - name: Collect static files
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            cd /home/Vaultify-main
+            source venv/bin/activate
+            python manage.py collectstatic --noinput
+
+      - name: Restart services
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            echo "Restarting Gunicorn..."
+            sudo systemctl restart vaultify
+
+            echo "Reloading Nginx..."
+            sudo systemctl reload nginx
