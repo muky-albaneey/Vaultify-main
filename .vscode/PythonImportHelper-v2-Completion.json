@@ -590,6 +590,22 @@
         "documentation": {}
     },
     {
+        "label": "migrations",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "importPath": "django.db",
+        "description": "django.db",
+        "isExtraImport": true,
+        "detail": "django.db",
+        "documentation": {}
+    },
+    {
         "label": "models",
         "importPath": "django.db",
         "description": "django.db",
@@ -814,6 +830,14 @@
         "documentation": {}
     },
     {
+        "label": "User",
+        "importPath": "django.contrib.auth.models",
+        "description": "django.contrib.auth.models",
+        "isExtraImport": true,
+        "detail": "django.contrib.auth.models",
+        "documentation": {}
+    },
+    {
         "label": "status",
         "importPath": "rest_framework",
         "description": "rest_framework",
@@ -1063,6 +1087,14 @@
     },
     {
         "label": "status",
+        "importPath": "rest_framework",
+        "description": "rest_framework",
+        "isExtraImport": true,
+        "detail": "rest_framework",
+        "documentation": {}
+    },
+    {
+        "label": "generics",
         "importPath": "rest_framework",
         "description": "rest_framework",
         "isExtraImport": true,
@@ -1367,6 +1399,22 @@
         "description": "rest_framework.views",
         "isExtraImport": true,
         "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "APIView",
+        "importPath": "rest_framework.views",
+        "description": "rest_framework.views",
+        "isExtraImport": true,
+        "detail": "rest_framework.views",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "rest_framework.response",
+        "description": "rest_framework.response",
+        "isExtraImport": true,
+        "detail": "rest_framework.response",
         "documentation": {}
     },
     {
@@ -1829,6 +1877,22 @@
     },
     {
         "label": "IsAuthenticated",
+        "importPath": "rest_framework.permissions",
+        "description": "rest_framework.permissions",
+        "isExtraImport": true,
+        "detail": "rest_framework.permissions",
+        "documentation": {}
+    },
+    {
+        "label": "AllowAny",
+        "importPath": "rest_framework.permissions",
+        "description": "rest_framework.permissions",
+        "isExtraImport": true,
+        "detail": "rest_framework.permissions",
+        "documentation": {}
+    },
+    {
+        "label": "AllowAny",
         "importPath": "rest_framework.permissions",
         "description": "rest_framework.permissions",
         "isExtraImport": true,
@@ -2398,6 +2462,15 @@
         "documentation": {}
     },
     {
+        "label": "Migration",
+        "kind": 6,
+        "importPath": "accounts.migrations.0021_userprofile_apartment_type",
+        "description": "accounts.migrations.0021_userprofile_apartment_type",
+        "peekOfCode": "class Migration(migrations.Migration):\n    dependencies = [\n        (\"accounts\", \"0020_alter_devicetoken_unique_together_and_more\"),\n    ]\n    operations = [\n        migrations.AddField(\n            model_name=\"userprofile\",\n            name=\"apartment_type\",\n            field=models.CharField(\n                blank=True,",
+        "detail": "accounts.migrations.0021_userprofile_apartment_type",
+        "documentation": {}
+    },
+    {
         "label": "PrivateMessageCreateTests",
         "kind": 6,
         "importPath": "accounts.tests.test_private_message_create",
@@ -2420,7 +2493,7 @@
         "kind": 6,
         "importPath": "accounts.models",
         "description": "accounts.models",
-        "peekOfCode": "class UserProfile(models.Model):\n    USER_STATUS_CHOICES = [\n        ('pending', 'Pending'),\n        ('active', 'Active'),\n        ('suspended', 'Suspended'),  # optional, for future expansion\n    ]\n    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='profile')\n    phone_number = models.CharField(max_length=15, blank=True, null=True)\n    role = models.CharField(max_length=100, blank=True, null=True)\n    estate = models.CharField(max_length=100, blank=True, null=True)",
+        "peekOfCode": "class UserProfile(models.Model):\n    USER_STATUS_CHOICES = [\n        ('pending', 'Pending'),\n        ('active', 'Active'),\n        ('suspended', 'Suspended'),  # optional, for future expansion\n    ]\n      # NEW: apartment/flat types\n    APARTMENT_TYPE_CHOICES = [\n        ('self_contain', 'Self-contain'),\n        ('1_bed',        '1-Bedroom Flat'),",
         "detail": "accounts.models",
         "documentation": {}
     },
@@ -2582,7 +2655,7 @@
         "kind": 6,
         "importPath": "accounts.serializers",
         "description": "accounts.serializers",
-        "peekOfCode": "class UserProfileSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = UserProfile\n        fields = ['phone_number', 'role', 'estate', 'estate_email', 'house_address', 'pin', 'plan', 'wallet_balance', 'profile_picture', 'subscription_start_date', 'subscription_expiry_date','user_status']\n    def validate_role(self, value):\n        \"\"\"\n        Validate that the role is either 'Residence' or 'Security Personnel'.\n        \"\"\"\n        valid_roles = ['Residence', 'Security Personnel']\n        if value not in valid_roles:",
+        "peekOfCode": "class UserProfileSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = UserProfile\n        fields = ['phone_number', 'role', 'estate', 'estate_email', 'house_address',  'apartment_type', 'pin', 'plan', 'wallet_balance', 'profile_picture', 'subscription_start_date', 'subscription_expiry_date','user_status']\n    def validate_role(self, value):\n        \"\"\"\n        Validate that the role is either 'Residence' or 'Security Personnel'.\n        \"\"\"\n        valid_roles = ['Residence', 'Security Personnel']\n        if value not in valid_roles:",
         "detail": "accounts.serializers",
         "documentation": {}
     },
@@ -3275,7 +3348,16 @@
         "kind": 6,
         "importPath": "accounts.views",
         "description": "accounts.views",
-        "peekOfCode": "class FilterUsersView(APIView):\n    permission_classes = [AllowAny]\n    def get(self, request):\n        user_status = request.query_params.get(\"user_status\")\n        estate = request.query_params.get(\"estate\")\n        role_params = request.query_params.getlist(\"role\")\n        group_by_role = request.query_params.get(\"group_by_role\") in (\"1\", \"true\", \"True\")\n        allowed_roles = role_params or [\"Residence\", \"Security Personnel\"]\n        # Query USERS and filter via related profile fields\n        qs = (",
+        "peekOfCode": "class FilterUsersView(APIView):\n    permission_classes = [AllowAny]\n    def get(self, request):\n        user_status = request.query_params.get(\"user_status\")\n        estate = request.query_params.get(\"estate\")\n        role_params = request.query_params.getlist(\"role\")\n        group_by_role = request.query_params.get(\"group_by_role\") in (\"1\", \"true\", \"True\")\n        allowed_roles = role_params or [\"Residence\", \"Security Personnel\"]\n        qs = (\n            User.objects",
+        "detail": "accounts.views",
+        "documentation": {}
+    },
+    {
+        "label": "UsersByApartmentTypeView",
+        "kind": 6,
+        "importPath": "accounts.views",
+        "description": "accounts.views",
+        "peekOfCode": "class UsersByApartmentTypeView(generics.ListAPIView):\n    permission_classes = [AllowAny]\n    serializer_class = UserSerializer\n    def get_queryset(self):\n        apt = self.request.query_params.get(\"apartment_type\")\n        if not apt:\n            return User.objects.none()\n        valid = {k for k, _ in UserProfile.APARTMENT_TYPE_CHOICES}\n        if apt not in valid:\n            # Raise a 400 from get() so ListAPIView returns cleanly",
         "detail": "accounts.views",
         "documentation": {}
     },
@@ -3478,29 +3560,11 @@
         "documentation": {}
     },
     {
-        "label": "ALLOWED_HOSTS",
-        "kind": 5,
-        "importPath": "vaultify.settings",
-        "description": "vaultify.settings",
-        "peekOfCode": "ALLOWED_HOSTS = ['*']\nCORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],",
-        "detail": "vaultify.settings",
-        "documentation": {}
-    },
-    {
         "label": "CORS_ALLOW_ALL_ORIGINS",
         "kind": 5,
         "importPath": "vaultify.settings",
         "description": "vaultify.settings",
-        "peekOfCode": "CORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
-        "detail": "vaultify.settings",
-        "documentation": {}
-    },
-    {
-        "label": "CORS_ALLOWED_ORIGINS",
-        "kind": 5,
-        "importPath": "vaultify.settings",
-        "description": "vaultify.settings",
-        "peekOfCode": "CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}\nload_dotenv()  # Load environment variables from .env file",
+        "peekOfCode": "CORS_ALLOW_ALL_ORIGINS = True\n# CORS_ALLOWED_ORIGINS = [\"*\"]\n# CORS_ALLOWED_ORIGINS = [\"https://vaultifyadmin.onrender.com\"]\nCORS_ALLOW_CREDENTIALS = True\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': [\n        'rest_framework.authentication.SessionAuthentication',\n        'rest_framework.authentication.TokenAuthentication',\n    ],\n}",
         "detail": "vaultify.settings",
         "documentation": {}
     },

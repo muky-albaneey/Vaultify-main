@@ -13,6 +13,16 @@ class UserProfile(models.Model):
         ('active', 'Active'),
         ('suspended', 'Suspended'),  # optional, for future expansion
     ]
+    
+      # NEW: apartment/flat types
+    APARTMENT_TYPE_CHOICES = [
+        ('self_contain', 'Self-contain'),
+        ('1_bed',        '1-Bedroom Flat'),
+        ('2_bed',        '2-Bedroom Flat'),
+        ('3_bed',        '3-Bedroom Flat'),
+        ('4_bed',        '4-Bedroom Flat'),
+        ('5_plus',       '5+ Bedroom Flat'),
+    ]
        
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='profile')
     phone_number = models.CharField(max_length=15, blank=True, null=True)
@@ -20,6 +30,15 @@ class UserProfile(models.Model):
     estate = models.CharField(max_length=100, blank=True, null=True)
     estate_email = models.EmailField(blank=True, null=True)
     house_address = models.CharField(max_length=255, blank=True, null=True)
+     # 🔽 NEW FIELD (dropdown)
+    apartment_type = models.CharField(
+        max_length=16,
+        choices=APARTMENT_TYPE_CHOICES,
+        blank=True,
+        null=True,
+        help_text="Type of flat/apartment (e.g., Self-contain, 1-Bedroom Flat)"
+    )
+
     pin = models.CharField(max_length=128, blank=True, null=True)  # Hashed PIN
     plan = models.CharField(max_length=50, blank=True, null=True)
     subscription_start_date = models.DateTimeField(blank=True, null=True)
