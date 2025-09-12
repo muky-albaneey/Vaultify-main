@@ -80,42 +80,7 @@ class SubscriptionUsersListView(APIView):
         serializer = SubscriptionUserSerializer(subscription_users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-# class UploadProfileImageView(APIView):
-#     permission_classes = [IsAuthenticated]
-#     parser_classes = [MultiPartParser, FormParser]
 
-#     def post(self, request, format=None):
-#         import logging
-#         logger = logging.getLogger(__name__)
-#         logger.info("UploadProfileImageView POST called")
-#         logger.info(f"Request user: {request.user}")
-#         logger.info(f"Request files: {request.FILES}")
-
-#         file_obj = request.FILES.get('image')
-#         if not file_obj:
-#             logger.warning("No image file provided in request")
-#             return Response({'error': 'No image file provided'}, status=status.HTTP_400_BAD_REQUEST)
-
-#         # Generate a unique filename with the original extension
-#         ext = os.path.splitext(file_obj.name)[1]  # e.g. '.jpg'
-#         unique_filename = f"{uuid.uuid4().hex}{ext}"
-
-#         # Save the file to default storage (e.g., media folder) with unique name
-#         file_path = default_storage.save(f'profile_images/{unique_filename}', ContentFile(file_obj.read()))
-#         image_url = default_storage.url(file_path)
-
-#         # Prepend base URL to image_url if not absolute
-#         base_url = get_base_url()
-#         if not image_url.startswith('http'):
-#             if image_url.startswith('/'):
-#                 image_url = base_url + image_url
-#             else:
-#                 image_url = base_url + '/' + image_url
-
-#         logger.info(f"Image saved at: {file_path}, URL: {image_url}")
-
-#         return Response({'image_url': image_url}, status=status.HTTP_200_OK)
-# accounts/views.py
 
 class UploadProfileImageView(APIView):
     permission_classes = [IsAuthenticated]
@@ -2025,6 +1990,16 @@ from rest_framework.permissions import AllowAny
 
 from .serializers import UserSerializer
 
+# views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import User
+
+from .serializers import UserSerializer
+from .models import UserProfile  # ✅ for choices validation
+
+
 class FilterUsersView(APIView):
     permission_classes = [AllowAny]
 
@@ -2036,19 +2011,38 @@ class FilterUsersView(APIView):
 
         allowed_roles = role_params or ["Residence", "Security Personnel"]
 
-        # Query USERS and filter via related profile fields
         qs = (
             User.objects
-            .select_related("profile", "bank_service_charge")  # 1-1 / 1-0 relateds
-            .prefetch_related("transactions")                  # reverse FK
+            .select_related("profile", "bank_service_charge")
+            .prefetch_related("transactions")
         )
 
         if user_status:
             qs = qs.filter(profile__user_status__iexact=user_status.strip())
         if estate:
             qs = qs.filter(profile__estate__iexact=estate.strip())
-
         qs = qs.filter(profile__role__in=allowed_roles)
+
+        # 🔽 NEW: filter by apartment_type (supports single or multiple values)
+        apt_values = request.query_params.getlist("apartment_type")
+        if not apt_values:
+            one = request.query_params.get("apartment_type")
+            if one:
+                apt_values = [one]
+
+        if apt_values:
+            valid = {k for k, _ in UserProfile.APARTMENT_TYPE_CHOICES}
+            bad = [v for v in apt_values if v not in valid]
+            if bad:
+                return Response(
+                    {
+                        "error": "Invalid apartment_type value(s).",
+                        "invalid": bad,
+                        "allowed": sorted(list(valid)),
+                    },
+                    status=400,
+                )
+            qs = qs.filter(profile__apartment_type__in=apt_values)
 
         if group_by_role:
             residents_qs = qs.filter(profile__role="Residence")
@@ -2056,10 +2050,84 @@ class FilterUsersView(APIView):
             return Response({
                 "residents": UserSerializer(residents_qs, many=True, context={'request': request}).data,
                 "security_personnel": UserSerializer(security_qs, many=True, context={'request': request}).data,
-            }, status=status.HTTP_200_OK)
+            }, status=200)
 
         data = UserSerializer(qs, many=True, context={'request': request}).data
-        return Response(data, status=status.HTTP_200_OK)
+        return Response(data, status=200)
+
+
+# (Optional) Dedicated endpoint if you prefer a strict, focused route
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+
+class UsersByApartmentTypeView(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        apt = self.request.query_params.get("apartment_type")
+        if not apt:
+            return User.objects.none()
+
+        valid = {k for k, _ in UserProfile.APARTMENT_TYPE_CHOICES}
+        if apt not in valid:
+            # Raise a 400 from get() so ListAPIView returns cleanly
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError({"apartment_type": f"Invalid. Allowed: {sorted(list(valid))}"})
+
+        qs = (
+            User.objects
+            .select_related("profile", "bank_service_charge")
+            .prefetch_related("transactions")
+            .filter(profile__apartment_type=apt)
+        )
+
+        # Optional refinements (estate/role/etc.)
+        estate = self.request.query_params.get("estate")
+        if estate:
+            qs = qs.filter(profile__estate__iexact=estate.strip())
+
+        role_params = self.request.query_params.getlist("role")
+        if role_params:
+            qs = qs.filter(profile__role__in=role_params)
+
+        return qs
+
+# class FilterUsersView(APIView):
+#     permission_classes = [AllowAny]
+
+#     def get(self, request):
+#         user_status = request.query_params.get("user_status")
+#         estate = request.query_params.get("estate")
+#         role_params = request.query_params.getlist("role")
+#         group_by_role = request.query_params.get("group_by_role") in ("1", "true", "True")
+
+#         allowed_roles = role_params or ["Residence", "Security Personnel"]
+
+#         # Query USERS and filter via related profile fields
+#         qs = (
+#             User.objects
+#             .select_related("profile", "bank_service_charge")  # 1-1 / 1-0 relateds
+#             .prefetch_related("transactions")                  # reverse FK
+#         )
+
+#         if user_status:
+#             qs = qs.filter(profile__user_status__iexact=user_status.strip())
+#         if estate:
+#             qs = qs.filter(profile__estate__iexact=estate.strip())
+
+#         qs = qs.filter(profile__role__in=allowed_roles)
+
+#         if group_by_role:
+#             residents_qs = qs.filter(profile__role="Residence")
+#             security_qs = qs.filter(profile__role="Security Personnel")
+#             return Response({
+#                 "residents": UserSerializer(residents_qs, many=True, context={'request': request}).data,
+#                 "security_personnel": UserSerializer(security_qs, many=True, context={'request': request}).data,
+#             }, status=status.HTTP_200_OK)
+
+#         data = UserSerializer(qs, many=True, context={'request': request}).data
+#         return Response(data, status=status.HTTP_200_OK)
 
 from rest_framework.views import APIView
 from rest_framework.response import Response

@@ -20,7 +20,7 @@ from .views import (
     ChangePasswordView,notify_topic_view,delete_device_token,
     SubscriptionUsersListView,
     BankServiceChargeUpdateView,OpenDeleteAccountView,PublicUserDetailView,
-    UpdateUserStatusView,ResetPaidChargeView,notify_users_view,notify_user_view,FilterUsersView
+    UpdateUserStatusView,ResetPaidChargeView,notify_users_view,notify_user_view,FilterUsersView,UsersByApartmentTypeView
 )
 from django.conf import settings
 from .views import  save_device_token
@@ -107,5 +107,6 @@ urlpatterns = [
     path('user/<int:pk>/status/', UpdateUserStatusView.as_view(), name='update-user-status'),
     path('bank-service-charge/<int:user_id>/reset-paid/', ResetPaidChargeView.as_view(), name='reset-paid-charge'),
     path('filter-users/', FilterUsersView.as_view(), name='filter-users-by-status'),
+    path('users/by-apartment/', UsersByApartmentTypeView.as_view(), name='users-by-apartment'),# Option B (focused)
 
 ]
