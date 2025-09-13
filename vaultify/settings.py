@@ -52,9 +52,11 @@ MIDDLEWARE = [
 ]
 # ALLOWED_HOSTS = ['vaultify.lexisdevelopmentltd.com', 'vaultify.lexisfinance.com', 'vaultify-43wm.onrender.com', 'vaultifyadmin.onrender.com', 'yourdomain.com', '127.0.0.1', ] 
 # or specify your IP
+# ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = ["*"]
+# CORS_ALLOWED_ORIGINS = ["*"]
+# CORS_ALLOWED_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = ["https://vaultifyadmin.onrender.com"]
 CORS_ALLOW_CREDENTIALS = True
 REST_FRAMEWORK = {
@@ -166,7 +168,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# Only include this if you actually have a /static folder with extra assets
+# STATICFILES_DIRS = [BASE_DIR / "static"]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

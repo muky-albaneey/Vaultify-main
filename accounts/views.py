@@ -906,7 +906,23 @@ class LostFoundCountView(APIView):
         lostfound_count = LostFoundItem.objects.count()
         logger.debug(f"Total lost and found items count: {lostfound_count}")
         return Response({'lostfound_count': lostfound_count}, status=status.HTTP_200_OK)
-
+    
+class LostFoundItemDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def delete(self, request, pk):
+        try:
+            item = LostFoundItem.objects.get(pk=pk)
+        except LostFoundItem.DoesNotExist:
+            return Response({'error': 'Lost found item not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Optional: Check if user is authorized to delete (e.g., only the creator)
+        # if item.sender != request.user:
+        #     return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
+        
+        item.delete()
+        return Response({'message': 'Lost found item deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    
 class AlertDeleteView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -1198,6 +1214,9 @@ class LostFoundItemListAllView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
 
+
+
+
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -1209,6 +1228,7 @@ class LostFoundItemDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = LostFoundItem.objects.all()
     serializer_class = LostFoundItemSerializer
     permission_classes = [IsAuthenticated]
+    
     
 class VisitorCheckinListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
