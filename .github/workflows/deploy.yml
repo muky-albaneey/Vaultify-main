@@ -23,7 +23,9 @@ jobs:
           script: |
             set -e
             cd /home/Vaultify-main
-            echo "Fetching branch: ${GITHUB_REF_NAME}"
+            BRANCH=${GITHUB_REF_NAME##*/} 
+            BRANCH=${BRANCH:-main}
+            echo "Fetching branch: $BRANCH"
             git fetch --all
             git reset --hard origin/${GITHUB_REF_NAME}
             git clean -fd
