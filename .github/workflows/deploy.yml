@@ -74,7 +74,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -e
-            echo "Restarting Gunicorn..."
+            echo "Restarting Gunicorn...."
             sudo systemctl restart vaultify
 
             echo "Reloading Nginx..."
