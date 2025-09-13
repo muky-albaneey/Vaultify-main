@@ -197,11 +197,13 @@ class UserSerializer(serializers.ModelSerializer):
     bank_service_charge = serializers.SerializerMethodField()
     transactions = serializers.SerializerMethodField()
     subscription = serializers.SerializerMethodField()  # <-- Add this
+    apartment_type = serializers.CharField(source='profile.apartment_type', read_only=True, allow_null=True)
 
     class Meta:
         model = User
         fields = [
-            'id', 'email', 'first_name', 'last_name',
+            'id', 'email', 'first_name', 'last_name', 
+            'apartment_type',  
             'profile', 'password', 'bank_service_charge',
             'transactions', 'subscription'
         ]
