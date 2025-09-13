@@ -291,9 +291,32 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
 
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     # Ensure wallet_balance is always included, defaulting to 0.00 if None
+    #     profile_data = data.get('profile', {})
+    #     wallet_balance = profile_data.get('wallet_balance')
+    #     if wallet_balance is None or wallet_balance == '0.00':
+    #         try:
+    #             wallet_balance_value = instance.profile.wallet_balance
+    #             profile_data['wallet_balance'] = str(wallet_balance_value) if wallet_balance_value is not None else '0.00'
+    #         except Exception:
+    #             profile_data['wallet_balance'] = '0.00'
+    #         data['profile'] = profile_data
+    #     else:
+    #         profile_data['wallet_balance'] = wallet_balance
+    #         data['profile'] = profile_data
+    #     return data
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        # Ensure wallet_balance is always included, defaulting to 0.00 if None
+
+        # ✅ flatten apartment_type to top-level as well
+        try:
+            data['apartment_type'] = instance.profile.apartment_type
+        except Exception:
+            data['apartment_type'] = None
+
+        # keep your existing wallet_balance normalization
         profile_data = data.get('profile', {})
         wallet_balance = profile_data.get('wallet_balance')
         if wallet_balance is None or wallet_balance == '0.00':
@@ -306,7 +329,9 @@ class UserSerializer(serializers.ModelSerializer):
         else:
             profile_data['wallet_balance'] = wallet_balance
             data['profile'] = profile_data
+
         return data
+
 
     def validate(self, data):
         profile_data = data.get('profile', {})

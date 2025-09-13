@@ -230,6 +230,8 @@ class SignupView(APIView):
                         'plan': profile_data.get('plan', ''),
                         'profile_picture': profile_data.get('profile_picture', ''),
                         'wallet_balance': 0.0,
+                        'apartment_type': profile_data.get('apartment_type', ''),  # ✅ add this
+
                     }
                 }
                 serializer = UserSerializer(data=user_data)
