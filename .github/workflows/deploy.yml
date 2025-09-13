@@ -23,11 +23,9 @@ jobs:
           script: |
             set -e
             cd /home/Vaultify-main
-            BRANCH=${GITHUB_REF_NAME##*/} 
-            BRANCH=${BRANCH:-main}
-            echo "Fetching branch: $BRANCH"
+            echo "Fetching branch: main"
             git fetch --all
-            git reset --hard origin/${GITHUB_REF_NAME}
+            git reset --hard origin/main
             git clean -fd
 
       - name: Install dependencies
