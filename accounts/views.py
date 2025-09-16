@@ -332,6 +332,67 @@ import uuid
 
 logger = logging.getLogger(__name__)
 
+# class SignupSendOTPView(APIView):
+#     def post(self, request):
+#         email = request.data.get('email', '').strip().lower()
+#         if not email:
+#             return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         # Check if user exists
+#         from django.contrib.auth.models import User
+#         try:
+#             user = User.objects.get(email=email)
+#         except User.DoesNotExist:
+#             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+#         profile = user.profile
+
+#         # Generate 6-digit OTP
+#         otp = f"{random.randint(100000, 999999)}"
+#         profile.signup_otp = otp
+#         profile.signup_otp_expiry = now() + timedelta(minutes=10)
+#         profile.save()
+
+#         # Send OTP email with personalized text
+#         try:
+#             send_mail(
+#                 'Your Vaultify Signup OTP',
+#                 f"""Dear {user.first_name},
+
+# You’re just one step away from joining your Estate on Vaultify. To complete your sign-in, please verify your email address using the OTP below. Here’s why it’s important:
+# \t•\tAccount Protection: Verifying your email helps secure your profile and prevent unauthorized access.
+# \t•\tStay Informed: Get important announcements, updates, and alerts from your estate without missing a thing.
+
+# Your OTP is: {otp}
+
+# This OTP expires in 10 minutes.
+
+# Warm regards,
+# The Vaultify Team.
+# """,
+#                 settings.DEFAULT_FROM_EMAIL,
+#                 [user.email],
+#                 fail_silently=False,
+#             )
+#             logger.info(f"Signup OTP sent to {user.email}")
+#         except Exception as e:
+#             logger.error(f"Failed to send signup OTP: {e}")
+#             return Response({'error': 'Failed to send OTP'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#         return Response({'message': 'OTP sent successfully'}, status=status.HTTP_200_OK)
+from django.conf import settings
+from django.core.mail import send_mail
+from django.utils.timezone import now
+from datetime import timedelta
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+import random
+import datetime
+import logging
+
+logger = logging.getLogger(__name__)
+
 class SignupSendOTPView(APIView):
     def post(self, request):
         email = request.data.get('email', '').strip().lower()
@@ -345,7 +406,11 @@ class SignupSendOTPView(APIView):
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        profile = user.profile
+        # Ensure profile exists (adjust if your app creates it elsewhere)
+        try:
+            profile = user.profile
+        except Exception:
+            return Response({'error': 'User profile not found'}, status=status.HTTP_404_NOT_FOUND)
 
         # Generate 6-digit OTP
         otp = f"{random.randint(100000, 999999)}"
@@ -353,25 +418,119 @@ class SignupSendOTPView(APIView):
         profile.signup_otp_expiry = now() + timedelta(minutes=10)
         profile.save()
 
-        # Send OTP email with personalized text
-        try:
-            send_mail(
-                'Your Vaultify Signup OTP',
-                f"""Dear {user.first_name},
+        # Branding (use settings override if available)
+        subject = "Your Vaultify Signup OTP"
+        logo_url = getattr(settings, "BRANDING_LOGO_URL", "https://your-cdn.example.com/vaultify/logo.png")
+        display_name = (user.first_name or user.get_username()).strip() or "there"
 
-You’re just one step away from joining your Estate on Vaultify. To complete your sign-in, please verify your email address using the OTP below. Here’s why it’s important:
-\t•\tAccount Protection: Verifying your email helps secure your profile and prevent unauthorized access.
-\t•\tStay Informed: Get important announcements, updates, and alerts from your estate without missing a thing.
+        # Plain-text fallback
+        text_message = f"""Dear {display_name},
+
+You’re just one step away from joining your Estate on Vaultify. To complete your sign-in, please verify your email address using the OTP below.
+
+• Account protection: Verifying your email helps secure your profile and prevent unauthorized access.
+• Stay informed: Get important announcements, updates, and alerts from your estate without missing a thing.
 
 Your OTP is: {otp}
 
 This OTP expires in 10 minutes.
 
+If you didn’t request this, you can ignore this email.
+
 Warm regards,
-The Vaultify Team.
-""",
-                settings.DEFAULT_FROM_EMAIL,
-                [user.email],
+The Vaultify Team
+"""
+
+        # HTML version (styled + logo)
+        html_message = f"""\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>{subject}</title>
+</head>
+<body style="margin:0;padding:0;background:#f6f8fb;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;">
+    <tr>
+      <td align="center" style="padding:24px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+          <tr>
+            <td align="center" style="padding:24px 24px 8px;">
+              <img src="{logo_url}" width="120" alt="Vaultify" style="display:block;">
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:8px 24px 0;font:600 20px/1.3 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
+              Verify your email to finish signing up
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:8px 24px 16px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
+              Dear {display_name},<br><br>
+              You’re just one step away from joining your Estate on Vaultify. To complete your sign-in, please verify your email address using the OTP below.
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:0 24px 8px;font:600 14px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
+              Why this matters
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:0 24px 16px;">
+              <ul style="margin:0;padding-left:20px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
+                <li><strong>Account protection:</strong> Verifying your email helps secure your profile and prevent unauthorized access.</li>
+                <li><strong>Stay informed:</strong> Get announcements, updates, and alerts from your estate without missing a thing.</li>
+              </ul>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="padding:12px 24px 8px;">
+              <div style="display:inline-block;padding:14px 24px;border:1px dashed #d1d5db;border-radius:10px;background:#f9fafb;
+                          font:700 22px/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono','Courier New', monospace;
+                          letter-spacing:2px;color:#111827;">
+                {otp}
+              </div>
+              <div style="margin-top:8px;font:400 12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#6b7280;">
+                Expires in 10 minutes
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:8px 24px 24px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
+              If you didn’t request this, you can safely ignore this email.
+              <br><br>
+              Warm regards,<br>
+              <strong>The Vaultify Team</strong>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="background:#f3f4f6;padding:16px 24px;font:400 12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#6b7280;">
+              © {datetime.date.today().year} Vaultify. All rights reserved.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>"""
+
+        # Send OTP email (HTML + plain text fallback)
+        try:
+            send_mail(
+                subject=subject,
+                message=text_message,
+                from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
+                recipient_list=[user.email],
+                html_message=html_message,
                 fail_silently=False,
             )
             logger.info(f"Signup OTP sent to {user.email}")
