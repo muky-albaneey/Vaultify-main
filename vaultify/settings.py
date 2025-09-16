@@ -52,22 +52,14 @@ MIDDLEWARE = [
 ]
 # ALLOWED_HOSTS = ['vaultify.lexisdevelopmentltd.com', 'vaultify.lexisfinance.com', 'vaultify-43wm.onrender.com', 'vaultifyadmin.onrender.com', 'yourdomain.com', '127.0.0.1', ] 
 # or specify your IP
-<<<<<<< HEAD
-# ALLOWED_HOSTS = ['*']
-<<<<<<< HEAD
+
 ALLOWED_HOSTS = ['*']
 CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = ["*"]
 # CORS_ALLOWED_ORIGINS = True
-=======
-CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = ["*"]
->>>>>>> 2a20d08 (Add gunicorn to requirements)
-=======
-ALLOWED_HOSTS = ['*']
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = ["*"]
->>>>>>> ce7e42f (Add gunicorn to requirements)
+
+# CORS_ALLOWED_ORIGINS = ["*"]
 # CORS_ALLOWED_ORIGINS = ["https://vaultifyadmin.onrender.com"]
 CORS_ALLOW_CREDENTIALS = True
 REST_FRAMEWORK = {
