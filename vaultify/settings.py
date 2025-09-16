@@ -53,15 +53,22 @@ MIDDLEWARE = [
 # ALLOWED_HOSTS = ['vaultify.lexisdevelopmentltd.com', 'vaultify.lexisfinance.com', 'vaultify-43wm.onrender.com', 'vaultifyadmin.onrender.com', 'yourdomain.com', '127.0.0.1', ] 
 # or specify your IP
 
-ALLOWED_HOSTS = ['*']
-CORS_ALLOW_ALL_ORIGINS = True
+# ALLOWED_HOSTS = ['*']
+# CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = ["*"]
 # CORS_ALLOWED_ORIGINS = True
-# CORS_ALLOWED_ORIGINS = ["*"]
 
+# ALLOWED_HOSTS = ['*']
+# CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = ["*"]
-# CORS_ALLOWED_ORIGINS = ["https://vaultifyadmin.onrender.com"]
-CORS_ALLOW_CREDENTIALS = True
+# # CORS_ALLOWED_ORIGINS = ["https://vaultifyadmin.onrender.com"]
+# CORS_ALLOW_CREDENTIALS = True
+
+ALLOWED_HOSTS = ["*"]  # or enumerate your real hosts in prod
+
+CORS_ALLOW_ALL_ORIGINS = True     # allow everyone
+CORS_ALLOW_CREDENTIALS = False    # must be False with wildcard
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
@@ -129,7 +136,7 @@ DATABASES = {
 }
 
 
-BRANDING_LOGO_URL='https://vaultify.us-southeast-1.linodeobjects.com/v_logo.jpeg'
+
 
 
 ROOT_URLCONF = 'vaultify.urls'
