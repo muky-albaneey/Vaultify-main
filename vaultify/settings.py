@@ -83,7 +83,7 @@ EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable
 DEFAULT_FROM_EMAIL = 'support@vaultify.africa'
 
 BASE_URL = 'https://vaultify-43wm.onrender.com'
-
+BRANDING_LOGO_URL='https://vaultify.us-southeast-1.linodeobjects.com/v_logo.jpeg'
 
 TEMPLATES = [
     {
