@@ -129,7 +129,7 @@ DATABASES = {
 }
 
 
-
+BRANDING_LOGO_URL='https://vaultify.us-southeast-1.linodeobjects.com/v_logo.jpeg'
 
 
 ROOT_URLCONF = 'vaultify.urls'
