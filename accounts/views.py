@@ -17,7 +17,10 @@ from rest_framework import serializers
 from .serializers import AlertSerializer, UserSerializer, LostFoundItemSerializer, TransactionSerializer, SubscriptionUserSerializer
 from .models import Alert, UserProfile, LostFoundItem, Transaction
 from google.oauth2 import id_token
+# from django.conf import settings
 from django.conf import settings
+from django.core.mail import send_mail
+import datetime
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
@@ -291,9 +294,9 @@ class SignupView(APIView):
     #         recipient_list=[email],
     #         fail_silently=False,
     #     )
-    from django.core.mail import send_mail
-    from django.conf import settings
-    import datetime
+    # from django.core.mail import send_mail
+    # from django.conf import settings
+    # import datetime
 
     def _send_signup_otp_email(self, first_name, email, otp_code):
         subject = "Your Vaultify Signup OTP"
