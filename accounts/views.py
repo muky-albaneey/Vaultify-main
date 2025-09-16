@@ -567,85 +567,85 @@ class SignupSendOTPView(APIView):
 
         # HTML version (styled + logo)
         html_message = f"""\
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
-<title>{subject}</title>
-</head>
-<body style="margin:0;padding:0;background:#f6f8fb;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;">
-    <tr>
-      <td align="center" style="padding:24px;">
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
-          <tr>
-            <td align="center" style="padding:24px 24px 8px;">
-              <img src="{logo_url}" width="120" alt="Vaultify" style="display:block;">
-            </td>
-          </tr>
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width">
+                <title>{subject}</title>
+                </head>
+                <body style="margin:0;padding:0;background:#f6f8fb;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;">
+                    <tr>
+                    <td align="center" style="padding:24px;">
+                        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+                        <tr>
+                            <td align="center" style="padding:24px 24px 8px;">
+                            <img src="{logo_url}" width="120" alt="Vaultify" style="display:block;">
+                            </td>
+                        </tr>
 
-          <tr>
-            <td style="padding:8px 24px 0;font:600 20px/1.3 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
-              Verify your email to finish signing up
-            </td>
-          </tr>
+                        <tr>
+                            <td style="padding:8px 24px 0;font:600 20px/1.3 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
+                            Verify your email to finish signing up
+                            </td>
+                        </tr>
 
-          <tr>
-            <td style="padding:8px 24px 16px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
-              Dear {display_name},<br><br>
-              You’re just one step away from joining your Estate on Vaultify. To complete your sign-in, please verify your email address using the OTP below.
-            </td>
-          </tr>
+                        <tr>
+                            <td style="padding:8px 24px 16px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
+                            Dear {display_name},<br><br>
+                            You’re just one step away from joining your Estate on Vaultify. To complete your sign-in, please verify your email address using the OTP below.
+                            </td>
+                        </tr>
 
-          <tr>
-            <td style="padding:0 24px 8px;font:600 14px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
-              Why this matters
-            </td>
-          </tr>
+                        <tr>
+                            <td style="padding:0 24px 8px;font:600 14px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
+                            Why this matters
+                            </td>
+                        </tr>
 
-          <tr>
-            <td style="padding:0 24px 16px;">
-              <ul style="margin:0;padding-left:20px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
-                <li><strong>Account protection:</strong> Verifying your email helps secure your profile and prevent unauthorized access.</li>
-                <li><strong>Stay informed:</strong> Get announcements, updates, and alerts from your estate without missing a thing.</li>
-              </ul>
-            </td>
-          </tr>
+                        <tr>
+                            <td style="padding:0 24px 16px;">
+                            <ul style="margin:0;padding-left:20px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
+                                <li><strong>Account protection:</strong> Verifying your email helps secure your profile and prevent unauthorized access.</li>
+                                <li><strong>Stay informed:</strong> Get announcements, updates, and alerts from your estate without missing a thing.</li>
+                            </ul>
+                            </td>
+                        </tr>
 
-          <tr>
-            <td align="center" style="padding:12px 24px 8px;">
-              <div style="display:inline-block;padding:14px 24px;border:1px dashed #d1d5db;border-radius:10px;background:#f9fafb;
-                          font:700 22px/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono','Courier New', monospace;
-                          letter-spacing:2px;color:#111827;">
-                {otp}
-              </div>
-              <div style="margin-top:8px;font:400 12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#6b7280;">
-                Expires in 10 minutes
-              </div>
-            </td>
-          </tr>
+                        <tr>
+                            <td align="center" style="padding:12px 24px 8px;">
+                            <div style="display:inline-block;padding:14px 24px;border:1px dashed #d1d5db;border-radius:10px;background:#f9fafb;
+                                        font:700 22px/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono','Courier New', monospace;
+                                        letter-spacing:2px;color:#111827;">
+                                {otp}
+                            </div>
+                            <div style="margin-top:8px;font:400 12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#6b7280;">
+                                Expires in 10 minutes
+                            </div>
+                            </td>
+                        </tr>
 
-          <tr>
-            <td style="padding:8px 24px 24px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
-              If you didn’t request this, you can safely ignore this email.
-              <br><br>
-              Warm regards,<br>
-              <strong>The Vaultify Team</strong>
-            </td>
-          </tr>
+                        <tr>
+                            <td style="padding:8px 24px 24px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
+                            If you didn’t request this, you can safely ignore this email.
+                            <br><br>
+                            Warm regards,<br>
+                            <strong>The Vaultify Team</strong>
+                            </td>
+                        </tr>
 
-          <tr>
-            <td align="center" style="background:#f3f4f6;padding:16px 24px;font:400 12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#6b7280;">
-              © {datetime.date.today().year} Vaultify. All rights reserved.
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>"""
+                        <tr>
+                            <td align="center" style="background:#f3f4f6;padding:16px 24px;font:400 12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#6b7280;">
+                            © {datetime.date.today().year} Vaultify. All rights reserved.
+                            </td>
+                        </tr>
+                        </table>
+                    </td>
+                    </tr>
+                </table>
+                </body>
+                </html>"""
 
         # Send OTP email (HTML + plain text fallback)
         try:
