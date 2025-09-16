@@ -20,7 +20,7 @@ from google.oauth2 import id_token
 # from django.conf import settings
 from django.conf import settings
 from django.core.mail import send_mail
-import datetime
+from datetime import datetime, timedelta
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
@@ -914,7 +914,7 @@ class GoogleSignInView(APIView):
             return Response({'error': 'Invalid Google token'}, status=status.HTTP_400_BAD_REQUEST)
 
 import random
-from datetime import datetime, timedelta
+# from datetime import datetime, timedelta
 from django.utils.timezone import now
 
 class PasswordResetRequestView(APIView):
