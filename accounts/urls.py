@@ -9,7 +9,7 @@ from .views import (
     AccessCodeCreateView, AccessCodeVerifyView, AccessCodeByUserListView,
     AccessCodeDeactivateView, AccessCodeVerifiedCountView, AccessCodeUnapprovedCountView,
     VisitorCheckinListView, AlertCreateView, AlertListView, LostFoundItemCreateView,
-    LostFoundItemListView, LostFoundItemDetailView, VerifyAndCreditView, LostFoundItemDeleteView,
+    LostFoundItemListView, LostFoundItemDetailView, VerifyAndCreditView,
     ResidenceUsersListView, SecurityPersonnelUsersListView,
     ResidenceUsersListAllView, SecurityPersonnelUsersListAllView, LostFoundItemListAllView,
     ResidenceUsersCountView, SecurityPersonnelUsersCountView,
@@ -20,7 +20,7 @@ from .views import (
     ChangePasswordView,notify_topic_view,delete_device_token,
     SubscriptionUsersListView,
     BankServiceChargeUpdateView,OpenDeleteAccountView,PublicUserDetailView,
-    UpdateUserStatusView,ResetPaidChargeView,notify_users_view,notify_user_view,FilterUsersView,UsersByApartmentTypeView
+    UpdateUserStatusView,ResetPaidChargeView,notify_users_view,notify_user_view,FilterUsersView
 )
 from django.conf import settings
 from .views import  save_device_token
@@ -69,7 +69,6 @@ urlpatterns = [
     path('lostfound/', LostFoundItemListView.as_view(), name='lostfound-list'),
     path('lostfound/create/', LostFoundItemCreateView.as_view(), name='lostfound-create'),
     path('lostfound/<int:pk>/', LostFoundItemDetailView.as_view(), name='lostfound-detail'),
-    path('lostfound/<int:pk>/delete/', LostFoundItemDeleteView.as_view(), name='lostfound-delete'),
     path('residence-users/all/', ResidenceUsersListAllView.as_view(), name='residence-users-list-all'),
     path('security-personnel-users/all/', SecurityPersonnelUsersListAllView.as_view(), name='security-personnel-users-list-all'),
     path('lostfound/all/', LostFoundItemListAllView.as_view(), name='lostfound-list-all'),
@@ -107,6 +106,5 @@ urlpatterns = [
     path('user/<int:pk>/status/', UpdateUserStatusView.as_view(), name='update-user-status'),
     path('bank-service-charge/<int:user_id>/reset-paid/', ResetPaidChargeView.as_view(), name='reset-paid-charge'),
     path('filter-users/', FilterUsersView.as_view(), name='filter-users-by-status'),
-    path('users/by-apartment/', UsersByApartmentTypeView.as_view(), name='users-by-apartment'),# Option B (focused)
 
 ]

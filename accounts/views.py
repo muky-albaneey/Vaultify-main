@@ -17,10 +17,7 @@ from rest_framework import serializers
 from .serializers import AlertSerializer, UserSerializer, LostFoundItemSerializer, TransactionSerializer, SubscriptionUserSerializer
 from .models import Alert, UserProfile, LostFoundItem, Transaction
 from google.oauth2 import id_token
-# from django.conf import settings
 from django.conf import settings
-from django.core.mail import send_mail
-from datetime import datetime, timedelta
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
@@ -83,7 +80,42 @@ class SubscriptionUsersListView(APIView):
         serializer = SubscriptionUserSerializer(subscription_users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+# class UploadProfileImageView(APIView):
+#     permission_classes = [IsAuthenticated]
+#     parser_classes = [MultiPartParser, FormParser]
 
+#     def post(self, request, format=None):
+#         import logging
+#         logger = logging.getLogger(__name__)
+#         logger.info("UploadProfileImageView POST called")
+#         logger.info(f"Request user: {request.user}")
+#         logger.info(f"Request files: {request.FILES}")
+
+#         file_obj = request.FILES.get('image')
+#         if not file_obj:
+#             logger.warning("No image file provided in request")
+#             return Response({'error': 'No image file provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         # Generate a unique filename with the original extension
+#         ext = os.path.splitext(file_obj.name)[1]  # e.g. '.jpg'
+#         unique_filename = f"{uuid.uuid4().hex}{ext}"
+
+#         # Save the file to default storage (e.g., media folder) with unique name
+#         file_path = default_storage.save(f'profile_images/{unique_filename}', ContentFile(file_obj.read()))
+#         image_url = default_storage.url(file_path)
+
+#         # Prepend base URL to image_url if not absolute
+#         base_url = get_base_url()
+#         if not image_url.startswith('http'):
+#             if image_url.startswith('/'):
+#                 image_url = base_url + image_url
+#             else:
+#                 image_url = base_url + '/' + image_url
+
+#         logger.info(f"Image saved at: {file_path}, URL: {image_url}")
+
+#         return Response({'image_url': image_url}, status=status.HTTP_200_OK)
+# accounts/views.py
 
 class UploadProfileImageView(APIView):
     permission_classes = [IsAuthenticated]
@@ -137,9 +169,181 @@ import random
 OTP_LIFETIME_MINUTES = 10
 
 
+# class SignupView(APIView):
+#     """
+#     Signup + email‑OTP verification.
+#     """
+#     def post(self, request):
+#         email      = request.data.get('email', '').strip().lower()
+#         otp        = request.data.get('otp', '').strip()
+#         first_name = request.data.get('first_name', '').strip()
+#         last_name  = request.data.get('last_name', '').strip()
+#         password   = request.data.get('password', '').strip()
+
+#         if not all([email, first_name, last_name, password]):
+#             return Response(
+#                 {'error': 'Email, first name, last name, and password are required'},
+#                 status=status.HTTP_400_BAD_REQUEST
+#             )
+
+#         try:
+#             user = User.objects.get(email=email)
+#             profile = user.profile
+
+#             # Already verified?  Bail out early.
+#             if profile.is_email_verified:
+#                 return Response(
+#                     # {'message': 'Email already exist. Please sign in.'},
+#                     { "message": "Email already registered. Use a different Email address to sign up." },
+
+#                     status=status.HTTP_200_OK
+#                 )
+
+#             # --- Verify OTP ---
+#             if otp:
+#                 if otp != profile.signup_otp:
+#                     return Response(
+#                         {'status': 'failure', 'message': 'Invalid OTP'},
+#                         status=status.HTTP_400_BAD_REQUEST
+#                     )
+#                 if profile.signup_otp_expiry < now():
+#                     return Response(
+#                         {'status': 'failure', 'message': 'OTP expired'},
+#                         status=status.HTTP_400_BAD_REQUEST
+#                     )
+
+#                 profile.is_email_verified = True
+#                 profile.signup_otp = None
+#                 profile.signup_otp_expiry = None
+#                 profile.save(update_fields=[
+#                     'is_email_verified', 'signup_otp', 'signup_otp_expiry'
+#                 ])
+#                 return Response(
+#                     {'status': 'success', 'message': 'Email verified successfully'},
+#                     status=status.HTTP_200_OK
+#                 )
+
+#             # --- Resend OTP (but don’t regenerate if still valid) ---
+#             if profile.signup_otp and profile.signup_otp_expiry > now():
+#                 otp_code = profile.signup_otp         # reuse existing
+#             else:
+#                 otp_code = f"{random.randint(100000, 999999)}"
+#                 profile.signup_otp = otp_code
+#                 profile.signup_otp_expiry = now() + timedelta(minutes=OTP_LIFETIME_MINUTES)
+#                 profile.save(update_fields=['signup_otp', 'signup_otp_expiry'])
+
+#             self._send_signup_otp_email(user.first_name, user.email, otp_code)
+#             return Response({'message': 'OTP sent successfully'}, status=status.HTTP_200_OK)
+
+#         # ----------------------------------------------------------
+#         # New user branch
+#         # ----------------------------------------------------------
+#         except User.DoesNotExist:
+#             with transaction.atomic():
+#                 from .serializers import UserSerializer
+#                 profile_data = request.data.get('profile', {})
+#                 role_value = profile_data.get('role', '').strip()
+#                 if role_value.lower() == 'security personnel':
+#                     role_value = 'Security Personnel'
+#                 elif role_value.lower() == 'residence':
+#                     role_value = 'Residence'
+#                 else:
+#                     role_value = ''  # Invalid role will cause serializer validation error
+
+#                 user_data = {
+#                     'email': email,
+#                     'first_name': first_name,
+#                     'last_name': last_name,
+#                     'password': password,
+#                     'profile': {
+#                         'phone_number': profile_data.get('phone_number', ''),
+#                         'role': role_value,
+#                         'estate': profile_data.get('estate', ''),
+#                         'estate_email': profile_data.get('estate_email', ''),
+#                         'house_address': profile_data.get('house_address', ''),
+#                         'pin': profile_data.get('pin', ''),
+#                         'plan': profile_data.get('plan', ''),
+#                         'profile_picture': profile_data.get('profile_picture', ''),
+#                         'wallet_balance': 0.0,
+#                     }
+#                 }
+#                 serializer = UserSerializer(data=user_data)
+#                 if serializer.is_valid():
+#                     user = serializer.save()
+#                     profile = user.profile
+
+#                     # Set subscription start and expiry dates based on plan after signup
+#                     # from django.utils.timezone import now
+#                     plan = profile_data.get('plan', '').lower()
+#                     profile.subscription_start_date = now()
+#                     if plan == 'monthly':
+#                         profile.subscription_expiry_date = now() + timedelta(days=30)
+#                     elif plan == 'annual':
+#                         profile.subscription_expiry_date = now() + timedelta(days=365)
+#                     else:
+#                         # For free or unknown plans, set expiry 30 days from now
+#                         profile.subscription_expiry_date = now() + timedelta(days=30)
+#                     profile.save(update_fields=['signup_otp', 'signup_otp_expiry', 'subscription_start_date', 'subscription_expiry_date'])
+
+#                     print(f"Subscription dates set after signup: start={profile.subscription_start_date}, expiry={profile.subscription_expiry_date}, plan={plan}")
+
+#                     otp_code = f"{random.randint(100000, 999999)}"
+#                     profile.signup_otp = otp_code
+#                     profile.signup_otp_expiry = now() + timedelta(minutes=OTP_LIFETIME_MINUTES)
+#                     profile.save(update_fields=['signup_otp', 'signup_otp_expiry'])
+#                 else:
+#                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#             self._send_signup_otp_email(first_name, email, otp_code)
+#             return Response(
+#                 {'message': 'User created and OTP sent successfully'},
+#                 status=status.HTTP_201_CREATED
+#             )
+
+#     # ------------------------------------------------------------------
+#     # Helper: send e‑mail (kept outside the main logic for clarity)
+#     # ------------------------------------------------------------------
+#     def _send_signup_otp_email(self, first_name, email, otp_code):
+#         send_mail(
+#             subject='Your Vaultify Signup OTP',
+#             message=f"""Dear {first_name},
+
+#                 You’re just one step away from joining your Estate on Vaultify.
+#                 please verify your email address. Here’s why it’s important:
+#                     •	Account Protection: Verifying your email helps secure your profile and prevent unauthorized access.
+#                     •	Stay Informed: Get important announcements, updates, and alerts from your estate without missing a thing.
+
+#                 To complete your sign‑in, please verify your email address using the OTP below:
+#                 Your OTP is: {otp_code}
+
+#                 This OTP expires in {OTP_LIFETIME_MINUTES} minutes.
+
+#                 Warm regards,
+#                 The Vaultify Team""",
+#             from_email=settings.DEFAULT_FROM_EMAIL,
+#             recipient_list=[email],
+#             fail_silently=False,
+#         )
+from django.db import transaction
+from django.utils.timezone import now
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+import random
+
+# ✅ Added imports
+from datetime import timedelta
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from email.mime.image import MIMEImage
+from django.contrib.auth.models import User  # if already imported elsewhere, keep only one
+
+OTP_LIFETIME_MINUTES = 10
+
+
 class SignupView(APIView):
     """
-    Signup + email‑OTP verification.
+    Signup + email-OTP verification.
     """
     def post(self, request):
         email      = request.data.get('email', '').strip().lower()
@@ -161,9 +365,7 @@ class SignupView(APIView):
             # Already verified?  Bail out early.
             if profile.is_email_verified:
                 return Response(
-                    # {'message': 'Email already exist. Please sign in.'},
                     { "message": "Email already registered. Use a different Email address to sign up." },
-
                     status=status.HTTP_200_OK
                 )
 
@@ -233,8 +435,6 @@ class SignupView(APIView):
                         'plan': profile_data.get('plan', ''),
                         'profile_picture': profile_data.get('profile_picture', ''),
                         'wallet_balance': 0.0,
-                        'apartment_type': profile_data.get('apartment_type', ''),  # ✅ add this
-
                     }
                 }
                 serializer = UserSerializer(data=user_data)
@@ -243,7 +443,6 @@ class SignupView(APIView):
                     profile = user.profile
 
                     # Set subscription start and expiry dates based on plan after signup
-                    # from django.utils.timezone import now
                     plan = profile_data.get('plan', '').lower()
                     profile.subscription_start_date = now()
                     if plan == 'monthly':
@@ -271,149 +470,151 @@ class SignupView(APIView):
             )
 
     # ------------------------------------------------------------------
-    # Helper: send e‑mail (kept outside the main logic for clarity)
+    # Helper: send e-mail (HTML + plain text; top image supported)
     # ------------------------------------------------------------------
-    # def _send_signup_otp_email(self, first_name, email, otp_code):
-    #     send_mail(
-    #         subject='Your Vaultify Signup OTP',
-    #         message=f"""Dear {first_name},
+    def _send_signup_otp_email(self, first_name: str, email: str, otp_code: str):
+        subject = "Verify your email • Vaultify"
 
-    #         You’re just one step away from joining your Estate on Vaultify.
-    #         please verify your email address. Here’s why it’s important:
-    #             •	Account Protection: Verifying your email helps secure your profile and prevent unauthorized access.
-    #             •	Stay Informed: Get important announcements, updates, and alerts from your estate without missing a thing.
+        # Decide banner content:
+        # 1) Prefer hosted image URL, 2) else CID image if file path provided, 3) else text banner.
+        logo_url = getattr(settings, "BRANDING_LOGO_URL", None)
+        logo_path = getattr(settings, "BRANDING_LOGO_PATH", None)
+        use_cid = False
+        if logo_url:
+            banner_html = f'<img src="{logo_url}" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
+        elif logo_path:
+            use_cid = True
+            banner_html = '<img src="cid:vaultify_logo" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
+        else:
+            # graceful fallback if no logo configured
+            banner_html = """
+            <div style="height:140px; background:#0f172a; color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700;">
+              Vaultify
+            </div>
+            """
 
-    #         To complete your sign‑in, please verify your email address using the OTP below:
-    #         Your OTP is: {otp_code}
-
-    #         This OTP expires in {OTP_LIFETIME_MINUTES} minutes.
-
-    #         Warm regards,
-    #         The Vaultify Team""",
-    #         from_email=settings.DEFAULT_FROM_EMAIL,
-    #         recipient_list=[email],
-    #         fail_silently=False,
-    #     )
-    # from django.core.mail import send_mail
-    # from django.conf import settings
-    # import datetime
-
-    def _send_signup_otp_email(self, first_name, email, otp_code):
-        subject = "Your Vaultify Signup OTP"
-        display_name = (first_name or "there").strip()
-        logo_url = getattr(settings, "BRANDING_LOGO_URL", "https://vaultify.us-southeast-1.linodeobjects.com/v_logo.jpeg")
-
-        # Plain-text fallback (improves deliverability & accessibility)
-        text_message = f"""Dear {display_name},
-
-        You’re just one step away from joining your Estate on Vaultify.
-        Please verify your email address.
-
-        • Account Protection: Verifying your email helps secure your profile and prevent unauthorized access.
-        • Stay Informed: Get important announcements, updates, and alerts from your estate without missing a thing.
-
-        To complete your sign-in, use the OTP below:
-        Your OTP is: {otp_code}
-
-        This OTP expires in {OTP_LIFETIME_MINUTES} minutes.
-
-        If you didn’t request this, you can ignore this email.
-
-        Warm regards,
-        The Vaultify Team
-        """
-
-        # HTML version (styled + logo)
-        html_message = f"""\
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width">
-            <title>{subject}</title>
-            </head>
-            <body style="margin:0;padding:0;background:#f6f8fb;">
-            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;">
-                <tr>
-                <td align="center" style="padding:24px;">
-                    <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
-                    <tr>
-                        <td align="center" style="padding:24px 24px 8px;">
-                        <img src="{logo_url}" width="120" alt="Vaultify" style="display:block;">
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td style="padding:8px 24px 0;font:600 20px/1.3 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
-                        Verify your email to finish signing up
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td style="padding:8px 24px 16px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
-                        Dear {display_name},<br><br>
-                        You’re just one step away from joining your Estate on Vaultify. Please verify your email address.
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td style="padding:0 24px 8px;font:600 14px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
-                        Why this matters
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td style="padding:0 24px 16px;">
-                        <ul style="margin:0;padding-left:20px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
-                            <li><strong>Account protection:</strong> Verifying your email helps secure your profile and prevent unauthorized access.</li>
-                            <li><strong>Stay informed:</strong> Get announcements, updates, and alerts from your estate without missing a thing.</li>
-                        </ul>
-                        </td>
-                    </tr>
-
-            <tr>
-                <td align="center" style="padding:12px 24px 8px;">
-                <div style="display:inline-block;padding:14px 24px;border:1px dashed #d1d5db;border-radius:10px;background:#f9fafb;
-                            font:700 22px/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono','Courier New', monospace;
-                            letter-spacing:2px;color:#111827;">
-                    {otp_code}
-                </div>
-                <div style="margin-top:8px;font:400 12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#6b7280;">
-                    Expires in {OTP_LIFETIME_MINUTES} minutes
-                </div>
-                </td>
-            </tr>
-
-            <tr>
-                <td style="padding:8px 24px 24px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
-                If you didn’t request this, you can safely ignore this email.
-                <br><br>
-                Warm regards,<br>
-                <strong>The Vaultify Team</strong>
-                </td>
-            </tr>
-
-            <tr>
-                <td align="center" style="background:#f3f4f6;padding:16px 24px;font:400 12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#6b7280;">
-                © {datetime.date.today().year} Vaultify. All rights reserved.
-                </td>
-            </tr>
-            </table>
-        </td>
-        </tr>
-        </table>
-        </body>
-        </html>"""
-
-        # Send (HTML + plain text)
-        send_mail(
-            subject=subject,
-            message=text_message,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[email],
-            html_message=html_message,
-            fail_silently=False,
+        text_body = (
+            f"Dear {first_name},\n\n"
+            "You’re just one step away from joining your Estate on Vaultify.\n"
+            "Please verify your email address using the OTP below.\n\n"
+            f"Your OTP: {otp_code}\n\n"
+            f"This OTP expires in {OTP_LIFETIME_MINUTES} minutes.\n\n"
+            "Why verify?\n"
+            " • Account Protection: Secure your profile and prevent unauthorized access.\n"
+            " • Stay Informed: Receive important announcements, updates and alerts from your estate.\n\n"
+            "Warm regards,\n"
+            "The Vaultify Team"
         )
+
+        html_body = f"""\
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{subject}</title>
+  </head>
+  <body style="margin:0; padding:0; background:#f6f9fc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f6f9fc;">
+      <tr>
+        <td align="center" style="padding: 32px 12px;">
+          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px; background:#ffffff; border-radius:14px; overflow:hidden; box-shadow:0 6px 24px rgba(18, 38, 63, 0.06);">
+            <!-- Top banner -->
+            <tr>
+              <td align="center" style="background:#0f172a;">
+                {banner_html}
+              </td>
+            </tr>
+
+            <!-- Header -->
+            <tr>
+              <td style="padding: 28px 28px 0 28px;">
+                <h1 style="margin:0; font-size:22px; line-height:28px; color:#0f172a;">
+                  Verify your email, {first_name}
+                </h1>
+                <p style="margin:8px 0 0; font-size:14px; color:#334155;">
+                  You’re just one step away from joining your Estate on Vaultify. Please use the one-time passcode (OTP) below to complete verification.
+                </p>
+              </td>
+            </tr>
+
+            <!-- OTP Box -->
+            <tr>
+              <td style="padding: 20px 28px 0 28px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px;">
+                  <tr>
+                    <td align="center" style="padding:20px 16px;">
+                      <div style="font-size:12px; color:#64748b; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">
+                        Your OTP
+                      </div>
+                      <div style="font-weight:700; font-size:28px; letter-spacing:0.32em; color:#0f172a;">
+                        {otp_code}
+                      </div>
+                      <div style="font-size:12px; color:#64748b; margin-top:8px;">
+                        Expires in {OTP_LIFETIME_MINUTES} minutes
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Why verify -->
+            <tr>
+              <td style="padding: 20px 28px 0 28px;">
+                <h3 style="margin:0 0 8px; font-size:16px; color:#0f172a;">Why verify?</h3>
+                <ul style="margin:0 0 0 18px; padding:0; color:#334155; font-size:14px; line-height:20px;">
+                  <li><strong>Account Protection</strong>: Verifying your email helps secure your profile and prevent unauthorized access.</li>
+                  <li><strong>Stay Informed</strong>: Receive announcements, updates, and alerts from your estate without missing a thing.</li>
+                </ul>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="padding: 24px 28px 28px 28px;">
+                <p style="margin:0; font-size:14px; color:#334155;">
+                  Warm regards,<br/>
+                  <strong>The Vaultify Team</strong>
+                </p>
+                <p style="margin:12px 0 0; font-size:12px; color:#94a3b8;">
+                  If you didn’t request this, you can safely ignore this email.
+                </p>
+              </td>
+            </tr>
+
+          </table>
+          <div style="margin-top:16px; font-size:11px; color:#94a3b8;">
+            © {now().year} Vaultify. All rights reserved.
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+"""
+
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            body=text_body,  # plain text fallback
+            from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
+            to=[email],
+        )
+        msg.attach_alternative(html_body, "text/html")
+
+        # Attach CID image if a local path is configured
+        if use_cid and logo_path:
+            try:
+                with open(logo_path, "rb") as f:
+                    img = MIMEImage(f.read())
+                    img.add_header("Content-ID", "<vaultify_logo>")
+                    img.add_header("Content-Disposition", "inline", filename="vaultify-banner.jpg")
+                    msg.attach(img)
+            except Exception:
+                # If embedding fails, send without image
+                pass
+
+        msg.send(fail_silently=False)
 
 class PlainTextParser(BaseParser):
     """
@@ -456,67 +657,6 @@ import uuid
 
 logger = logging.getLogger(__name__)
 
-# class SignupSendOTPView(APIView):
-#     def post(self, request):
-#         email = request.data.get('email', '').strip().lower()
-#         if not email:
-#             return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-#         # Check if user exists
-#         from django.contrib.auth.models import User
-#         try:
-#             user = User.objects.get(email=email)
-#         except User.DoesNotExist:
-#             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-
-#         profile = user.profile
-
-#         # Generate 6-digit OTP
-#         otp = f"{random.randint(100000, 999999)}"
-#         profile.signup_otp = otp
-#         profile.signup_otp_expiry = now() + timedelta(minutes=10)
-#         profile.save()
-
-#         # Send OTP email with personalized text
-#         try:
-#             send_mail(
-#                 'Your Vaultify Signup OTP',
-#                 f"""Dear {user.first_name},
-
-# You’re just one step away from joining your Estate on Vaultify. To complete your sign-in, please verify your email address using the OTP below. Here’s why it’s important:
-# \t•\tAccount Protection: Verifying your email helps secure your profile and prevent unauthorized access.
-# \t•\tStay Informed: Get important announcements, updates, and alerts from your estate without missing a thing.
-
-# Your OTP is: {otp}
-
-# This OTP expires in 10 minutes.
-
-# Warm regards,
-# The Vaultify Team.
-# """,
-#                 settings.DEFAULT_FROM_EMAIL,
-#                 [user.email],
-#                 fail_silently=False,
-#             )
-#             logger.info(f"Signup OTP sent to {user.email}")
-#         except Exception as e:
-#             logger.error(f"Failed to send signup OTP: {e}")
-#             return Response({'error': 'Failed to send OTP'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-#         return Response({'message': 'OTP sent successfully'}, status=status.HTTP_200_OK)
-from django.conf import settings
-from django.core.mail import send_mail
-from django.utils.timezone import now
-from datetime import timedelta
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-import random
-import datetime
-import logging
-
-logger = logging.getLogger(__name__)
-
 class SignupSendOTPView(APIView):
     def post(self, request):
         email = request.data.get('email', '').strip().lower()
@@ -530,11 +670,7 @@ class SignupSendOTPView(APIView):
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        # Ensure profile exists (adjust if your app creates it elsewhere)
-        try:
-            profile = user.profile
-        except Exception:
-            return Response({'error': 'User profile not found'}, status=status.HTTP_404_NOT_FOUND)
+        profile = user.profile
 
         # Generate 6-digit OTP
         otp = f"{random.randint(100000, 999999)}"
@@ -542,119 +678,25 @@ class SignupSendOTPView(APIView):
         profile.signup_otp_expiry = now() + timedelta(minutes=10)
         profile.save()
 
-        # Branding (use settings override if available)
-        subject = "Your Vaultify Signup OTP"
-        logo_url = getattr(settings, "BRANDING_LOGO_URL", "https://vaultify.us-southeast-1.linodeobjects.com/v_logo.jpeg")
-        display_name = (user.first_name or user.get_username()).strip() or "there"
-
-        # Plain-text fallback
-        text_message = f"""Dear {display_name},
-
-            You’re just one step away from joining your Estate on Vaultify. To complete your sign-in, please verify your email address using the OTP below.
-
-            • Account protection: Verifying your email helps secure your profile and prevent unauthorized access.
-            • Stay informed: Get important announcements, updates, and alerts from your estate without missing a thing.
-
-            Your OTP is: {otp}
-
-            This OTP expires in 10 minutes.
-
-            If you didn’t request this, you can ignore this email.
-
-            Warm regards,
-            The Vaultify Team
-            """
-
-        # HTML version (styled + logo)
-        html_message = f"""\
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width">
-                <title>{subject}</title>
-                </head>
-                <body style="margin:0;padding:0;background:#f6f8fb;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6f8fb;">
-                    <tr>
-                    <td align="center" style="padding:24px;">
-                        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
-                        <tr>
-                            <td align="center" style="padding:24px 24px 8px;">
-                            <img src="{logo_url}" width="120" alt="Vaultify" style="display:block;">
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td style="padding:8px 24px 0;font:600 20px/1.3 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
-                            Verify your email to finish signing up
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td style="padding:8px 24px 16px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
-                            Dear {display_name},<br><br>
-                            You’re just one step away from joining your Estate on Vaultify. To complete your sign-in, please verify your email address using the OTP below.
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td style="padding:0 24px 8px;font:600 14px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
-                            Why this matters
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td style="padding:0 24px 16px;">
-                            <ul style="margin:0;padding-left:20px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
-                                <li><strong>Account protection:</strong> Verifying your email helps secure your profile and prevent unauthorized access.</li>
-                                <li><strong>Stay informed:</strong> Get announcements, updates, and alerts from your estate without missing a thing.</li>
-                            </ul>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td align="center" style="padding:12px 24px 8px;">
-                            <div style="display:inline-block;padding:14px 24px;border:1px dashed #d1d5db;border-radius:10px;background:#f9fafb;
-                                        font:700 22px/1.1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono','Courier New', monospace;
-                                        letter-spacing:2px;color:#111827;">
-                                {otp}
-                            </div>
-                            <div style="margin-top:8px;font:400 12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#6b7280;">
-                                Expires in 10 minutes
-                            </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td style="padding:8px 24px 24px;font:400 14px/1.7 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#374151;">
-                            If you didn’t request this, you can safely ignore this email.
-                            <br><br>
-                            Warm regards,<br>
-                            <strong>The Vaultify Team</strong>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td align="center" style="background:#f3f4f6;padding:16px 24px;font:400 12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#6b7280;">
-                            © {datetime.date.today().year} Vaultify. All rights reserved.
-                            </td>
-                        </tr>
-                        </table>
-                    </td>
-                    </tr>
-                </table>
-                </body>
-                </html>"""
-
-        # Send OTP email (HTML + plain text fallback)
+        # Send OTP email with personalized text
         try:
             send_mail(
-                subject=subject,
-                message=text_message,
-                from_email=getattr(settings, "DEFAULT_FROM_EMAIL", None),
-                recipient_list=[user.email],
-                html_message=html_message,
+                'Your Vaultify Signup OTP',
+                f"""Dear {user.first_name},
+
+                    You’re just one step away from joining your Estate on Vaultify. To complete your sign-in, please verify your email address using the OTP below. Here’s why it’s important:
+                    \t•\tAccount Protection: Verifying your email helps secure your profile and prevent unauthorized access.
+                    \t•\tStay Informed: Get important announcements, updates, and alerts from your estate without missing a thing.
+
+                    Your OTP is: {otp}
+
+                    This OTP expires in 10 minutes.
+
+                    Warm regards,
+                    The Vaultify Team.
+                    """,
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
                 fail_silently=False,
             )
             logger.info(f"Signup OTP sent to {user.email}")
@@ -914,7 +956,7 @@ class GoogleSignInView(APIView):
             return Response({'error': 'Invalid Google token'}, status=status.HTTP_400_BAD_REQUEST)
 
 import random
-# from datetime import datetime, timedelta
+from datetime import datetime, timedelta
 from django.utils.timezone import now
 
 class PasswordResetRequestView(APIView):
@@ -1189,23 +1231,7 @@ class LostFoundCountView(APIView):
         lostfound_count = LostFoundItem.objects.count()
         logger.debug(f"Total lost and found items count: {lostfound_count}")
         return Response({'lostfound_count': lostfound_count}, status=status.HTTP_200_OK)
-    
-class LostFoundItemDeleteView(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def delete(self, request, pk):
-        try:
-            item = LostFoundItem.objects.get(pk=pk)
-        except LostFoundItem.DoesNotExist:
-            return Response({'error': 'Lost found item not found'}, status=status.HTTP_404_NOT_FOUND)
-        
-        # Optional: Check if user is authorized to delete (e.g., only the creator)
-        # if item.sender != request.user:
-        #     return Response({'error': 'Not authorized'}, status=status.HTTP_403_FORBIDDEN)
-        
-        item.delete()
-        return Response({'message': 'Lost found item deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
-    
+
 class AlertDeleteView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -1497,9 +1523,6 @@ class LostFoundItemListAllView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
 
-
-
-
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -1511,7 +1534,6 @@ class LostFoundItemDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = LostFoundItem.objects.all()
     serializer_class = LostFoundItemSerializer
     permission_classes = [IsAuthenticated]
-    
     
 class VisitorCheckinListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -2275,16 +2297,6 @@ from rest_framework.permissions import AllowAny
 
 from .serializers import UserSerializer
 
-# views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
-from django.contrib.auth.models import User
-
-from .serializers import UserSerializer
-from .models import UserProfile  # ✅ for choices validation
-
-
 class FilterUsersView(APIView):
     permission_classes = [AllowAny]
 
@@ -2296,38 +2308,19 @@ class FilterUsersView(APIView):
 
         allowed_roles = role_params or ["Residence", "Security Personnel"]
 
+        # Query USERS and filter via related profile fields
         qs = (
             User.objects
-            .select_related("profile", "bank_service_charge")
-            .prefetch_related("transactions")
+            .select_related("profile", "bank_service_charge")  # 1-1 / 1-0 relateds
+            .prefetch_related("transactions")                  # reverse FK
         )
 
         if user_status:
             qs = qs.filter(profile__user_status__iexact=user_status.strip())
         if estate:
             qs = qs.filter(profile__estate__iexact=estate.strip())
+
         qs = qs.filter(profile__role__in=allowed_roles)
-
-        # 🔽 NEW: filter by apartment_type (supports single or multiple values)
-        apt_values = request.query_params.getlist("apartment_type")
-        if not apt_values:
-            one = request.query_params.get("apartment_type")
-            if one:
-                apt_values = [one]
-
-        if apt_values:
-            valid = {k for k, _ in UserProfile.APARTMENT_TYPE_CHOICES}
-            bad = [v for v in apt_values if v not in valid]
-            if bad:
-                return Response(
-                    {
-                        "error": "Invalid apartment_type value(s).",
-                        "invalid": bad,
-                        "allowed": sorted(list(valid)),
-                    },
-                    status=400,
-                )
-            qs = qs.filter(profile__apartment_type__in=apt_values)
 
         if group_by_role:
             residents_qs = qs.filter(profile__role="Residence")
@@ -2335,84 +2328,10 @@ class FilterUsersView(APIView):
             return Response({
                 "residents": UserSerializer(residents_qs, many=True, context={'request': request}).data,
                 "security_personnel": UserSerializer(security_qs, many=True, context={'request': request}).data,
-            }, status=200)
+            }, status=status.HTTP_200_OK)
 
         data = UserSerializer(qs, many=True, context={'request': request}).data
-        return Response(data, status=200)
-
-
-# (Optional) Dedicated endpoint if you prefer a strict, focused route
-from rest_framework import generics
-from rest_framework.permissions import AllowAny
-
-class UsersByApartmentTypeView(generics.ListAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = UserSerializer
-
-    def get_queryset(self):
-        apt = self.request.query_params.get("apartment_type")
-        if not apt:
-            return User.objects.none()
-
-        valid = {k for k, _ in UserProfile.APARTMENT_TYPE_CHOICES}
-        if apt not in valid:
-            # Raise a 400 from get() so ListAPIView returns cleanly
-            from rest_framework.exceptions import ValidationError
-            raise ValidationError({"apartment_type": f"Invalid. Allowed: {sorted(list(valid))}"})
-
-        qs = (
-            User.objects
-            .select_related("profile", "bank_service_charge")
-            .prefetch_related("transactions")
-            .filter(profile__apartment_type=apt)
-        )
-
-        # Optional refinements (estate/role/etc.)
-        estate = self.request.query_params.get("estate")
-        if estate:
-            qs = qs.filter(profile__estate__iexact=estate.strip())
-
-        role_params = self.request.query_params.getlist("role")
-        if role_params:
-            qs = qs.filter(profile__role__in=role_params)
-
-        return qs
-
-# class FilterUsersView(APIView):
-#     permission_classes = [AllowAny]
-
-#     def get(self, request):
-#         user_status = request.query_params.get("user_status")
-#         estate = request.query_params.get("estate")
-#         role_params = request.query_params.getlist("role")
-#         group_by_role = request.query_params.get("group_by_role") in ("1", "true", "True")
-
-#         allowed_roles = role_params or ["Residence", "Security Personnel"]
-
-#         # Query USERS and filter via related profile fields
-#         qs = (
-#             User.objects
-#             .select_related("profile", "bank_service_charge")  # 1-1 / 1-0 relateds
-#             .prefetch_related("transactions")                  # reverse FK
-#         )
-
-#         if user_status:
-#             qs = qs.filter(profile__user_status__iexact=user_status.strip())
-#         if estate:
-#             qs = qs.filter(profile__estate__iexact=estate.strip())
-
-#         qs = qs.filter(profile__role__in=allowed_roles)
-
-#         if group_by_role:
-#             residents_qs = qs.filter(profile__role="Residence")
-#             security_qs = qs.filter(profile__role="Security Personnel")
-#             return Response({
-#                 "residents": UserSerializer(residents_qs, many=True, context={'request': request}).data,
-#                 "security_personnel": UserSerializer(security_qs, many=True, context={'request': request}).data,
-#             }, status=status.HTTP_200_OK)
-
-#         data = UserSerializer(qs, many=True, context={'request': request}).data
-#         return Response(data, status=status.HTTP_200_OK)
+        return Response(data, status=status.HTTP_200_OK)
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
