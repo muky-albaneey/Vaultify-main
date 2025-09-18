@@ -340,7 +340,6 @@ from django.contrib.auth.models import User  # if already imported elsewhere, ke
 
 OTP_LIFETIME_MINUTES = 10
 
-
 class SignupView(APIView):
     """
     Signup + email-OTP verification.
