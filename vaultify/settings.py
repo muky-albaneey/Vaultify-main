@@ -57,7 +57,7 @@ ALLOWED_HOSTS = ["*"]  # or enumerate your real hosts in prod
 
 CORS_ALLOW_ALL_ORIGINS = True     # allow everyone
 CORS_ALLOW_CREDENTIALS = False    
-CORS_ALLOWED_ORIGINS = ["*"]
+# CORS_ALLOWED_ORIGINS = ["*"]
 
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:5173",
