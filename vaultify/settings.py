@@ -263,5 +263,6 @@ SESSION_CACHE_ALIAS = "default"
 # Optional: Global Cache Middleware
 # ======================
 CACHE_MIDDLEWARE_ALIAS = "default"
-CACHE_MIDDLEWARE_SECONDS = 60 * 5  # 5 minutes
+# CACHE_MIDDLEWARE_SECONDS = 60 * 5  # 5 minutes
+CACHE_MIDDLEWARE_SECONDS = 3  # 3 seconds
 CACHE_MIDDLEWARE_KEY_PREFIX = "vaultify"
