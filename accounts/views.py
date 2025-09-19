@@ -430,6 +430,7 @@ class SignupView(APIView):
                         'estate': profile_data.get('estate', ''),
                         'estate_email': profile_data.get('estate_email', ''),
                         'house_address': profile_data.get('house_address', ''),
+                        'apartment_type': profile_data.get('apartment_type', ''),
                         'pin': profile_data.get('pin', ''),
                         'plan': profile_data.get('plan', ''),
                         'profile_picture': profile_data.get('profile_picture', ''),

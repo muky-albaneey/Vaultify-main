@@ -56,7 +56,14 @@ MIDDLEWARE = [
 ALLOWED_HOSTS = ["*"]  # or enumerate your real hosts in prod
 
 CORS_ALLOW_ALL_ORIGINS = True     # allow everyone
-CORS_ALLOW_CREDENTIALS = False    # must be False with wildcard
+CORS_ALLOW_CREDENTIALS = False    
+CORS_ALLOWED_ORIGINS = ["*"]
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     "https://vaultifyadmin.africa",
+#     "https://api-vps.203.161.56.225.nip.io",   # your API origin can be here safely
+# ]
 
 # ALLOWED_HOSTS = ['vaultify.lexisdevelopmentltd.com', 'vaultify.lexisfinance.com', 'vaultify-43wm.onrender.com', 'vaultifyadmin.onrender.com', 'yourdomain.com', '127.0.0.1', ] 
 # or specify your IP
