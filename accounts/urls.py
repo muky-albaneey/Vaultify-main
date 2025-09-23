@@ -20,7 +20,9 @@ from .views import (
     ChangePasswordView,notify_topic_view,delete_device_token,
     SubscriptionUsersListView,
     BankServiceChargeUpdateView,OpenDeleteAccountView,PublicUserDetailView,
-    UpdateUserStatusView,ResetPaidChargeView,notify_users_view,notify_user_view,FilterUsersView
+    UpdateUserStatusView,ResetPaidChargeView,notify_users_view,notify_user_view,
+    FilterUsersView,AccessCodeCreateSlimView,AccessCodeListSlimView,AlertCreateSlimView,
+    AlertListSlimView,LostFoundItemListSlimView,  
 )
 from django.conf import settings
 from .views import  save_device_token
@@ -107,4 +109,20 @@ urlpatterns = [
     path('bank-service-charge/<int:user_id>/reset-paid/', ResetPaidChargeView.as_view(), name='reset-paid-charge'),
     path('filter-users/', FilterUsersView.as_view(), name='filter-users-by-status'),
 
+]
+# urls.py — add/replace
+urlpatterns += [
+    # Access codes (fast)
+    path('access-codes/create/', AccessCodeCreateSlimView.as_view(), name='access-code-create-slim'),
+    path('access-codes/list/', AccessCodeListSlimView.as_view(), name='access-code-list-slim'),
+
+    # Alerts (fast)
+    path('alerts/create/fast/', AlertCreateSlimView.as_view(), name='alert-create-slim'),
+    path('alerts/list/fast/', AlertListSlimView.as_view(), name='alert-list-slim'),
+
+    # Lost & Found (fast)
+    #path('lostfound/create/fast/', LostFoundFastView.as_view(), name='lostfound-create-slim'),
+    #path('lostfound/list/fast/', LostFoundItemListSlimView.as_view(), name='lostfound-list-slim'),
+
+    # Optional presign
 ]

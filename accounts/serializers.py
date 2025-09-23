@@ -7,6 +7,114 @@ from django.utils import timezone
 logger = logging.getLogger(__name__)
 
 
+# --- Tiny user for list rows ---
+class UserTinySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name', 'email']
+
+# --- Create: minimal I/O (no nested user) ---
+class AccessCodeCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccessCode
+        fields = [
+            'code', 'visitor_name', 'visitor_email', 'visitor_phone',
+            'valid_from', 'valid_to', 'max_uses', 'gate', 'notify_on_use'
+        ]
+
+    def validate(self, data):
+        if data.get('valid_from') and data.get('valid_to') and data['valid_from'] >= data['valid_to']:
+            raise serializers.ValidationError({'valid_to': 'valid_to must be after valid_from'})
+        if not data.get('visitor_email'):
+            raise serializers.ValidationError({'visitor_email': 'This field is required.'})
+        return data
+
+# --- List rows: tiny creator only ---
+class AccessCodeRowSerializer(serializers.ModelSerializer):
+    creator = UserTinySerializer(read_only=True)
+
+    class Meta:
+        model = AccessCode
+        fields = [
+            'code', 'creator', 'visitor_name', 'visitor_email', 'visitor_phone',
+            'gate', 'created_at', 'valid_from', 'valid_to', 'current_uses', 'max_uses', 'is_active'
+        ]
+
+# Create: keep it minimal
+class AlertCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Alert
+        fields = ['id','message', 'alert_type', 'recipients', 'urgency_level']
+
+# List: tiny sender only
+class AlertRowSerializer(serializers.ModelSerializer):
+    sender = UserTinySerializer(read_only=True)
+
+    class Meta:
+        model = Alert
+        fields = ['id', 'message', 'alert_type', 'urgency_level', 'timestamp', 'sender']
+        
+
+# Create: minimal fields only (no nested sender)
+# serializers.py
+from rest_framework import serializers
+from .models import LostFoundItem
+
+# serializers.py
+from rest_framework import serializers
+from .models import LostFoundItem
+
+# class LostFoundItemCreateSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = LostFoundItem
+#         fields = ['id', 'description', 'item_type', 'location', 'contact_info', 'image']
+#         read_only_fields = ['id']
+
+# class LostFoundItemRowSerializer(serializers.ModelSerializer):
+#     sender = UserTinySerializer(read_only=True)
+
+#     class Meta:
+#         model = LostFoundItem
+#         fields = ['id', 'description', 'item_type', 'location', 'date_reported', 'image', 'sender']
+# serializers.py
+from rest_framework import serializers
+from .models import LostFoundItem
+from .serializers import UserTinySerializer  # your existing tiny user
+
+class LostFoundItemCreateSerializer(serializers.ModelSerializer):
+    # make image optional just like your BankServiceCharge files list was
+    image = serializers.ImageField(required=False, allow_null=True)
+
+    class Meta:
+        model = LostFoundItem
+        fields = ["id", "description", "item_type", "location", "contact_info", "image"]
+
+    def validate_item_type(self, value):
+        if value not in dict(LostFoundItem.ITEM_TYPES):
+            raise serializers.ValidationError("Invalid item type")
+        return value
+
+
+class LostFoundItemRowSerializer(serializers.ModelSerializer):
+    sender = UserTinySerializer(read_only=True)
+
+    class Meta:
+        model = LostFoundItem
+        fields = ["id", "description", "item_type", "location", "date_reported", "contact_info", "image", "sender"]
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        request = self.context.get("request")
+        if instance.image:
+            try:
+                url = instance.image.url          # no download, just URL build
+                rep["image"] = request.build_absolute_uri(url) if request else url
+            except Exception:
+                rep["image"] = instance.image.name
+        else:
+            rep["image"] = None
+        return rep
+
 # ---------------- BankServiceChargeFile Serializer ----------------
 class BankServiceChargeFileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -190,6 +298,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
                 f"Role must be one of: {', '.join(valid_roles)}"
             )
         return value
+    
 
 class UserSerializer(serializers.ModelSerializer):
     profile = UserProfileSerializer()
@@ -453,21 +562,28 @@ from .serializers import UserSerializer
 class LostFoundItemSerializer(serializers.ModelSerializer):
     # Use the UserSerializer already defined earlier in this file
     sender = UserSerializer(read_only=True)
-
     class Meta:
         model = LostFoundItem
         fields = [
-            'id',
-            'description',
-            'item_type',
-            'location',
-            'date_reported',
-            'contact_info',
-            'sender',
-            'image',
+            'id', 'description', 'item_type', 'location',
+            'date_reported', 'contact_info', 'sender', 'image',
         ]
         read_only_fields = ['date_reported', 'sender']
-        extra_kwargs = {'image': {'required': False}}  # keep image optional
+        extra_kwargs = {'image': {'required': False}}
+    # class Meta:
+    #     model = LostFoundItem
+    #     fields = [
+    #         'id',
+    #         'description',
+    #         'item_type',
+    #         'location',
+    #         'date_reported',
+    #         'contact_info',
+    #         'sender',
+    #         'image',
+    #     ]
+    #     read_only_fields = ['date_reported', 'sender']
+    #     extra_kwargs = {'image': {'required': False}} 
 
     def validate_item_type(self, value):
         valid_types = [choice[0] for choice in LostFoundItem.ITEM_TYPES]

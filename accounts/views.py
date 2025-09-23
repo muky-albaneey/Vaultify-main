@@ -705,6 +705,148 @@ class SignupSendOTPView(APIView):
             return Response({'error': 'Failed to send OTP'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({'message': 'OTP sent successfully'}, status=status.HTTP_200_OK)
+from django.db import transaction
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .serializers import (
+    AccessCodeCreateSerializer,
+    AccessCodeRowSerializer,   # if you use the slim list view
+)
+
+# CREATE (fast, compact response)
+class AccessCodeCreateSlimView(generics.CreateAPIView):
+    serializer_class = AccessCodeCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        resp = super().create(request, *args, **kwargs)
+        data = resp.data
+        # return only what the UI needs to proceed
+        return Response(
+            {'code': data.get('code'), 'status': 'created'},
+            status=status.HTTP_201_CREATED
+        )
+
+# LIST (select_related to avoid N+1)
+class AccessCodeListSlimView(generics.ListAPIView):
+    serializer_class = AccessCodeRowSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return (AccessCode.objects
+                .select_related('creator', 'creator__profile')
+                .filter(creator=self.request.user)
+                .order_by('-created_at'))
+
+from django.db.models import Q
+from .serializers import (
+    AlertCreateSerializer,
+    AlertRowSerializer,   # if you use the slim list view below
+)
+
+class AlertCreateSlimView(generics.CreateAPIView):
+    serializer_class = AlertCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        estate = getattr(self.request.user.profile, 'estate', None)
+        # we don't store estate on model; just attach sender and save
+        serializer.save(sender=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        resp = super().create(request, *args, **kwargs)
+        return Response({'id': resp.data.get('id'), 'status': 'created'}, status=status.HTTP_201_CREATED)
+
+class AlertListSlimView(generics.ListAPIView):
+    serializer_class = AlertRowSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        try:
+            user_role = user.profile.role
+            estate = user.profile.estate
+        except Exception:
+            return Alert.objects.none()
+
+        # deleted alerts
+        deleted_ids = set(user.deleted_alerts.values_list('alert_id', flat=True))
+
+        qs = (Alert.objects
+              .select_related('sender', 'sender__profile')
+              .filter(
+                  Q(recipients__contains=[user_role]) | Q(recipients__contains=[str(user.id)])
+              )
+              .order_by('-timestamp'))
+
+        if deleted_ids:
+            qs = qs.exclude(id__in=deleted_ids)
+        return qs
+
+# CREATE — compact response (no heavy nested serialization)
+from .serializers import (
+    LostFoundItemRowSerializer   # if you use the slim list view
+)
+
+# views.py
+import boto3, datetime
+from django.conf import settings
+from rest_framework.views import APIView
+
+class LostFoundPresignView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        filename = request.data.get('filename') or 'upload.jpg'
+        content_type = request.data.get('content_type') or 'image/jpeg'
+        s3 = boto3.client(
+            's3',
+            region_name=settings.AWS_S3_REGION_NAME,
+            endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            config=getattr(settings, 'AWS_S3_CONFIG', None),
+        )
+        key = f"lostfound_images/{uuid.uuid4().hex}{os.path.splitext(filename)[1].lower()}"
+        presigned = s3.generate_presigned_post(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+            Key=key,
+            Fields={"Content-Type": content_type, "acl": "public-read"},
+            Conditions=[
+                {"Content-Type": content_type},
+                {"acl": "public-read"},
+                ["content-length-range", 0, 15 * 1024 * 1024],  # 15MB
+            ],
+            ExpiresIn=600,
+        )
+        # Client: upload to presigned['url'] with presigned['fields']
+        return Response({"upload": presigned, "key": key}, status=200)
+
+
+# LIST — prefetch sender/profile; search/order as before
+class LostFoundItemListSlimView(generics.ListAPIView):
+    serializer_class = LostFoundItemRowSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['description', 'location', 'contact_info']
+    ordering = ['-date_reported']
+
+    def get_queryset(self):
+        estate = (self.request.query_params.get('estate')
+                  or getattr(self.request.user.profile, 'estate', None))
+        if not estate:
+            return LostFoundItem.objects.none()
+        qs = (LostFoundItem.objects
+              .select_related('sender', 'sender__profile')
+              .filter(sender__profile__estate__iexact=estate))
+        item_type = self.request.query_params.get('item_type')
+        if item_type in dict(LostFoundItem.ITEM_TYPES):
+            qs = qs.filter(item_type=item_type)
+        return qs
 
 class SignupVerifyOTPView(APIView):
     def post(self, request):
@@ -1484,15 +1626,106 @@ from rest_framework.response import Response
 from .models import LostFoundItem
 from .serializers import LostFoundItemSerializer
 
+# views.py (replace only the create() in LostFoundItemCreateView)
+
+import os, uuid, requests
+from botocore.client import Config as BotoConfig
+import boto3
+from django.conf import settings
+
+def _s3_client():
+    return boto3.client(
+        "s3",
+        region_name=settings.AWS_S3_REGION_NAME,
+        endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        config=BotoConfig(signature_version=getattr(settings, "AWS_S3_SIGNATURE_VERSION", "s3v4")),
+    )
+
+def _extract_key(v: str) -> str:
+    from urllib.parse import urlparse
+    v = (v or "").strip()
+    if not v:
+        return ""
+    if v.startswith(("http://", "https://")):
+        p = urlparse(v); path = (p.path or "").lstrip("/")
+        return path.split("/", 1)[1] if "/" in path else path
+    return v
+
+# views.py
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.response import Response
+from django.db import transaction
+
+from .models import LostFoundItem
+from .serializers import (
+    LostFoundItemCreateSerializer,
+    LostFoundItemRowSerializer,
+)
+
 class LostFoundItemCreateView(generics.CreateAPIView):
     queryset = LostFoundItem.objects.all()
-    serializer_class = LostFoundItemSerializer
     permission_classes = [IsAuthenticated]
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+    serializer_class = LostFoundItemCreateSerializer   # ← REQUIRED
 
-    def perform_create(self, serializer):
-        # Estate is derived at list-time from sender.profile; no need to store on model
-        serializer.save(sender=self.request.user)
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        if "image_key" in request.FILES:
+            return Response({"error": "Send 'image_key' as TEXT (not file)."}, status=400)
+
+        saved_key = ""
+        file_obj = request.FILES.get("image")
+        if file_obj:
+            ext = os.path.splitext(file_obj.name)[1] or ".jpg"
+            key = f"lostfound_images/{uuid.uuid4().hex}{ext}"
+            content_type = getattr(file_obj, "content_type", "application/octet-stream")
+
+            s3 = _s3_client()
+            put_url = s3.generate_presigned_url(
+                "put_object",
+                Params={
+                    "Bucket": settings.AWS_STORAGE_BUCKET_NAME,
+                    "Key": key,
+                    "ContentType": content_type,
+                    "ACL": "public-read",
+                },
+                ExpiresIn=600,
+            )
+
+            # upload WITHOUT botocore (prevents ConnectionClosedError)
+            r = requests.put(
+                put_url,
+                data=file_obj.file,  # stream
+                headers={"Content-Type": content_type, "x-amz-acl": "public-read"},
+                timeout=60,
+            )
+            if r.status_code not in (200, 201, 204):
+                return Response(
+                    {"error": "S3 upload failed", "status": r.status_code, "detail": r.text[:500]},
+                    status=502,
+                )
+            saved_key = key
+            data.pop("image", None)  # don't let DRF try to upload again
+
+        if not saved_key:
+            saved_key = _extract_key(data.get("image_key", "")) if isinstance(data.get("image_key", ""), str) else ""
+        data.pop("image_key", None)
+
+        ser = self.get_serializer(data=data)
+        ser.is_valid(raise_exception=True)
+        item = ser.save(sender=request.user)
+
+        if saved_key and not item.image:
+            item.image.name = saved_key
+            item.save(update_fields=["image"])
+
+        out = LostFoundItemRowSerializer(item, context=self.get_serializer_context()).data
+        return Response(out, status=status.HTTP_201_CREATED)
 
 class LostFoundItemListView(generics.ListAPIView):
     serializer_class = LostFoundItemSerializer

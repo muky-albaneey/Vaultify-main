@@ -240,14 +240,18 @@ class LostFoundItem(models.Model):
     location = models.CharField(max_length=255, blank=True, null=True)
     date_reported = models.DateTimeField(auto_now_add=True)
     contact_info = models.CharField(max_length=255, blank=True, null=True)
-    image = models.ImageField(upload_to='lostfound_images/', blank=True, null=True)
+    image = models.ImageField(blank=True, null=True)
 
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.item_type} Item - {self.description[:50]}"
 
-
+    class Meta:
+        indexes = [
+            models.Index(fields=['item_type', 'date_reported']),
+            models.Index(fields=['sender', 'date_reported']),
+        ]
 class PrivateMessage(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
