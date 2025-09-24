@@ -1444,6 +1444,9 @@ class AlertListView(generics.ListAPIView):
         ).exclude(
             id__in=deleted_alert_ids
         ).order_by('-timestamp')
+        
+        
+from accounts.timefmt import to_local_iso
 
 class AccessCodeVerifyView(APIView):
     permission_classes = [IsAuthenticated]
@@ -1471,17 +1474,17 @@ class AccessCodeVerifyView(APIView):
             logger.warning(f"User {request.user.email} from estate {user_estate} attempted to verify access code from estate {access_code_estate}")
             return Response({"error": "You are not authorized to verify access codes from this estate."}, status=status.HTTP_403_FORBIDDEN)
 
-        now = timezone.now().astimezone(WAT)
+        now = timezone.now()
         if now < access_code.valid_from:
-            logger.warning(f"Access code not yet valid: {code}, Now: {now}, Valid from: {access_code.valid_from}")
+            logger.warning(f"Access code not yet valid: {code}, Now: {now}, Valid from: {to_local_iso(access_code.valid_from)}")
             return Response(
                 {"error": f"Access code is not yet valid: {access_code.valid_from}"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         if now > access_code.valid_to:
-            logger.warning(f"Access code expired: {code}, Now: {now}, Valid to: {access_code.valid_to}")
+            logger.warning(f"Access code expired: {code}, Now: {now}, Valid to: {to_local_iso(access_code.valid_to)}")
             return Response(
-                {"error": f"Access code has expired: {access_code.valid_to}"},
+                {"error": f"Access code has expired: {to_local_iso(access_code.valid_to)}"},
                 status=status.HTTP_400_BAD_REQUEST
             )
         if not access_code.is_active:
@@ -1510,8 +1513,8 @@ class AccessCodeVerifyView(APIView):
             'status': 'valid',
             'accessArea': access_code.gate,
             'code': access_code.code,
-            'validFrom': access_code.valid_from.isoformat(),
-            'validTo': access_code.valid_to.isoformat(),
+            'validFrom': to_local_iso(access_code.valid_from),
+            'validTo': to_local_iso(access_code.valid_to),
             'verified_count': access_code.current_uses,
             'unapproved_count': 0 if access_code.current_uses > 0 else 1,
         }, status=status.HTTP_200_OK)
@@ -1974,7 +1977,7 @@ class AccessCodeByUserListView(APIView):
         Automatically deactivate expired access codes.
         """
         try:
-            now = timezone.now().astimezone(WAT)
+            now = timezone.now()
             # Filter access codes by the authenticated user and order by creation date
             access_codes = AccessCode.objects.filter(creator=request.user).order_by('-created_at')
 
