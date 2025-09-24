@@ -37,7 +37,7 @@ class AccessCodeCreateSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, data):
-        from accounts.utils.timefmt import assume_lagos_then_to_utc
+        from accounts.timefmt import assume_lagos_then_to_utc
 
         # Normalize incoming naive values as Lagos → store UTC
         vf = data.get('valid_from')
