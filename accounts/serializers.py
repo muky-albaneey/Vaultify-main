@@ -306,14 +306,8 @@ class SubscriptionUserSerializer(serializers.Serializer):
 #                 'visitor_email': "This field is required."
 #             })
 #         return data
-from .timefmt import to_local_iso, assume_lagos_then_to_utc
-class AccessCodeSerializers(serializers.ModelSerializer):
+class AccessCodeSerializer(serializers.ModelSerializer):
     creator_name = serializers.CharField(source='creator.get_full_name', read_only=True)
-
-    # Localized, human-facing fields
-    valid_from = serializers.SerializerMethodField()
-    valid_to   = serializers.SerializerMethodField()
-    created_at = serializers.SerializerMethodField()
 
     class Meta:
         model = AccessCode
@@ -324,18 +318,6 @@ class AccessCodeSerializers(serializers.ModelSerializer):
             'created_at'
         ]
 
-    def get_valid_from(self, obj):
-        from accounts.timefmt import to_local_iso
-        return to_local_iso(obj.valid_from)
-
-    def get_valid_to(self, obj):
-        from accounts.timefmt import to_local_iso
-        return to_local_iso(obj.valid_to)
-
-    def get_created_at(self, obj):
-        from accounts.timefmt import to_local_iso
-        return to_local_iso(obj.created_at)
-
     def validate_code(self, value):
         if AccessCode.objects.filter(code=value).exists():
             raise serializers.ValidationError("An access code with this value already exists.")
@@ -344,11 +326,14 @@ class AccessCodeSerializers(serializers.ModelSerializer):
     def validate(self, data):
         if data.get('valid_from') and data.get('valid_to'):
             if data['valid_from'] >= data['valid_to']:
-                raise serializers.ValidationError({'valid_to': "Valid to date must be after valid from date."})
+                raise serializers.ValidationError({
+                    'valid_to': "Valid to date must be after valid from date."
+                })
         if 'visitor_email' not in data or not data['visitor_email']:
-            raise serializers.ValidationError({'visitor_email': "This field is required."})
+            raise serializers.ValidationError({
+                'visitor_email': "This field is required."
+            })
         return data
-    
 from .timefmt import to_local_iso, assume_lagos_then_to_utc
 class AccessCodeSerializers(serializers.ModelSerializer):
     creator_name = serializers.CharField(source='creator.get_full_name', read_only=True)
