@@ -710,13 +710,13 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import (
-    AccessCodeCreateSerializer,
+    AccessCodeCreateSerializer,AccessCodeSerializers
     AccessCodeRowSerializer,   # if you use the slim list view
 )
 
 # CREATE (fast, compact response)
 class AccessCodeCreateSlimView(generics.CreateAPIView):
-    serializer_class = AccessCodeCreateSerializer
+    serializer_class = AccessCodeSerializers
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
@@ -733,7 +733,7 @@ class AccessCodeCreateSlimView(generics.CreateAPIView):
 
 # LIST (select_related to avoid N+1)
 class AccessCodeListSlimView(generics.ListAPIView):
-    serializer_class = AccessCodeRowSerializer
+    serializer_class = AccessCodeSerializers
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
