@@ -82,6 +82,7 @@ REST_FRAMEWORK = {
 
 
 load_dotenv()  # Load environment variables from .env file
+DEFAULT_FROM_EMAIL = "Vaultify <support@vaultify.africa>"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
@@ -89,7 +90,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable
-DEFAULT_FROM_EMAIL = 'support@vaultify.africa'
+# DEFAULT_FROM_EMAIL = 'support@vaultify.africa'
 
 # BASE_URL = 'https://vaultify-43wm.onrender.com'
 
