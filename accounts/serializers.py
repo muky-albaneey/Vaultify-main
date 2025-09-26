@@ -56,15 +56,40 @@ class AccessCodeCreateSerializer(serializers.ModelSerializer):
         return data
 
 # --- List rows: tiny creator only ---
+# class AccessCodeRowSerializer(serializers.ModelSerializer):
+#     creator = UserTinySerializer(read_only=True)
+
+#     class Meta:
+#         model = AccessCode
+#         fields = [
+#             'code', 'creator', 'visitor_name', 'visitor_email', 'visitor_phone',
+#             'gate', 'created_at', 'valid_from', 'valid_to', 'current_uses', 'max_uses', 'is_active'
+#         ]
+# serializers.py
+from .timefmt import to_local_iso
+
 class AccessCodeRowSerializer(serializers.ModelSerializer):
     creator = UserTinySerializer(read_only=True)
+    valid_from = serializers.SerializerMethodField()
+    valid_to   = serializers.SerializerMethodField()
+    created_at = serializers.SerializerMethodField()
 
     class Meta:
         model = AccessCode
         fields = [
             'code', 'creator', 'visitor_name', 'visitor_email', 'visitor_phone',
-            'gate', 'created_at', 'valid_from', 'valid_to', 'current_uses', 'max_uses', 'is_active'
+            'gate', 'created_at', 'valid_from', 'valid_to',
+            'current_uses', 'max_uses', 'is_active'
         ]
+
+    def get_valid_from(self, obj):
+        return to_local_iso(obj.valid_from)
+
+    def get_valid_to(self, obj):
+        return to_local_iso(obj.valid_to)
+
+    def get_created_at(self, obj):
+        return to_local_iso(obj.created_at)
 
 # Create: keep it minimal
 class AlertCreateSerializer(serializers.ModelSerializer):

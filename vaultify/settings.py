@@ -96,7 +96,7 @@ EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable
 
 # BRANDING_LOGO_URL ='https://vaultify.us-southeast-1.linodeobjects.com/vaultify_logo.jpeg'
 # BRANDING_LOGO_PATH = 'https://vaultify.us-southeast-1.linodeobjects.com/vaultify_logo.jpeg'BRANDING_LOGO_URL = None  # force embed path branch
-BRANDING_LOGO_URL = None  # force embed path branch
+# BRANDING_LOGO_URL = None  # force embed path branch
 BRANDING_LOGO_PATH = BASE_DIR / "static/email/vaultify.jpeg"  # local filesystem path
 TEMPLATES = [
     {

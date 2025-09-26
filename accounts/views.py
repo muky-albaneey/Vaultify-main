@@ -322,14 +322,14 @@ class SignupView(APIView):
 
         # Decide banner content:
         # 1) Prefer hosted image URL, 2) else CID image if file path provided, 3) else text banner.
-        logo_url = getattr(settings, "BRANDING_LOGO_URL", None)
+        # logo_url = getattr(settings, "BRANDING_LOGO_URL", None)
         logo_path = getattr(settings, "BRANDING_LOGO_PATH", None)
         use_cid = False
-        if logo_url:
-            banner_html = f'<img src="{logo_url}" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
+        if logo_path:
+            banner_html = f'<img src="{logo_path}" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
         elif logo_path:
             use_cid = True
-            banner_html = '<img src="cid:vaultify_logo" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
+            banner_html = '<img src="cid:vaultify.jpeg" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
         else:
             # graceful fallback if no logo configured
             banner_html = """
@@ -577,8 +577,18 @@ class AccessCodeCreateSlimView(generics.CreateAPIView):
         )
 
 # LIST (select_related to avoid N+1)
+# class AccessCodeListSlimView(generics.ListAPIView):
+#     serializer_class = AccessCodeCreateSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_queryset(self):
+#         return (AccessCode.objects
+#                 .select_related('creator', 'creator__profile')
+#                 .filter(creator=self.request.user)
+#                 .order_by('-created_at'))
+# views.py
 class AccessCodeListSlimView(generics.ListAPIView):
-    serializer_class = AccessCodeCreateSerializer
+    serializer_class = AccessCodeRowSerializer   # ← switch to the row serializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -586,6 +596,7 @@ class AccessCodeListSlimView(generics.ListAPIView):
                 .select_related('creator', 'creator__profile')
                 .filter(creator=self.request.user)
                 .order_by('-created_at'))
+
 
 from django.db.models import Q
 from .serializers import (
@@ -1319,19 +1330,29 @@ class AccessCodeVerifyView(APIView):
             logger.warning(f"User {request.user.email} from estate {user_estate} attempted to verify access code from estate {access_code_estate}")
             return Response({"error": "You are not authorized to verify access codes from this estate."}, status=status.HTTP_403_FORBIDDEN)
 
+            # views.py (AccessCodeVerifyView.post)
+        from accounts.timefmt import to_local_iso
+
+        # ...
         now = timezone.now()
         if now < access_code.valid_from:
-            logger.warning(f"Access code not yet valid: {code}, Now: {now}, Valid from: {to_local_iso(access_code.valid_from)}")
+            logger.warning(
+                f"Access code not yet valid: {code}, Now: {now}, Valid from: {to_local_iso(access_code.valid_from)}"
+            )
             return Response(
-                {"error": f"Access code is not yet valid: {access_code.valid_from}"},
+                {"error": f"Access code is not yet valid: {to_local_iso(access_code.valid_from)}"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
         if now > access_code.valid_to:
-            logger.warning(f"Access code expired: {code}, Now: {now}, Valid to: {to_local_iso(access_code.valid_to)}")
+            logger.warning(
+                f"Access code expired: {code}, Now: {now}, Valid to: {to_local_iso(access_code.valid_to)}"
+            )
             return Response(
                 {"error": f"Access code has expired: {to_local_iso(access_code.valid_to)}"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
         if not access_code.is_active:
             logger.warning(f"Access code is inactive: {code}")
             return Response({"error": "Access code is disabled"}, status=status.HTTP_400_BAD_REQUEST)
