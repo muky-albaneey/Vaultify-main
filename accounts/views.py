@@ -561,7 +561,7 @@ from .serializers import (
 
 # CREATE (fast, compact response)
 class AccessCodeCreateSlimView(generics.CreateAPIView):
-    serializer_class = AccessCodeSerializers
+    serializer_class = AccessCodeCreateSerializer
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
@@ -578,7 +578,7 @@ class AccessCodeCreateSlimView(generics.CreateAPIView):
 
 # LIST (select_related to avoid N+1)
 class AccessCodeListSlimView(generics.ListAPIView):
-    serializer_class = AccessCodeSerializers
+    serializer_class = AccessCodeCreateSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -809,7 +809,7 @@ class UserUpdateView(APIView):
 
 
 class AccessCodeCreateView(generics.CreateAPIView):
-    serializer_class = AccessCodeSerializer
+    serializer_class = AccessCodeCreateSerializer
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
