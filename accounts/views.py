@@ -1662,6 +1662,7 @@ class VisitorCheckinListView(generics.ListAPIView):
                     'checkInTime': item['created_at'],
                     'expectedCheckOutTime': item['valid_to'],
                     'accessArea': item['gate'],
+                    'visitor_phone': item['visitor_phone'],
                     'estate': item.get('creator_profile', {}).get('estate', '')  # Add estate field here
                 } for item in serializer.data
             ]
@@ -1690,6 +1691,7 @@ class GeneralVisitorCheckinListView(generics.ListAPIView):
                     'checkInTime': item['created_at'],
                     'expectedCheckOutTime': item['valid_to'],
                     'accessArea': item['gate'],
+                    'visitor_phone': item['visitor_phone'],
                     'estate': item.get('creator_profile', {}).get('estate', '')  # Add estate field here
                 } for item in serializer.data
             ]
