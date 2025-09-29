@@ -22,7 +22,7 @@ from .views import (
     BankServiceChargeUpdateView,OpenDeleteAccountView,PublicUserDetailView,
     UpdateUserStatusView,ResetPaidChargeView,notify_users_view,notify_user_view,
     FilterUsersView,AccessCodeCreateSlimView,AccessCodeListSlimView,AlertCreateSlimView,
-    AlertListSlimView,LostFoundItemListSlimView,  
+    AlertListSlimView,LostFoundItemListSlimView,ActiveUsersCountView, ActiveUsersCountsByEstateView
 )
 from django.conf import settings
 from .views import  save_device_token
@@ -79,6 +79,8 @@ urlpatterns = [
     path('verify-and-credit/', VerifyAndCreditView.as_view(), name='verify-and-credit'),
     # User role based lists and counts
     path('residence-users/', ResidenceUsersListView.as_view(), name='residence-users-list'),
+    path('all-active-users/', ActiveUsersCountView.as_view(), name='active-users-list'),
+    path('users/active-counts/by-estate/', ActiveUsersCountsByEstateView.as_view(), name='active-counts-by-estate'),
     path('security-personnel-users/', SecurityPersonnelUsersListView.as_view(), name='security-personnel-users-list'),
     path('residence-users/count/', ResidenceUsersCountView.as_view(), name='residence-users-count'),
     path('security-personnel-users/count/', SecurityPersonnelUsersCountView.as_view(), name='security-personnel-users-count'),

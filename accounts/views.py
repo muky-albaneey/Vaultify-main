@@ -1670,6 +1670,79 @@ class VisitorCheckinListView(generics.ListAPIView):
         return Response(response_data)
     
     
+class ActiveUsersCountView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        estate = request.query_params.get('estate')  # optional
+        role   = request.query_params.get('role')    # optional: Residence | Security Personnel
+
+        qs = User.objects.filter(profile__is_email_verified=True)
+
+        if estate:
+            qs = qs.filter(profile__estate__iexact=estate)
+
+        if role in ('Residence', 'Security Personnel'):
+            qs = qs.filter(profile__role=role)
+
+        return Response({'count': qs.count()}, status=200)
+
+# views.py
+from django.db.models import Count, Sum, Case, When, IntegerField, Q
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import User
+
+class ActiveUsersCountsByEstateView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        estate = request.query_params.get('estate')  # optional
+        base = User.objects.filter(
+            profile__is_email_verified=True,
+            profile__user_status='active'
+        )
+        if estate:
+            base = base.filter(profile__estate__iexact=estate)
+
+        qs = (
+            base.values('profile__estate')
+                .annotate(
+                    active_all=Count('id'),
+                    active_residents=Sum(
+                        Case(When(profile__role='Residence', then=1),
+                             default=0, output_field=IntegerField())
+                    ),
+                    active_security=Sum(
+                        Case(When(profile__role='Security Personnel', then=1),
+                             default=0, output_field=IntegerField())
+                    ),
+                )
+                .order_by('profile__estate')
+        )
+
+        # nice, flat payload
+        data = [
+            {
+                "estate": row["profile__estate"] or "Unknown",
+                "active_all": row["active_all"],
+                "active_by_role": {
+                    "Residence": row["active_residents"] or 0,
+                    "Security Personnel": row["active_security"] or 0,
+                }
+            }
+            for row in qs
+        ]
+
+        # If a single estate was requested and not found, return empty counts
+        if estate and not data:
+            data = [{
+                "estate": estate,
+                "active_all": 0,
+                "active_by_role": {"Residence": 0, "Security Personnel": 0}
+            }]
+
+        return Response(data, status=200)
 
 # New GeneralVisitorCheckinListView without estate filtering
 class GeneralVisitorCheckinListView(generics.ListAPIView):
