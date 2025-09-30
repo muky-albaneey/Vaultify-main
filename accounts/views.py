@@ -323,21 +323,21 @@ class SignupView(APIView):
         # Decide banner content:
         # 1) Prefer hosted image URL, 2) else CID image if file path provided, 3) else text banner.
         # logo_url = getattr(settings, "BRANDING_LOGO_URL", None)
-        logo_path = getattr(settings, "BRANDING_LOGO_PATH", None)
-        use_cid = False
-        if logo_path:
-            banner_html = f'<img src="{logo_path}" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
-        elif logo_path:
-            use_cid = True
-            banner_html = '<img src="cid:vaultify.jpeg" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
-        else:
+        # logo_path = getattr(settings, "BRANDING_LOGO_PATH", None)
+        # use_cid = False
+        # if logo_path:
+        #     banner_html = f'<img src="{logo_path}" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
+        # elif logo_path:
+        #     use_cid = True
+        #     banner_html = '<img src="cid:vaultify.jpeg" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
+        # else:
             # graceful fallback if no logo configured
-            banner_html = """
-            <div style="height:140px; background:#0f172a; color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700;">
-              Vaultify
-            </div>
-            """
-
+        # banner_html = """
+        #     <div style="height:140px; background:#0f172a; color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700;">
+        #       Vaultify
+        #     </div>
+        #     """
+            
         text_body = (
             f"Dear {first_name},\n\n"
             "You’re just one step away from joining your Estate on Vaultify.\n"
@@ -366,9 +366,7 @@ class SignupView(APIView):
           <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px; background:#ffffff; border-radius:14px; overflow:hidden; box-shadow:0 6px 24px rgba(18, 38, 63, 0.06);">
             <!-- Top banner -->
             <tr>
-              <td align="center" style="background:#0f172a;">
-                {banner_html}
-              </td>
+            # 
             </tr>
 
             <!-- Header -->
