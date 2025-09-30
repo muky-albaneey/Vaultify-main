@@ -320,24 +320,6 @@ class SignupView(APIView):
     def _send_signup_otp_email(self, first_name: str, email: str, otp_code: str):
         subject = "Verify your email • Vaultify"
 
-        # Decide banner content:
-        # 1) Prefer hosted image URL, 2) else CID image if file path provided, 3) else text banner.
-        # logo_url = getattr(settings, "BRANDING_LOGO_URL", None)
-        # logo_path = getattr(settings, "BRANDING_LOGO_PATH", None)
-        # use_cid = False
-        # if logo_path:
-        #     banner_html = f'<img src="{logo_path}" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
-        # elif logo_path:
-        #     use_cid = True
-        #     banner_html = '<img src="cid:vaultify.jpeg" alt="Vaultify" width="100%" style="display:block; max-height:180px; object-fit:cover;">'
-        # else:
-            # graceful fallback if no logo configured
-        # banner_html = """
-        #     <div style="height:140px; background:#0f172a; color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700;">
-        #       Vaultify
-        #     </div>
-        #     """
-            
         text_body = (
             f"Dear {first_name},\n\n"
             "You’re just one step away from joining your Estate on Vaultify.\n"
@@ -352,90 +334,92 @@ class SignupView(APIView):
         )
 
         html_body = f"""\
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>{subject}</title>
-  </head>
-  <body style="margin:0; padding:0; background:#f6f9fc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f6f9fc;">
-      <tr>
-        <td align="center" style="padding: 32px 12px;">
-          <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px; background:#ffffff; border-radius:14px; overflow:hidden; box-shadow:0 6px 24px rgba(18, 38, 63, 0.06);">
-            <!-- Top banner -->
-            <tr>
-            # 
-            </tr>
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>{subject}</title>
+    </head>
+    <body style="margin:0; padding:0; background:#f6f9fc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f6f9fc;">
+        <tr>
+            <td align="center" style="padding: 32px 12px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px; background:#ffffff; border-radius:14px; overflow:hidden; box-shadow:0 6px 24px rgba(18, 38, 63, 0.06);">
+                <!-- Simple text header (no images) -->
+                <tr>
+                <td align="center" style="background:#0f172a; padding: 20px;">
+                    <div style="color:#ffffff; font-weight:700; font-size:18px;">Vaultify</div>
+                </td>
+                </tr>
 
-            <!-- Header -->
-            <tr>
-              <td style="padding: 28px 28px 0 28px;">
-                <h1 style="margin:0; font-size:22px; line-height:28px; color:#0f172a;">
-                  Verify your email, {first_name}
-                </h1>
-                <p style="margin:8px 0 0; font-size:14px; color:#334155;">
-                  You’re just one step away from joining your Estate on Vaultify. Please use the one-time passcode (OTP) below to complete verification.
-                </p>
-              </td>
-            </tr>
+                <!-- Header -->
+                <tr>
+                <td style="padding: 28px 28px 0 28px;">
+                    <h1 style="margin:0; font-size:22px; line-height:28px; color:#0f172a;">
+                    Verify your email, {first_name}
+                    </h1>
+                    <p style="margin:8px 0 0; font-size:14px; color:#334155;">
+                    You’re just one step away from joining your Estate on Vaultify. Please use the one-time passcode (OTP) below to complete verification.
+                    </p>
+                </td>
+                </tr>
 
-            <!-- OTP Box -->
-            <tr>
-              <td style="padding: 20px 28px 0 28px;">
-                <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px;">
-                  <tr>
-                    <td align="center" style="padding:20px 16px;">
-                      <div style="font-size:12px; color:#64748b; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">
-                        Your OTP
-                      </div>
-                      <div style="font-weight:700; font-size:28px; letter-spacing:0.32em; color:#0f172a;">
-                        {otp_code}
-                      </div>
-                      <div style="font-size:12px; color:#64748b; margin-top:8px;">
-                        Expires in {OTP_LIFETIME_MINUTES} minutes
-                      </div>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
+                <!-- OTP Box -->
+                <tr>
+                <td style="padding: 20px 28px 0 28px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f8fafc; border:1px solid #e5e7eb; border-radius:12px;">
+                    <tr>
+                        <td align="center" style="padding:20px 16px;">
+                        <div style="font-size:12px; color:#64748b; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:8px;">
+                            Your OTP
+                        </div>
+                        <div style="font-weight:700; font-size:28px; letter-spacing:0.32em; color:#0f172a;">
+                            {otp_code}
+                        </div>
+                        <div style="font-size:12px; color:#64748b; margin-top:8px;">
+                            Expires in {OTP_LIFETIME_MINUTES} minutes
+                        </div>
+                        </td>
+                    </tr>
+                    </table>
+                </td>
+                </tr>
 
-            <!-- Why verify -->
-            <tr>
-              <td style="padding: 20px 28px 0 28px;">
-                <h3 style="margin:0 0 8px; font-size:16px; color:#0f172a;">Why verify?</h3>
-                <ul style="margin:0 0 0 18px; padding:0; color:#334155; font-size:14px; line-height:20px;">
-                  <li><strong>Account Protection</strong>: Verifying your email helps secure your profile and prevent unauthorized access.</li>
-                  <li><strong>Stay Informed</strong>: Receive announcements, updates, and alerts from your estate without missing a thing.</li>
-                </ul>
-              </td>
-            </tr>
+                <!-- Why verify -->
+                <tr>
+                <td style="padding: 20px 28px 0 28px;">
+                    <h3 style="margin:0 0 8px; font-size:16px; color:#0f172a;">Why verify?</h3>
+                    <ul style="margin:0 0 0 18px; padding:0; color:#334155; font-size:14px; line-height:20px;">
+                    <li><strong>Account Protection</strong>: Verifying your email helps secure your profile and prevent unauthorized access.</li>
+                    <li><strong>Stay Informed</strong>: Receive announcements, updates, and alerts from your estate without missing a thing.</li>
+                    </ul>
+                </td>
+                </tr>
 
-            <!-- Footer -->
-            <tr>
-              <td style="padding: 24px 28px 28px 28px;">
-                <p style="margin:0; font-size:14px; color:#334155;">
-                  Warm regards,<br/>
-                  <strong>The Vaultify Team</strong>
-                </p>
-                <p style="margin:12px 0 0; font-size:12px; color:#94a3b8;">
-                  If you didn’t request this, you can safely ignore this email.
-                </p>
-              </td>
-            </tr>
+                <!-- Footer -->
+                <tr>
+                <td style="padding: 24px 28px 28px 28px;">
+                    <p style="margin:0; font-size:14px; color:#334155;">
+                    Warm regards,<br/>
+                    <strong>The Vaultify Team</strong>
+                    </p>
+                    <p style="margin:12px 0 0; font-size:12px; color:#94a3b8;">
+                    If you didn’t request this, you can safely ignore this email.
+                    </p>
+                </td>
+                </tr>
 
-          </table>
-          <div style="margin-top:16px; font-size:11px; color:#94a3b8;">
-            © {now().year} Vaultify. All rights reserved.
-          </div>
-        </td>
-      </tr>
-    </table>
-  </body>
-</html>
-"""
+            </table>
+            <div style="margin-top:16px; font-size:11px; color:#94a3b8;">
+                © {now().year} Vaultify. All rights reserved.
+            </div>
+            </td>
+        </tr>
+        </table>
+    </body>
+    </html>
+    """
 
         msg = EmailMultiAlternatives(
             subject=subject,
@@ -444,20 +428,21 @@ class SignupView(APIView):
             to=[email],
         )
         msg.attach_alternative(html_body, "text/html")
+        msg.send(fail_silently=False)
 
         # Attach CID image if a local path is configured
-        if use_cid and logo_path:
-            try:
-                with open(logo_path, "rb") as f:
-                    img = MIMEImage(f.read())
-                    img.add_header("Content-ID", "<vaultify_logo>")
-                    img.add_header("Content-Disposition", "inline", filename="vaultify-banner.jpg")
-                    msg.attach(img)
-            except Exception:
-                # If embedding fails, send without image
-                pass
+        # if use_cid and logo_path:
+        #     try:
+        #         with open(logo_path, "rb") as f:
+        #             img = MIMEImage(f.read())
+        #             img.add_header("Content-ID", "<vaultify_logo>")
+        #             img.add_header("Content-Disposition", "inline", filename="vaultify-banner.jpg")
+        #             msg.attach(img)
+        #     except Exception:
+        #         # If embedding fails, send without image
+        #         pass
 
-        msg.send(fail_silently=False)
+        # msg.send(fail_silently=False)
 
 class PlainTextParser(BaseParser):
     """
