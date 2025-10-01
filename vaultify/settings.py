@@ -107,11 +107,12 @@ EMAIL_USE_TLS = True
 
 # Pull creds from env (see .env below)
 EMAIL_HOST_USER = 'no-reply@vaultify.africa'              # e.g. no-reply@vaultify.africa
-EMAIL_HOST_PASSWORD = 'OlaJoseph0129$'  # App Password (NOT the normal login)
+EMAIL_HOST_PASSWORD = 'xyusckxgdmjqfqvc'  # App Password (NOT the normal login)
 
 # From address shown to recipients
 DEFAULT_FROM_EMAIL = 'Vaultify <no-reply@vaultify.africa>'
 SERVER_EMAIL = DEFAULT_FROM_EMAIL  # for error emails, if any
+EMAIL_TIMEOUT = 15
 
 TEMPLATES = [
     {
