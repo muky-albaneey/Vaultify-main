@@ -82,14 +82,14 @@ REST_FRAMEWORK = {
 
 
 load_dotenv()  # Load environment variables from .env file
-DEFAULT_FROM_EMAIL = "Vaultify <support@vaultify.africa>"
+# DEFAULT_FROM_EMAIL = "Vaultify <support@vaultify.africa>"
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'apikey'
-EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'apikey'
+# EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable
 # DEFAULT_FROM_EMAIL = 'support@vaultify.africa'
 
 # BASE_URL = 'https://vaultify-43wm.onrender.com'
@@ -98,6 +98,21 @@ EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # Environment variable
 # BRANDING_LOGO_PATH = 'https://vaultify.us-southeast-1.linodeobjects.com/vaultify_logo.jpeg'BRANDING_LOGO_URL = None  # force embed path branch
 # BRANDING_LOGO_URL = None  # force embed path branch
 # BRANDING_LOGO_PATH = BASE_DIR / "static/email/vaultify.jpeg"  # local filesystem path
+
+# --- EMAIL (Google Workspace / Gmail SMTP) ---
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'          # Workspace uses Gmail SMTP here
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# Pull creds from env (see .env below)
+EMAIL_HOST_USER = 'o-reply@vaultify.africa'              # e.g. no-reply@vaultify.africa
+EMAIL_HOST_PASSWORD = 'OlaJoseph0129$'  # App Password (NOT the normal login)
+
+# From address shown to recipients
+DEFAULT_FROM_EMAIL = 'Vaultify <no-reply@vaultify.africa>'
+SERVER_EMAIL = DEFAULT_FROM_EMAIL  # for error emails, if any
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
