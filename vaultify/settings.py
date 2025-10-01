@@ -106,7 +106,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 # Pull creds from env (see .env below)
-EMAIL_HOST_USER = 'o-reply@vaultify.africa'              # e.g. no-reply@vaultify.africa
+EMAIL_HOST_USER = 'no-reply@vaultify.africa'              # e.g. no-reply@vaultify.africa
 EMAIL_HOST_PASSWORD = 'OlaJoseph0129$'  # App Password (NOT the normal login)
 
 # From address shown to recipients
