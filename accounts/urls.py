@@ -22,7 +22,7 @@ from .views import (
     BankServiceChargeUpdateView,OpenDeleteAccountView,PublicUserDetailView,
     UpdateUserStatusView,ResetPaidChargeView,notify_users_view,notify_user_view,
     FilterUsersView,AccessCodeCreateSlimView,AccessCodeListSlimView,AlertCreateSlimView,
-    AlertListSlimView,LostFoundItemListSlimView,ActiveUsersCountView, ActiveUsersCountsByEstateView
+    AlertListSlimView,LostFoundItemListSlimView,ActiveUsersCountView, ActiveUsersCountsByEstateView, ResetMonthlySubscriptionView, BulkResetMonthlySubscriptionsView 
 )
 from django.conf import settings
 from .views import  save_device_token
@@ -125,6 +125,10 @@ urlpatterns += [
     # Lost & Found (fast)
     #path('lostfound/create/fast/', LostFoundFastView.as_view(), name='lostfound-create-slim'),
     #path('lostfound/list/fast/', LostFoundItemListSlimView.as_view(), name='lostfound-list-slim'),
+    path('user/<int:user_id>/subscription/reset-months/', ResetMonthlySubscriptionView.as_view(),
+         name='reset-monthly-subscription'),
+    path('subscriptions/reset-months/', BulkResetMonthlySubscriptionsView.as_view(),
+         name='reset-monthly-subscriptions-bulk'),
 
     # Optional presign
 ]
