@@ -116,6 +116,101 @@ class SubscriptionUsersListView(APIView):
 
 #         return Response({'image_url': image_url}, status=status.HTTP_200_OK)
 # accounts/views.py
+# views.py (add near other imports)
+from django.utils import timezone
+from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+
+class ResetMonthlySubscriptionView(APIView):
+    """
+    Expire a single user's subscription immediately (0 months remaining).
+    Optional body: {"downgrade_to_free": true} to also set plan='free'.
+    Staff-only for safety.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response({'error': 'Only staff can reset subscriptions.'}, status=status.HTTP_403_FORBIDDEN)
+
+        user = get_object_or_404(User, pk=user_id)
+        profile = user.profile
+
+        # Expire now → effectively "0 months left"
+        profile.subscription_start_date = None
+        profile.subscription_expiry_date = timezone.now()
+
+        # Optional: downgrade to free if requested
+        downgrade = str(request.data.get('downgrade_to_free', 'false')).lower() in ('1', 'true', 'yes')
+        update_fields = ['subscription_start_date', 'subscription_expiry_date']
+        if downgrade:
+            profile.plan = 'free'
+            update_fields.append('plan')
+
+        profile.save(update_fields=update_fields)
+
+        # Reuse your helper to compute status + auto-downgrade if needed
+        try:
+            summary = _subscription_summary_and_autofix(profile)
+        except NameError:
+            # Fallback if helper isn't in scope for any reason
+            now_ts = timezone.now()
+            summary = {
+                'type': (profile.plan or 'free').lower(),
+                'start_date': profile.subscription_start_date.isoformat() if profile.subscription_start_date else None,
+                'expiry_date': profile.subscription_expiry_date.isoformat() if profile.subscription_expiry_date else None,
+                'is_active': bool(profile.subscription_expiry_date and profile.subscription_expiry_date >= now_ts),
+                'days_remaining': 0
+            }
+
+        return Response({
+            'message': 'User subscription reset to 0 months (expired immediately).',
+            'user_id': user.id,
+            'subscription': summary
+        }, status=status.HTTP_200_OK)
+
+
+class BulkResetMonthlySubscriptionsView(APIView):
+    """
+    Bulk expire monthly subscriptions immediately.
+    Optional body:
+      { "estate": "Paradise Estate", "downgrade_to_free": true }
+    Staff-only.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response({'error': 'Only staff can reset subscriptions.'}, status=status.HTTP_403_FORBIDDEN)
+
+        estate = request.data.get('estate')
+        downgrade = str(request.data.get('downgrade_to_free', 'false')).lower() in ('1', 'true', 'yes')
+
+        qs = User.objects.select_related('profile')
+        if estate:
+            qs = qs.filter(profile__estate__iexact=estate)
+
+        now_ts = timezone.now()
+        affected = []
+
+        for u in qs:
+            p = u.profile
+            if (p.plan or '').lower() == 'monthly':
+                p.subscription_start_date = None
+                p.subscription_expiry_date = now_ts
+                fields = ['subscription_start_date', 'subscription_expiry_date']
+                if downgrade:
+                    p.plan = 'free'
+                    fields.append('plan')
+                p.save(update_fields=fields)
+                affected.append(u.id)
+
+        return Response({
+            'message': 'Monthly subscriptions reset to 0 months (expired).',
+            'count': len(affected),
+            'affected_user_ids': affected,
+            'filtered_by_estate': estate or None
+        }, status=status.HTTP_200_OK)
 
 class UploadProfileImageView(APIView):
     permission_classes = [IsAuthenticated]
