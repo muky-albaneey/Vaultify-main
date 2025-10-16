@@ -117,30 +117,27 @@ class SubscriptionUsersListView(APIView):
 #         return Response({'image_url': image_url}, status=status.HTTP_200_OK)
 # accounts/views.py
 # views.py (add near other imports)
+# views.py
+# views.py
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 class ResetMonthlySubscriptionView(APIView):
     """
-    Expire a single user's subscription immediately (0 months remaining).
-    Optional body: {"downgrade_to_free": true} to also set plan='free'.
-    Staff-only for safety.
+    Expire a user's subscription immediately (0 months remaining).
+    NOW: any authenticated user can reset any user's subscription.
+    Optional body: {"downgrade_to_free": true}
     """
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
-        if not (request.user.is_staff or request.user.is_superuser):
-            return Response({'error': 'Only staff can reset subscriptions.'}, status=status.HTTP_403_FORBIDDEN)
-
         user = get_object_or_404(User, pk=user_id)
         profile = user.profile
 
-        # Expire now → effectively "0 months left"
         profile.subscription_start_date = None
         profile.subscription_expiry_date = timezone.now()
 
-        # Optional: downgrade to free if requested
         downgrade = str(request.data.get('downgrade_to_free', 'false')).lower() in ('1', 'true', 'yes')
         update_fields = ['subscription_start_date', 'subscription_expiry_date']
         if downgrade:
@@ -149,11 +146,10 @@ class ResetMonthlySubscriptionView(APIView):
 
         profile.save(update_fields=update_fields)
 
-        # Reuse your helper to compute status + auto-downgrade if needed
+        # keep summary return
         try:
             summary = _subscription_summary_and_autofix(profile)
         except NameError:
-            # Fallback if helper isn't in scope for any reason
             now_ts = timezone.now()
             summary = {
                 'type': (profile.plan or 'free').lower(),
@@ -164,11 +160,51 @@ class ResetMonthlySubscriptionView(APIView):
             }
 
         return Response({
-            'message': 'User subscription reset to 0 months (expired immediately).',
+            'message': 'Subscription reset to 0 months (expired immediately).',
             'user_id': user.id,
             'subscription': summary
         }, status=status.HTTP_200_OK)
 
+class ResetMySubscriptionView(APIView):
+    """
+    Convenience endpoint: the caller resets THEIR OWN subscription.
+    Any authenticated user can call this.
+    Optional body: {"downgrade_to_free": true}
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        profile = user.profile
+
+        profile.subscription_start_date = None
+        profile.subscription_expiry_date = timezone.now()
+
+        downgrade = str(request.data.get('downgrade_to_free', 'false')).lower() in ('1', 'true', 'yes')
+        update_fields = ['subscription_start_date', 'subscription_expiry_date']
+        if downgrade:
+            profile.plan = 'free'
+            update_fields.append('plan')
+
+        profile.save(update_fields=update_fields)
+
+        try:
+            summary = _subscription_summary_and_autofix(profile)
+        except NameError:
+            now_ts = timezone.now()
+            summary = {
+                'type': (profile.plan or 'free').lower(),
+                'start_date': profile.subscription_start_date.isoformat() if profile.subscription_start_date else None,
+                'expiry_date': profile.subscription_expiry_date.isoformat() if profile.subscription_expiry_date else None,
+                'is_active': bool(profile.subscription_expiry_date and profile.subscription_expiry_date >= now_ts),
+                'days_remaining': 0
+            }
+
+        return Response({
+            'message': 'Your subscription was reset to 0 months (expired immediately).',
+            'user_id': user.id,
+            'subscription': summary
+        }, status=status.HTTP_200_OK)
 
 class BulkResetMonthlySubscriptionsView(APIView):
     """
