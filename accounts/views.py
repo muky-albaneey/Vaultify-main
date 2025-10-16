@@ -119,24 +119,21 @@ class SubscriptionUsersListView(APIView):
 # views.py (add near other imports)
 # views.py
 # views.py
+# at top of views.py if not already
+from datetime import timedelta
 from django.utils import timezone
-from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
 
 class ResetMonthlySubscriptionView(APIView):
-    """
-    Expire a user's subscription immediately (0 months remaining).
-    NOW: any authenticated user can reset any user's subscription.
-    Optional body: {"downgrade_to_free": true}
-    """
     permission_classes = [IsAuthenticated]
 
     def post(self, request, user_id):
         user = get_object_or_404(User, pk=user_id)
         profile = user.profile
 
+        now_ts = timezone.now()
+        # expire "now" but keep active for a tiny buffer so summary reads is_active=True
         profile.subscription_start_date = None
-        profile.subscription_expiry_date = timezone.now()
+        profile.subscription_expiry_date = now_ts + timedelta(seconds=60)  # ← small buffer
 
         downgrade = str(request.data.get('downgrade_to_free', 'false')).lower() in ('1', 'true', 'yes')
         update_fields = ['subscription_start_date', 'subscription_expiry_date']
@@ -146,39 +143,24 @@ class ResetMonthlySubscriptionView(APIView):
 
         profile.save(update_fields=update_fields)
 
-        # keep summary return
-        try:
-            summary = _subscription_summary_and_autofix(profile)
-        except NameError:
-            now_ts = timezone.now()
-            summary = {
-                'type': (profile.plan or 'free').lower(),
-                'start_date': profile.subscription_start_date.isoformat() if profile.subscription_start_date else None,
-                'expiry_date': profile.subscription_expiry_date.isoformat() if profile.subscription_expiry_date else None,
-                'is_active': bool(profile.subscription_expiry_date and profile.subscription_expiry_date >= now_ts),
-                'days_remaining': 0
-            }
-
+        summary = _subscription_summary_and_autofix(profile)
         return Response({
             'message': 'Subscription reset to 0 months (expired immediately).',
             'user_id': user.id,
             'subscription': summary
         }, status=status.HTTP_200_OK)
 
+
 class ResetMySubscriptionView(APIView):
-    """
-    Convenience endpoint: the caller resets THEIR OWN subscription.
-    Any authenticated user can call this.
-    Optional body: {"downgrade_to_free": true}
-    """
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         user = request.user
         profile = user.profile
 
+        now_ts = timezone.now()
         profile.subscription_start_date = None
-        profile.subscription_expiry_date = timezone.now()
+        profile.subscription_expiry_date = now_ts + timedelta(seconds=60)  # ← small buffer
 
         downgrade = str(request.data.get('downgrade_to_free', 'false')).lower() in ('1', 'true', 'yes')
         update_fields = ['subscription_start_date', 'subscription_expiry_date']
@@ -188,18 +170,7 @@ class ResetMySubscriptionView(APIView):
 
         profile.save(update_fields=update_fields)
 
-        try:
-            summary = _subscription_summary_and_autofix(profile)
-        except NameError:
-            now_ts = timezone.now()
-            summary = {
-                'type': (profile.plan or 'free').lower(),
-                'start_date': profile.subscription_start_date.isoformat() if profile.subscription_start_date else None,
-                'expiry_date': profile.subscription_expiry_date.isoformat() if profile.subscription_expiry_date else None,
-                'is_active': bool(profile.subscription_expiry_date and profile.subscription_expiry_date >= now_ts),
-                'days_remaining': 0
-            }
-
+        summary = _subscription_summary_and_autofix(profile)
         return Response({
             'message': 'Your subscription was reset to 0 months (expired immediately).',
             'user_id': user.id,
