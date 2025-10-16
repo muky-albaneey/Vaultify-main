@@ -120,8 +120,11 @@ class SubscriptionUsersListView(APIView):
 # views.py
 # views.py
 # at top of views.py if not already
+# views.py
 from datetime import timedelta
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 
 class ResetMonthlySubscriptionView(APIView):
     permission_classes = [IsAuthenticated]
@@ -131,21 +134,22 @@ class ResetMonthlySubscriptionView(APIView):
         profile = user.profile
 
         now_ts = timezone.now()
-        # expire "now" but keep active for a tiny buffer so summary reads is_active=True
-        profile.subscription_start_date = None
-        profile.subscription_expiry_date = now_ts + timedelta(seconds=60)  # ← small buffer
+        # Start now, expire in ~30 days (add 1 minute so .days floors to 30)
+        profile.subscription_start_date = now_ts
+        profile.subscription_expiry_date = now_ts + timedelta(days=30, minutes=1)
 
-        downgrade = str(request.data.get('downgrade_to_free', 'false')).lower() in ('1', 'true', 'yes')
+        # keep current plan unless caller wants to change it
+        set_plan = (request.data.get('set_plan') or '').strip().lower()
         update_fields = ['subscription_start_date', 'subscription_expiry_date']
-        if downgrade:
-            profile.plan = 'free'
+        if set_plan:
+            profile.plan = set_plan  # e.g. "monthly"
             update_fields.append('plan')
 
         profile.save(update_fields=update_fields)
 
         summary = _subscription_summary_and_autofix(profile)
         return Response({
-            'message': 'Subscription reset to 0 months (expired immediately).',
+            'message': 'Subscription reset to 30 days from now.',
             'user_id': user.id,
             'subscription': summary
         }, status=status.HTTP_200_OK)
@@ -159,23 +163,24 @@ class ResetMySubscriptionView(APIView):
         profile = user.profile
 
         now_ts = timezone.now()
-        profile.subscription_start_date = None
-        profile.subscription_expiry_date = now_ts + timedelta(seconds=60)  # ← small buffer
+        profile.subscription_start_date = now_ts
+        profile.subscription_expiry_date = now_ts + timedelta(days=30, minutes=1)
 
-        downgrade = str(request.data.get('downgrade_to_free', 'false')).lower() in ('1', 'true', 'yes')
+        set_plan = (request.data.get('set_plan') or '').strip().lower()
         update_fields = ['subscription_start_date', 'subscription_expiry_date']
-        if downgrade:
-            profile.plan = 'free'
+        if set_plan:
+            profile.plan = set_plan
             update_fields.append('plan')
 
         profile.save(update_fields=update_fields)
 
         summary = _subscription_summary_and_autofix(profile)
         return Response({
-            'message': 'Your subscription was reset to 0 months (expired immediately).',
+            'message': 'Your subscription was reset to 30 days from now.',
             'user_id': user.id,
             'subscription': summary
         }, status=status.HTTP_200_OK)
+
 
 class BulkResetMonthlySubscriptionsView(APIView):
     """
